@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="javascripts/sha256.js"></script>
+	<title>Hallo dunia</title>
+</head>
+<body>
+<p>Alhamdulillah {{title}}</p>
+	{{"sha256_digest("87xsd6")""}}
+<p>
+	
+<script type="text/javascript">
+	// alert(sha256_digest("87xsd6"));
+</script>
+
+</p>
+</body>
+</html>
