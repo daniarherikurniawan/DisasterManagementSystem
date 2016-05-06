@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>DIMAS</title>
+</head>
+<body>
+<h4>{{title}}</h4>
+<div class="row" style=" white-space: pre-wrap; font-family: monospace;">
+	var MedicalFacility = new mongoose.Schema({
+	  name: { type: String, default: "Bumi Medika Ganesha"},
+	  address: {
+	  	street : { type: String, default: "Jl Ganesha no 8"},
+	  	id_village : { type: mongoose.Schema.Types.ObjectId, ref: 'Village' }
+	  },
+	  type : { type: String, default: "puskesmas"}
+	})
+</div>
+	
+<script type="text/javascript">
+	// alert(sha256_digest("87xsd6"));
+</script>
+
+</p>
+</body>
+</html>

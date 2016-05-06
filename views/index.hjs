@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<script src="javascripts/sha256.js"></script>
-	<title>Hallo dunia</title>
+	<title>DIMAS</title>
 </head>
 <body>
-<p>Alhamdulillah {{title}}</p>
-	{{"sha256_digest("87xsd6")""}}
-<p>
+<h4>{{title}}</h4>
+<div class="row">
+	<div>
+		<a href="/db">DB schema</a>
+	</div>
+</div>
 	
 <script type="text/javascript">
 	// alert(sha256_digest("87xsd6"));

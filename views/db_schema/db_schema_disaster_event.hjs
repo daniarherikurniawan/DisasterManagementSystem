@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>DIMAS</title>
+</head>
+<body>
+<h4>{{title}}</h4>
+<div class="row" style=" white-space: pre-wrap; font-family: monospace;">
+	var DisasterEvent = new mongoose.Schema({
+	  name: { type: String, default: "Banjir Tamansari"},
+	  id_disasters : {type : [{ type: mongoose.Schema.Types.ObjectId, ref: 'Disaster' }], default: []},
+	  date_start: { type: Date, default: Date.now},
+	  date_end	: { type: Date, default: null},
+	})
+</div>
+	
+<script type="text/javascript">
+	// alert(sha256_digest("87xsd6"));
+</script>
+
+</p>
+</body>
+</html>

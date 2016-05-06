@@ -1,14 +1,15 @@
-var mongoose = require('mongoose');
-var db = require('../dbhelper/dbschema')(mongoose);
+var Disaster = require('../dbhelper/disaster_model');
 
 module.exports = { 
 	hello: function() {
 		return "hai daniar";
 	},
 
-	signUp: function(){
-		var victimObj = new db.Victims({name: "Daniar"});
-	    victimObj.save();
+	insert: function(){
+		var disasterObj = new Disaster({cause: "Sungai tersumbat"});
+	    disasterObj.save(function(err){
+		  if(err) console.log(err); 
+		});
 	    return ;
 	}
 }

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+</head>
+<body>
+	<div>
+		{{title}}	
+	</div>
+
+	<div>
+		<ol>
+			<li><a href="/db/disaster_event">Table Disaster Event</a></li>
+				<ul>- <a href="/db/disaster_event/insert">Insert</a></ul>
+				<ul>- <a href="/db/disaster_event/find">Find</a></ul>
+			<li><a href="/db/disaster">Table Disaster</a></li>
+				<ul>- <a href="/db/disaster/insert">Insert</a></ul>
+				<ul>- <a href="/db/disaster/find">Find</a></ul>
+			<li><a href="/db/victim">Table Victim</a></li>
+				<ul>- <a href="/db/victim/insert">Insert</a></ul>
+				<ul>- <a href="/db/victim/find">Find</a></ul>
+			<li><a href="/db/village">Table VIllage</a></li>
+				<ul>- <a href="/db/village/insert">Insert</a></ul>
+				<ul>- <a href="/db/village/find">Find</a></ul>
+			<li><a href="/db/medical_facility">Table Medical Facility</a></li>
+				<ul>- <a href="/db/medical_facility/insert">Insert</a></ul>
+				<ul>- <a href="/db/medical_facility/find">Find</a></ul>
+			<li><a href="/db/refugee_camp">Table Refugee Camp</a></li>
+				<ul>- <a href="/db/refugee_camp/insert">Insert</a></ul>
+				<ul>- <a href="/db/refugee_camp/find">Find</a></ul>
+		</ol>
+	</div>
+</body>
+</html>	
