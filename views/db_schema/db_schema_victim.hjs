@@ -112,21 +112,82 @@
 
 					        </div>
 					   	</div>
-					    <div class="row">
+					   <div class="row">
 					       <div class="form-group">
 						        <label class="col-sm-2">Gender</label>
 						        <div class="col-sm-10">
-						        	<bs-dropdown  select-val="selected_status = selected_gender" preselected-item="selected_gender" data-dropdown-data="type_gender"></bs-dropdown> 
+						        	<bs-dropdown  select-val="selected_status_gender = selectedVal" preselected-item="selected_gender" data-dropdown-data="type_gender">
+						        	</bs-dropdown> 
 						        </div>
 						   	</div>
 						</div>
-					    <div class="row">
+
+				        <div ng-show="selected_status_gender==2">
+				        	<div class="row">
+						       	<div class="form-group">
+							        <label class="col-sm-2">Pregnant</label>
+							        <div class="col-sm-10">
+							        	<input type="checkbox" ng-model="is_pregnant">
+							        </div>
+						        </div>
+						   	</div>
+						</div>
+							<div class="row">
 					       <div class="form-group">
-					        <label class="col-sm-2">Birthday</label>
-					        <div class="col-sm-10"><input type="date" ng-model="birthday" 
-					        name="birthday" class="form-control" required/></div>
-					        </div>
-					   	</div>
+						        <label class="col-sm-2">Status</label>
+						        <div class="col-sm-10">
+						        	<bs-dropdown  select-val="selected_status_injury = selectedVal" preselected-item="selected_status_injury" data-dropdown-data="type_status_injury"></bs-dropdown> 
+						        </div>
+						   	</div>
+						</div>
+						<div ng-show="selected_status_injury==5">
+				        	<div class="row">
+						       	<div class="form-group">
+							        <label class="col-sm-2">Name of heirs</label>
+							        <div class="col-sm-10">
+							        	<span ng-repeat="name in name_heirs" style="float:left ">
+								            <input type="button" value="{{name}}" class="btn-info" />
+					       					<input type="button" value="X" class="btn-danger" style="margin:0 20px 20px -5px" ng-click="deleteNameHeir($index)"/>
+								        </span>
+
+								        <div class="row col-md-12">
+								        	<span  style="float:left ">
+								        		<input type="text" ng-model="name_heir" name="name_heir" placeholder="victim's heir" class="form-control" maxlength="13" required style="    display: inline-block; width: inherit;" />
+				       							<input type="button" value="Save" class="btn-success" ng-click="addNewNameHeir(name_heir)"/>
+								        	</span>
+							        	</div>
+
+							        </div>
+						        </div>
+						   	</div>
+						</div>
+						<div ng-show="selected_status_injury==3">
+				        	<div class="row">
+						       	<div class="form-group">
+							        <label class="col-sm-2">Medical facility</label>
+							        <div class="col-sm-10">
+							        	<span ng-repeat="id in id_medical_facility" style="float:left ">
+								            <input type="button" value="{{id}}" class="btn-info" />
+					       					<input type="button" value="X" class="btn-danger" style="margin:0 20px 20px -5px" ng-click="deleteIdMedicalFacility($index)"/>
+								        </span>
+
+								        <span style="float:left ">
+							       			<input type="button" value="+ Register Medical Facility" class="btn-success" ng-click="newTabRegisterMedicalFacility()"/>
+							       			<br><br>
+								        </span>
+
+							        	<input type="text" ng-model="searchStringMedicalFacility" name="search_query" placeholder="input name or KTP number to search" class="form-control" required />
+										<br>        
+							            <div class="data-ctrl">
+							                <span ng-repeat="i in items | searchFor:searchStringMedicalFacility">
+							                    <p><input type="button" value="+" class="btn-success"  ng-click="addIdMedicalFacility($index)"/> {{i.title}}
+							                </span>
+							            </div>
+							            {{status}}
+							        </div>
+						        </div>
+						   	</div>
+						</div>
 					  	<input class="btn btn-success" type="submit" id="submit" value="Submit" />
 					</form>
 				</div><!-- cpontroller -->
@@ -154,15 +215,61 @@
 		$scope.birthday = new Date();
 		$scope.original_village=[];
 		$scope.phone_numbers=[];
+		$scope.name_heirs=[];		
 		$scope.selected_gender = 1;
+		$scope.is_pregnant = false; /*if the person is man, it should be false by default*/
+		$scope.selected_status_injury = 1;
 		$scope.isOriginalVillageFilled = false;
 		$scope.type_gender = [{
 		        id: 1,
-		        name: "Laki-laki"        
+		        name: "Man"        
 		    }, {
 		        id: 2,
-		        name: "Perempuan"        
+		        name: "Woman"        
 		    }];
+		$scope.type_status_injury = [{
+		        id: 1,
+		        name: "Affected"        
+		    }, {
+		        id: 2,
+		        name: "Minor injury"        
+		    }, {
+		        id: 3,
+		        name: "Major injury"        
+		    }, {
+		        id: 4,
+		        name: "Missing"        
+		    }, {
+		        id: 5,
+		        name: "Deceased"        
+		    }];
+
+		$scope.id_medical_facility = [];
+
+		$scope.newTabRegisterMedicalFacility = function(){
+	    	$window.open('/db/medical_facility');
+		}
+		$scope.addIdMedicalFacility = function(id) {
+			$mdDialog.show({
+		      controller: DialogController,
+		      templateUrl: 'tabDialog.tmpl.html',
+		      parent: angular.element(document.body),
+		      targetEvent: ev,
+		      clickOutsideToClose:true
+		    })
+		        .then(function(answer) {
+		          $scope.status = 'You said the information was "' + answer + '".';
+		        }, function() {
+		          $scope.status = 'You cancelled the dialog.';
+		        });
+		    // $scope.id_medical_facility.push(id);
+	    };
+
+
+	    $scope.deleteIdMedicalFacility = function(id) {
+	    	$scope.id_medical_facility.splice(id, 1);
+	    };
+
 	    $scope.addNewPhone = function(phone) {
 	    	if(phone != ''){
 		        $scope.phone_numbers.push(phone);
@@ -183,7 +290,16 @@
 			$scope.isOriginalVillageFilled = false;
 	    	$scope.original_village.splice(id, 1);
 	    };
-	    
+	    $scope.deleteNameHeir =  function(id) {
+	    	$scope.name_heirs.splice(id, 1);
+		}
+
+	    $scope.addNewNameHeir = function(name) {
+	    	if(name != ''){
+		        $scope.name_heirs.push(name);
+				$scope.name_heir='';	
+	    	}
+	    };
 	    $scope.processForm = function(){
 		    alert("Submitting form..");
 		}

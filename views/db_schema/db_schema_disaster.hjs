@@ -6,7 +6,7 @@
 	       <div class="form-group">
 		        <label class="col-sm-2">Type</label>
 		        <div class="col-sm-10">
-		        	<bs-dropdown  select-val="selected_status = selected_type_disaster" preselected-item="selected_type_disaster" data-dropdown-data="type_disaster"></bs-dropdown> 
+		        	<bs-dropdown  select-val="selected_status = selectedVal" preselected-item="selected_type_disaster" data-dropdown-data="type_disaster"></bs-dropdown> 
 		        </div>
 	        </div>
 	   	</div>
