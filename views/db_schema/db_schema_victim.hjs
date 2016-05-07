@@ -159,14 +159,38 @@
 						        </div>
 						   	</div>
 						</div>
-						 <li>
-				            <a ng-click="getEnterDate()">Prompt something</a>
-				        </li>
+
+						<div ng-show="selected_status_injury==3">
+				        	<div class="row">
+						       	<div class="form-group">
+							        <label class="col-sm-2">Medical facility</label>
+							        <div class="col-sm-10">
+							        	<span ng-repeat="id in id_medical_facility" style="float:left ">
+								            <input type="button" value="{{id}}" class="btn-info" />
+					       					<input type="button" value="X" class="btn-danger" style="margin:0 20px 20px -5px" ng-click="deleteIdMedicalFacility($index)"/>
+								        </span>
+
+								        <span style="float:left ">
+							       			<input type="button" value="+ Register Medical Facility" class="btn-success" ng-click="newTabRegisterMedicalFacility()"/>
+							       			<br><br>
+								        </span>
+
+							        	<input type="text" ng-model="searchStringMedicalFacility" name="search_query" placeholder="input name or KTP number to search" class="form-control" required />
+										<br>        
+							            <div class="data-ctrl">
+							                <span ng-repeat="i in items | searchFor:searchStringMedicalFacility">
+							                    <p><input type="button" value="+" class="btn-success"  ng-click="addIdMedicalFacility($index)"/> {{i.title}}
+							                </span>
+							            </div>
+							            {{status}}
+							        </div>
+						        </div>
+						   	</div>
+						</div>
+
+
 					  	<input class="btn btn-success" type="submit" id="submit" value="Submit" />
 					</form>
-
-
-
 				</div><!-- cpontroller -->
 
 			</div><!-- MyApp -->
@@ -184,7 +208,7 @@
 <script>
 	$app.controller("disasterEventController", function($scope, $http, $templateRequest, $sce, $compile, $window, $modal, $log){
 
-		$scope.getEnterDate = function () {
+		$scope.getEnterDate = function (id) {
 			$modal.open({
 		      templateUrl: '/template/template_get_date.hjs',
 		      controller: 'disasterEventController'
@@ -236,18 +260,7 @@
 	    	$window.open('/db/medical_facility');
 		}
 		$scope.addIdMedicalFacility = function(id) {
-			$mdDialog.show({
-		      controller: DialogController,
-		      templateUrl: 'tabDialog.tmpl.html',
-		      parent: angular.element(document.body),
-		      targetEvent: ev,
-		      clickOutsideToClose:true
-		    })
-		        .then(function(answer) {
-		          $scope.status = 'You said the information was "' + answer + '".';
-		        }, function() {
-		          $scope.status = 'You cancelled the dialog.';
-		        });
+			$scope.getEnterDate(id);
 		    // $scope.id_medical_facility.push(id);
 	    };
 
