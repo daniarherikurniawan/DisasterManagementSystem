@@ -1,30 +1,61 @@
-<!DOCTYPE html>
-<html>
-	<head>
-		<title>DIMAS</title>
-		<link href="../../stylesheets/bootstrap.min.css" rel="stylesheet">
-		<script src="../../javascripts/jquery.min.js"></script>
-		<script src="../../javascripts/angular.min.js"></script>
-	</head>
-	<body>
-		<div class="container" >
-			<div class="row">
-				<h1><%title%></h1>
-			</div>
-			<div class="row" style=" white-space: pre-wrap; font-family: monospace;">
-				var Disaster = new mongoose.Schema({
-				  date_start: { type: Date, default: Date.now},
-				  date_end	: { type: Date, default: null},
-				  type 		: { type: String, default: "flood"},
-				  cause		: { type: String, default: "broken dam"},
-				  id_disaster_events : { type: mongoose.Schema.Types.ObjectId, ref: 'DisasterEvent' },
-				  id_victims : {type : [{ type: mongoose.Schema.Types.ObjectId, ref: 'Victims' }], default: []},
-				  record_region	: [{
-				  	date_start	: { type: Date, default: Date.now},
-				  	geo_region	: {type : String, default:"[{342, 5345},{3432, 535}, {32, 45}]"} 
-				  }]
-				})
-			</div>
-		</div>
-	</body>
-</html>
+<div class="container col-md-12">
+	<h2 style="text-align: center;">Disaster Data</h2>
+	<div class="form-horizontal" style="text-align: left" >
+	    
+	    <div class="row">
+	       <div class="form-group">
+		        <label class="col-sm-2">Type</label>
+		        <div class="col-sm-10">
+		        	<bs-dropdown  select-val="selected_status = selected_type_disaster" preselected-item="selected_type_disaster" data-dropdown-data="type_disaster"></bs-dropdown> 
+		        </div>
+	        </div>
+	   	</div>
+	    <div class="row">
+	       <div class="form-group">
+	        <label class="col-sm-2">Date Start</label>
+	        <div class="col-sm-10"><input type="date" ng-model="date_start" 
+	        name="date_start" class="form-control" required/></div>
+	        </div>
+	   	</div>
+	    <div class="row">
+	       <div class="form-group">
+	        <label class="col-sm-2">Cause</label>
+	        <div class="col-sm-10"><input type="text" ng-model="cause" 
+	        name="cause" placeholder="cause of the disaster" class="form-control" required /></div>
+	        </div>
+	   	</div>
+	    <div class="row" >
+	       <div class="form-group">
+		        <label class="col-sm-2">Id Victims</label>
+		        <div class="col-sm-10">
+		        	<span ng-repeat="id in id_victims" style="float:left ">
+			            <input type="button" value="{{id}}" class="btn-info" ng-click="processForm($index)"/>
+       					<input type="button" value="X" class="btn-danger" style="margin:0 20px 20px -5px" ng-click="deleteIdVictim($index)"/>
+			        </span>
+
+			        <span style="float:left ">
+		       			<input type="button" value="+ Create Victim" class="btn-success" ng-click="newTabCreateVictim()"/>
+		       			<br><br>
+			        </span>
+
+		        	<input type="text" ng-model="searchString" name="search_query" placeholder="input name or KTP number to search" class="form-control" required />
+					<br>        
+		            <div class="data-ctrl">
+		                <span ng-repeat="i in items | searchFor:searchString">
+		                    <p><input type="button" value="+" class="btn-success"  ng-click="addIdVictim($index)"/> {{i.title}}
+		                </span>
+		            </div>
+
+		        </div>
+	        </div>
+	   	</div>
+	    <div class="row" >
+	       <div class="form-group">
+	        <label class="col-sm-2">Region Affected</label>
+	        <div class="col-sm-10"><textarea type="text" ng-model="geo_region" 
+	        name="geo_region" placeholder="geo region of the disaster" class="form-control" required rows="5"/></div>
+	        </div>
+	   	</div>
+		<input type="button" value="Save" class="btn-success" ng-click="addIdDisaster()"/>
+	</div>
+</div>

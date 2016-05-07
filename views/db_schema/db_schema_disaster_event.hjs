@@ -3,8 +3,7 @@
 	<head>
 		<title>DIMAS</title>
 		<link href="../../stylesheets/bootstrap.min.css" rel="stylesheet">
-		<script src="../../javascripts/jquery.min.js"></script>
-		<script src="../../javascripts/angular.min.js"></script>
+		
 	</head>
 	<body>
 		<div class="container" >
@@ -44,20 +43,19 @@
 						        <div class="col-sm-10">
 						        	<div class="row col-md-12">
 								        <span ng-repeat="id in id_disasters" style="float:left ">
-								            <input type="button" value="{{id}}" class="btn-info" ng-click="processForm($parent.$index)"/>
+								            <input type="button" value="{{id}}" class="btn-info" ng-click="processForm($index)"/>
 					       					<input type="button" value="X" class="btn-danger" style="margin:0 20px 20px -5px" ng-click="deleteIdDisaster($index)"/>
 								        </span>
 								        <span style="float:left ">
 												<div ng-hide="isFormVissible">
-							       					<input type="button" value="+ Add" class="btn-success" ng-click="showForm()"/>
+							       					<input type="button" value="+ Add" class="btn-success" ng-click="showDisasterForm()"/>
 							       				</div>
 								        </span>
 							        </div>
 									<div ng-show="isFormVissible">
-				       					<div class="row col-md-12">
-										     I show up when your checkbox is checked.
-				       						<input type="button" value="Save" class="btn-success" ng-click="addIdDisaster()"/>
-			       						</div>
+										<div id="disaster_form">
+											<!-- Disaster form -->
+										</div>
 									</div>
 
 							    </div>
@@ -72,16 +70,21 @@
 		</div>
 	</body>
 </html>
-
+<script src="../../javascripts/jquery.min.js"></script>
+<script src="../../javascripts/angular.min.js"></script>
+<script src="../../javascripts/angular_directive.js"></script>
+<script src="../../javascripts/angular-ui-router.js"></script>
+<script src="../../javascripts/ui-bootstrap-tpls.min.js"></script>
 <script>
-	var $app = angular.module("myApp", []);
+	$app.controller("disasterEventController", function($scope, $http, $templateRequest, $sce, $compile, $window){
 
-	$app.controller("disasterEventController", function($scope){
 		$scope.name = '';
 		$scope.date_start = new Date();
 		$scope.id_disasters=[];
+		$scope.id_victims=[];
 		$scope.checked = true;
 		$scope.isFormVissible = false;
+		$scope.selected_type_disaster = 1;
 
 	    $scope.insertDisasterEvent = function() {
 	    	alert("submitting form");
@@ -90,19 +93,81 @@
 	    $scope.addIdDisaster = function() {
 			$scope.isFormVissible = false;
 	        $scope.id_disasters.push(Math.floor(Math.random()*10000));	
+
+	        /*Normalize the variable*/
+		    $scope.selected_type_disaster = 1;
+	        $scope.id_victims = [];
+	        $scope.cause = '';
+	        $scope.geo_region = '';
 	    };
+
+	    $scope.testGet = function(){
+			$http({
+					method:'GET',
+					url: '/db/disaster/find'})
+				.then(function (response){
+					$scope.name = response.data;
+				}, function(reason){
+					console.log(reason.data);
+				});
+	    }
 
 	    $scope.deleteIdDisaster = function(id) {
 	    	$scope.id_disasters.splice(id, 1);
 	    };
 
-	    $scope.showForm = function(){
+	    $scope.addIdVictim = function() {
+	        $scope.id_victims.push(Math.floor(Math.random()*10000000));	
+	    };
+
+	    $scope.deleteIdVictim = function(id) {
+	    	$scope.id_victims.splice(id, 1);
+	    };
+
+	    $scope.newTabCreateVictim = function() {
+	    	$window.open('/db/victim');
+	    };
+
+	    $scope.showDisasterForm = function(){
+		    $http.get('data.json').success(function(data, status, headers, config) {
+			        $scope.items = data.data;
+			    }).error(function(data, status, headers, config) {
+			        console.log("No data found..");
+			});
+
+	    	$scope.type_disaster = [{
+		        id: 1,
+		        name: "Flood"        
+		    }, {
+		        id: 2,
+		        name: "Landslide"        
+		    }, {
+		        id: 3,
+		        name: "Earthquake"        
+		    }, {
+		        id: 4,
+		        name: "Tornado"        
+		    }, {
+		        id: 5,
+		        name: "Tsunami"        
+		    }];
+
+			var templateUrl = $sce.getTrustedResourceUrl('disaster');
+	    	$templateRequest(templateUrl).then(function(template) {
+		        $compile($("#disaster_form").html(template).contents())($scope);
+		    }, function() {
+		    	alert("error templating");
+		    });
 			$scope.isFormVissible = true;
 	    }
 
 	    $scope.processForm = function(){
 		    alert("Submitting form..");
 		}
+
+		
 	   
 	});
+
+
 </script>

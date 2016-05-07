@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
+var fs = require('fs');
 
 /*Db Helper*/
 var disaster_event_cont = require('../controller/disaster_event_cont');
@@ -15,6 +16,17 @@ router.get('/', function(req, res, next) {
   	res.render('db_schema/db_schema', {title:"Database"});
 });
 
+/* GET Schema Declaration */
+router.get('/data.json', function(req, res, next) {
+	fs.readFile('data.json', 'utf8', function (err,data) {
+	  if (err) {
+	    console.error('There was an error reading the file!', err);
+    	return;
+	  }
+  		res.send(data);
+	});
+
+});
 
 
 /* GET Schema Declaration */

@@ -42,6 +42,158 @@
 				  }
 				})
 			</div>
-		</div>
+
+
+			<div ng-app="myApp">
+				<div ng-controller="disasterEventController">
+					<form class="form-horizontal" ng-submit="insertDisasterEvent()">
+					    <div class="row">
+					       <div class="form-group">
+					        <label class="col-sm-2">Id KTP</label>
+					        <div class="col-sm-10"><input type="number" ng-model="id_KTP" 
+					        name="id_KTP" placeholder="id KTP of the victim" class="form-control" required /></div>
+					        </div>
+					   	</div>
+					    <div class="row">
+					       <div class="form-group">
+					        <label class="col-sm-2">Name</label>
+					        <div class="col-sm-10"><input type="text" ng-model="name" 
+					        name="name" placeholder="name of the victim" class="form-control" required /></div>
+					        </div>
+					   	</div>
+					    <div class="row">
+					       <div class="form-group">
+					        <label class="col-sm-2">Phone</label>
+						        <div class="col-sm-10">
+
+						        	<span ng-repeat="id in phone_numbers track by $index" style="float:left ">
+							            <input type="button" value="{{id}}" class="btn-info" ng-click="processForm($index)" />
+				       					<input type="button" value="X" class="btn-danger" style="margin:0 20px 20px -5px" ng-click="deletePhone($index)"/>
+							        </span>
+							        <div class="row col-md-12">
+						        	<span  style="float:left ">
+						        		<input type="text" ng-model="phone" name="phone" placeholder="victim's phone number" class="form-control" maxlength="13" required style="    display: inline-block; width: inherit;" />
+		       							<input type="button" value="Save" class="btn-success" ng-click="addNewPhone(phone)"/>
+						        	</span>
+						        	</div>
+					        	</div>
+					        </div>
+					   	</div>
+					    <div class="row">
+					       <div class="form-group">
+					        <label class="col-sm-2">Address</label>
+					        <div class="col-sm-10"><input type="text" ng-model="address" 
+					        name="address" placeholder="address of the victim" class="form-control" required /></div>
+					        </div>
+					   	</div>
+					    <div class="row">
+					       <div class="form-group">
+					        <label class="col-sm-2">Village</label>
+					        	<div class="col-sm-10">
+						        	<span ng-repeat="village in original_village" style="float:left ">
+							            <input type="button" value="{{village}}" class="btn-info" ng-click="processForm($index)"/>
+				       					<input type="button" value="X" class="btn-danger" style="margin:0 20px 20px -5px" ng-click="deleteOriginalVillage($index)"/>
+							        </span>
+							        <div ng-hide="isOriginalVillageFilled">
+								        <span style="float:left ">
+							       			<input type="button" value="+ Register Village" class="btn-success" ng-click="newTabRegisterVillage()"/>
+							       			<br><br>
+								        </span>
+
+							        	<input type="text" ng-model="searchString" name="search_query" placeholder="original village of the victim" class="form-control" required />
+										<br>        
+							            <div class="data-ctrl">
+							                <span ng-repeat="i in items | searchFor:searchString">
+							                    <p><input type="button" value="+" class="btn-success"  ng-click="addOriginalVillage($index)"/> {{i.title}}
+							                </span>
+							            </div>
+							        </div>
+						        </div>
+
+					        </div>
+					   	</div>
+					    <div class="row">
+					       <div class="form-group">
+						        <label class="col-sm-2">Gender</label>
+						        <div class="col-sm-10">
+						        	<bs-dropdown  select-val="selected_status = selected_gender" preselected-item="selected_gender" data-dropdown-data="type_gender"></bs-dropdown> 
+						        </div>
+						   	</div>
+						</div>
+					    <div class="row">
+					       <div class="form-group">
+					        <label class="col-sm-2">Birthday</label>
+					        <div class="col-sm-10"><input type="date" ng-model="birthday" 
+					        name="birthday" class="form-control" required/></div>
+					        </div>
+					   	</div>
+					  	<input class="btn btn-success" type="submit" id="submit" value="Submit" />
+					</form>
+				</div><!-- cpontroller -->
+
+			</div><!-- MyApp -->
+
+		</div><!-- Container -->
+
 	</body>
 </html>
+
+<script src="../../javascripts/jquery.min.js"></script>
+<script src="../../javascripts/angular.min.js"></script>
+<script src="../../javascripts/angular_directive.js"></script>
+<script src="../../javascripts/angular-ui-router.js"></script>
+<script src="../../javascripts/ui-bootstrap-tpls.min.js"></script>
+<script>
+	$app.controller("disasterEventController", function($scope, $http, $templateRequest, $sce, $compile, $window){
+		$http.get('data.json').success(function(data, status, headers, config) {
+		        $scope.items = data.data;
+		    }).error(function(data, status, headers, config) {
+		        console.log("No data found..");
+		});
+
+		$scope.birthday = new Date();
+		$scope.original_village=[];
+		$scope.phone_numbers=[];
+		$scope.selected_gender = 1;
+		$scope.isOriginalVillageFilled = false;
+		$scope.type_gender = [{
+		        id: 1,
+		        name: "Laki-laki"        
+		    }, {
+		        id: 2,
+		        name: "Perempuan"        
+		    }];
+	    $scope.addNewPhone = function(phone) {
+	    	if(phone != ''){
+		        $scope.phone_numbers.push(phone);
+				$scope.phone='';	
+	    	}
+	    };
+
+	    $scope.deletePhone = function(id) {
+	    	$scope.phone_numbers.splice(id, 1);
+	    };
+
+	    $scope.addOriginalVillage = function(id) {
+		    $scope.original_village.push(id);
+			$scope.isOriginalVillageFilled = true;
+	    };
+
+	    $scope.deleteOriginalVillage = function(id) {
+			$scope.isOriginalVillageFilled = false;
+	    	$scope.original_village.splice(id, 1);
+	    };
+	    
+	    $scope.processForm = function(){
+		    alert("Submitting form..");
+		}
+
+		
+	    $scope.newTabRegisterVillage = function() {
+	    	$window.open('/db/village');
+	    };
+	   
+	});
+
+
+</script>
