@@ -1,29 +1,30 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<title>DIMAS</title>
-</head>
-<body>
-<h4>{{title}}</h4>
-<div class="row" style=" white-space: pre-wrap; font-family: monospace;">
-	var Disaster = new mongoose.Schema({
-	  date_start: { type: Date, default: Date.now},
-	  date_end	: { type: Date, default: null},
-	  type 		: { type: String, default: "flood"},
-	  cause		: { type: String, default: "broken dam"},
-	  id_disaster_events : { type: mongoose.Schema.Types.ObjectId, ref: 'DisasterEvent' },
-	  id_victims : {type : [{ type: mongoose.Schema.Types.ObjectId, ref: 'Victims' }], default: []},
-	  record_region	: [{
-	  	date_start	: { type: Date, default: Date.now},
-	  	geo_region	: {type : String, default:"[{342, 5345},{3432, 535}, {32, 45}]"} 
-	  }]
-	})
-</div>
-	
-<script type="text/javascript">
-	// alert(sha256_digest("87xsd6"));
-</script>
-
-</p>
-</body>
+	<head>
+		<title>DIMAS</title>
+		<link href="../../stylesheets/bootstrap.min.css" rel="stylesheet">
+		<script src="../../javascripts/jquery.min.js"></script>
+		<script src="../../javascripts/angular.min.js"></script>
+	</head>
+	<body>
+		<div class="container" >
+			<div class="row">
+				<h1><%title%></h1>
+			</div>
+			<div class="row" style=" white-space: pre-wrap; font-family: monospace;">
+				var Disaster = new mongoose.Schema({
+				  date_start: { type: Date, default: Date.now},
+				  date_end	: { type: Date, default: null},
+				  type 		: { type: String, default: "flood"},
+				  cause		: { type: String, default: "broken dam"},
+				  id_disaster_events : { type: mongoose.Schema.Types.ObjectId, ref: 'DisasterEvent' },
+				  id_victims : {type : [{ type: mongoose.Schema.Types.ObjectId, ref: 'Victims' }], default: []},
+				  record_region	: [{
+				  	date_start	: { type: Date, default: Date.now},
+				  	geo_region	: {type : String, default:"[{342, 5345},{3432, 535}, {32, 45}]"} 
+				  }]
+				})
+			</div>
+		</div>
+	</body>
 </html>

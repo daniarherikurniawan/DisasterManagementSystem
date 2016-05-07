@@ -12,29 +12,29 @@ var refugee_camp_cont = require('../controller/refugee_camp_cont');
 
 /* GET DB interface. */
 router.get('/', function(req, res, next) {
-  	res.render('db_schema/db_schema');
+  	res.render('db_schema/db_schema', {title:"Database"});
 });
 
 
 
 /* GET Schema Declaration */
 router.get('/disaster_event', function(req, res, next) {
-  res.render('db_schema/db_schema_disaster_event');
+  res.render('db_schema/db_schema_disaster_event', {title:"Disaster Event"});
 });
 router.get('/disaster', function(req, res, next) {
-  res.render('db_schema/db_schema_disaster');
+  res.render('db_schema/db_schema_disaster', {title:"Disaster"});
 });
 router.get('/victim', function(req, res, next) {
-  	res.render('db_schema/db_schema_victim');
+  	res.render('db_schema/db_schema_victim', {title:"Victim"});
 });
 router.get('/village', function(req, res, next) {
-  res.render('db_schema/db_schema_village');
+  res.render('db_schema/db_schema_village', {title:"Village"});
 });
 router.get('/medical_facility', function(req, res, next) {
-  res.render('db_schema/db_schema_medical_facility');
+  res.render('db_schema/db_schema_medical_facility', {title:"Medical Facility"});
 });
 router.get('/refugee_camp', function(req, res, next) {
-  res.render('db_schema/db_schema_refugee_camp');
+  res.render('db_schema/db_schema_refugee_camp', {title:"Refugee Camp"});
 });
 
 

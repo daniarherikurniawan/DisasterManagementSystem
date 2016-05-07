@@ -1,23 +1,108 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<title>DIMAS</title>
-</head>
-<body>
-<h4>{{title}}</h4>
-<div class="row" style=" white-space: pre-wrap; font-family: monospace;">
-	var DisasterEvent = new mongoose.Schema({
-	  name: { type: String, default: "Banjir Tamansari"},
-	  id_disasters : {type : [{ type: mongoose.Schema.Types.ObjectId, ref: 'Disaster' }], default: []},
-	  date_start: { type: Date, default: Date.now},
-	  date_end	: { type: Date, default: null},
-	})
-</div>
-	
-<script type="text/javascript">
-	// alert(sha256_digest("87xsd6"));
-</script>
+	<head>
+		<title>DIMAS</title>
+		<link href="../../stylesheets/bootstrap.min.css" rel="stylesheet">
+		<script src="../../javascripts/jquery.min.js"></script>
+		<script src="../../javascripts/angular.min.js"></script>
+	</head>
+	<body>
+		<div class="container" >
+			<div class="row">
+				<h1><%title%></h1>
+			</div>
+			<div class="row" style="white-space: pre-wrap; font-family: monospace;">
+				var DisasterEvent = new mongoose.Schema({
+				  name: { type: String, default: "Banjir Tamansari"},
+				  id_disasters : {type : [{ type: mongoose.Schema.Types.ObjectId, ref: 
+				  'Disaster' }], default: []},
+				  date_start: { type: Date, default: Date.now},
+				  date_end	: { type: Date, default: null},
+				})
+			</div>
 
-</p>
-</body>
+			<div ng-app="myApp">
+				<div ng-controller="disasterEventController">
+					<form class="form-horizontal" ng-submit="insertDisasterEvent()">
+					    <div class="row">
+					       <div class="form-group">
+					        <label class="col-sm-2">Name</label>
+					        <div class="col-sm-10"><input type="text" ng-model="name" 
+					        name="name" placeholder="name of the disaster" class="form-control" required /></div>
+					        </div>
+					   	</div>
+					    <div class="row">
+					       <div class="form-group">
+					        <label class="col-sm-2">Date Start</label>
+					        <div class="col-sm-10"><input type="date" ng-model="date_start" 
+					        name="date_start" class="form-control" required/></div>
+					        </div>
+					   	</div>
+					    <div class="row">
+					       <div class="form-group">
+						        <label class="col-sm-2">Id Disasters</label>
+						        <div class="col-sm-10">
+						        	<div class="row col-md-12">
+								        <span ng-repeat="id in id_disasters" style="float:left ">
+								            <input type="button" value="{{id}}" class="btn-info" ng-click="processForm($parent.$index)"/>
+					       					<input type="button" value="X" class="btn-danger" style="margin:0 20px 20px -5px" ng-click="deleteIdDisaster($index)"/>
+								        </span>
+								        <span style="float:left ">
+												<div ng-hide="isFormVissible">
+							       					<input type="button" value="+ Add" class="btn-success" ng-click="showForm()"/>
+							       				</div>
+								        </span>
+							        </div>
+									<div ng-show="isFormVissible">
+				       					<div class="row col-md-12">
+										     I show up when your checkbox is checked.
+				       						<input type="button" value="Save" class="btn-success" ng-click="addIdDisaster()"/>
+			       						</div>
+									</div>
+
+							    </div>
+						   	</div><!-- form-grup -->
+						</div><!-- row -->
+					  	<input class="btn btn-success" type="submit" id="submit" value="Submit" />
+					</form>
+				</div><!-- cpontroller -->
+
+			</div><!-- MyApp -->
+
+		</div>
+	</body>
 </html>
+
+<script>
+	var $app = angular.module("myApp", []);
+
+	$app.controller("disasterEventController", function($scope){
+		$scope.name = '';
+		$scope.date_start = new Date();
+		$scope.id_disasters=[];
+		$scope.checked = true;
+		$scope.isFormVissible = false;
+
+	    $scope.insertDisasterEvent = function() {
+	    	alert("submitting form");
+	    };
+
+	    $scope.addIdDisaster = function() {
+			$scope.isFormVissible = false;
+	        $scope.id_disasters.push(Math.floor(Math.random()*10000));	
+	    };
+
+	    $scope.deleteIdDisaster = function(id) {
+	    	$scope.id_disasters.splice(id, 1);
+	    };
+
+	    $scope.showForm = function(){
+			$scope.isFormVissible = true;
+	    }
+
+	    $scope.processForm = function(){
+		    alert("Submitting form..");
+		}
+	   
+	});
+</script>
