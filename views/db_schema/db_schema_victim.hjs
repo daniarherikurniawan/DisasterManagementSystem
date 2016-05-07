@@ -3,8 +3,6 @@
 	<head>
 		<title>DIMAS</title>
 		<link href="../../stylesheets/bootstrap.min.css" rel="stylesheet">
-		<script src="../../javascripts/jquery.min.js"></script>
-		<script src="../../javascripts/angular.min.js"></script>
 	</head>
 	<body>
 		<div class="container" >
@@ -161,35 +159,14 @@
 						        </div>
 						   	</div>
 						</div>
-						<div ng-show="selected_status_injury==3">
-				        	<div class="row">
-						       	<div class="form-group">
-							        <label class="col-sm-2">Medical facility</label>
-							        <div class="col-sm-10">
-							        	<span ng-repeat="id in id_medical_facility" style="float:left ">
-								            <input type="button" value="{{id}}" class="btn-info" />
-					       					<input type="button" value="X" class="btn-danger" style="margin:0 20px 20px -5px" ng-click="deleteIdMedicalFacility($index)"/>
-								        </span>
-
-								        <span style="float:left ">
-							       			<input type="button" value="+ Register Medical Facility" class="btn-success" ng-click="newTabRegisterMedicalFacility()"/>
-							       			<br><br>
-								        </span>
-
-							        	<input type="text" ng-model="searchStringMedicalFacility" name="search_query" placeholder="input name or KTP number to search" class="form-control" required />
-										<br>        
-							            <div class="data-ctrl">
-							                <span ng-repeat="i in items | searchFor:searchStringMedicalFacility">
-							                    <p><input type="button" value="+" class="btn-success"  ng-click="addIdMedicalFacility($index)"/> {{i.title}}
-							                </span>
-							            </div>
-							            {{status}}
-							        </div>
-						        </div>
-						   	</div>
-						</div>
+						 <li>
+				            <a ng-click="getEnterDate()">Prompt something</a>
+				        </li>
 					  	<input class="btn btn-success" type="submit" id="submit" value="Submit" />
 					</form>
+
+
+
 				</div><!-- cpontroller -->
 
 			</div><!-- MyApp -->
@@ -205,7 +182,16 @@
 <script src="../../javascripts/angular-ui-router.js"></script>
 <script src="../../javascripts/ui-bootstrap-tpls.min.js"></script>
 <script>
-	$app.controller("disasterEventController", function($scope, $http, $templateRequest, $sce, $compile, $window){
+	$app.controller("disasterEventController", function($scope, $http, $templateRequest, $sce, $compile, $window, $modal, $log){
+
+		$scope.getEnterDate = function () {
+			$modal.open({
+		      templateUrl: '/template/template_get_date.hjs',
+		      controller: 'disasterEventController'
+		    });
+	  };
+
+
 		$http.get('data.json').success(function(data, status, headers, config) {
 		        $scope.items = data.data;
 		    }).error(function(data, status, headers, config) {
@@ -308,8 +294,8 @@
 	    $scope.newTabRegisterVillage = function() {
 	    	$window.open('/db/village');
 	    };
+
 	   
 	});
-
 
 </script>
