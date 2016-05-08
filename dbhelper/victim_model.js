@@ -17,6 +17,7 @@ var VictimSchema = new mongoose.Schema({
   },
   is_major_injury	: { 
   	status		: { type: Boolean, default: false},
+    date_end  : { type: Date, default: null},
   	record_medical_facilities	: { type: [{
   		date_enter: { type: Date, default: Date.now},
   		id_medical_facility :{ type: mongoose.Schema.Types.ObjectId, ref: 'MedicalFacility' }	
@@ -24,6 +25,7 @@ var VictimSchema = new mongoose.Schema({
   },
   is_refugee	: { 
   	status		: { type: Boolean, default: false},
+    date_end  : { type: Date, default: null},
   	record_refugee_camps	: { type: [{
   		date_enter: { type: Date, default: Date.now},
   		id_refugee_camp :{ type: mongoose.Schema.Types.ObjectId, ref: 'RefugeeCamp' }	

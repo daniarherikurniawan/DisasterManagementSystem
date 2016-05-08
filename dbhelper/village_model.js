@@ -10,7 +10,7 @@ var VillageSchema = new mongoose.Schema({
     },
     record_weather: [{
       date_recorded : { type: Date, default: Date.now},
-      condition : {type : String, default:"Hujan sangat deras"} 
+      condition : {type : String, default:"Sunny"} 
     }],
     geo_region  : {type : String, default:"[{342, 5345},{3432, 535}, {32, 45}]"} 
   })

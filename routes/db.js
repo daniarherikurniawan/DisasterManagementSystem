@@ -25,7 +25,6 @@ router.get('/data.json', function(req, res, next) {
 	  }
   		res.send(data);
 	});
-
 });
 
 
@@ -53,27 +52,27 @@ router.get('/refugee_camp', function(req, res, next) {
 /* DB INSERT. */
 router.get('/disaster_event/insert', function(req, res, next) {
 	disaster_event_cont.insert();
-  	res.render('db_insert/db_insert_disaster_event');
+  res.send('respond with a resource db');
 });
 router.get('/disaster/insert', function(req, res, next) {
 	disaster_cont.insert();
-  	res.render('db_insert/db_insert_disaster');
+  res.send('respond with a resource db');
 });
 router.get('/victim/insert', function(req, res, next) {
 	victim_cont.insert();
-  	res.render('db_insert/db_insert_victim');
+  res.send('respond with a resource db');
 });
 router.get('/village/insert', function(req, res, next) {
 	village_cont.insert();
-  	res.render('db_insert/db_insert_village');
+  res.send('respond with a resource db');
 });
 router.get('/medical_facility/insert', function(req, res, next) {
 	medical_facility_cont.insert();
-  	res.render('db_insert/db_insert_medical_facility');
+  res.send('respond with a resource db');
 });
 router.get('/refugee_camp/insert', function(req, res, next) {
 	refugee_camp_cont.insert();
-  	res.render('db_insert/db_insert_refugee_camp');
+  res.send('respond with a resource db');
 });
 
 

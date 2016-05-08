@@ -149,6 +149,9 @@
 		        name: "Tornado"        
 		    }, {
 		        id: 5,
+		        name: "Volcanic Eruption"        
+		    }, {
+		        id: 6,
 		        name: "Tsunami"        
 		    }];
 
