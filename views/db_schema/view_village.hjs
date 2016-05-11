@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>DIMAS</title>
+		<link href="../../stylesheets/bootstrap.min.css" rel="stylesheet">
+	</head>
+	<body>
+		<div class="container" >
+			<div class="row">
+				<h1><%title%></h1>
+			</div>
+
+			<div ng-app="myApp">
+				<div ng-controller="villageController">
+					<form class="form-horizontal" ng-submit="insertVillage()">
+					    <div class="row">
+					       <div class="form-group">
+					        <label class="col-sm-2">Name</label>
+					        <div class="col-sm-10"><input type="text" ng-model="name" 
+					        name="name" placeholder="name of the victim" class="form-control" required /></div>
+					        </div>
+					   	</div>
+					   
+					    <div class="row">
+					       <div class="form-group">
+						        <label class="col-sm-2">Location</label>
+						        <div class="col-sm-10">
+						        	<br>
+							        <div class="form-group">
+								        <label class="col-sm-2">Subdistrict</label>
+								        <div class="col-sm-10"><input type="text" ng-model="sub_district" 
+								        name="sub_district" placeholder="sub district of the address" class="form-control" required /></div>
+								   	</div>
+							        <div class="form-group">
+								        <label class="col-sm-2">District</label>
+								        <div class="col-sm-10"><input type="text" ng-model="district" 
+								        name="district" placeholder="district of the address" class="form-control" required /></div>
+								   	</div>
+							        <div class="form-group">
+								        <label class="col-sm-2">Province</label>
+								        <div class="col-sm-10"><input type="text" ng-model="province" 
+								        name="province" placeholder="province of the address" class="form-control" required /></div>
+								   	</div>
+						        </div>
+						   	</div>
+						</div>
+
+			        	<div class="row">
+					       	<div class="form-group">
+						        <label class="col-sm-2">Record Weather</label>
+						        <div class="col-sm-10">
+						        	<span ng-repeat="weather in record_weather" style="float:left ">
+							            <input type="button" value="{{weather.date_recorded | date:'MM/dd/yyyy'}} {{weather.type_weather}}" class="btn-info" />
+				       					<input type="button" value="X" class="btn-danger" style="margin:0 20px 20px -5px" ng-click="deleteWeatherRecord($index)"/>
+							        </span>
+							        <div class="row col-md-12">
+							        	<div  class="row" >
+							        		<div class="col-md-3">
+								        		<input type="date" ng-model="date_recorded" 
+										        name="date_recorded" class="form-control" required/>
+							        		</div>
+							        		<div class="col-md-2">
+									        	<bs-dropdown  select-val="selected_type_weather = selectedVal" preselected-item="selected_weather" data-dropdown-data="type_weather">
+												</bs-dropdown> 
+							        		</div>
+							        		<div class="col-md-4">
+			       								<input type="button" value="Add" class="btn-success" ng-click="addWeatherRecord()"/>
+							        		</div>
+							        	</div>										       
+						        	</div>
+						        </div>
+					        </div>
+					   	</div>
+
+					  	<input class="btn btn-success" type="submit" id="submit" value="Submit" />
+					</form>
+				</div><!-- cpontroller -->
+			</div><!-- MyApp -->
+		</div>
+	</body>
+</html>
+
+<script src="../../javascripts/jquery.min.js"></script>
+<script src="../../javascripts/angular.min.js"></script>
+<script src="../../javascripts/angular_directive.js"></script>
+<script src="../../javascripts/angular-ui-router.js"></script>
+<script src="../../javascripts/ui-bootstrap-tpls.min.js"></script>
+<script>
+$app.controller("villageController", function($scope, $http, $templateRequest, $sce, $compile, $window){
+		$scope.record_weather = [];
+		$scope.date_recorded = new Date();
+		$scope.selected_weather = 1;
+		$scope.type_weather = [{
+		        id: 1,
+		        name: "Sunny"        
+		    }, {
+		        id: 2,
+		        name: "Cloudy"        
+		    }, {
+		        id: 3,
+		        name: "Thunderstorm"        
+		    }, {
+		        id: 4,
+		        name: "Snowy"        
+		    }, {
+		        id: 5,
+		        name: "Heavy Rain"        
+		    }];
+
+
+	    $scope.deleteWeatherRecord = function(id) {
+	    	$scope.record_weather.splice(id, 1);
+	    };
+
+	    $scope.addWeatherRecord = function() {
+		    $scope.record_weather.push({
+		    	'date_recorded' : $scope.date_recorded,
+	    		'type_weather' : $scope.type_weather[$scope.selected_type_weather - 1].name
+		    });
+	    };
+	    
+	    $scope.insertVillage = function(){
+	    	if($scope.record_weather.length == 0){
+	    		alert("Please input data recorded weather!")
+	    	}else{
+	    		$http({
+			        url: '/db/village/insert',
+			        method: "POST",
+			        data: {
+		                name: $scope.name,
+		                location: {
+		                	'sub_district' : $scope.sub_district,
+		                	'district' : $scope.district,
+		                	'province' : $scope.province
+		                },
+		                record_weather: $scope.record_weather
+		            }
+			    })
+			    .then(function(response) {
+			        alert("Data village has been saved successfully!");
+			    }, 
+			    function(response) { // optional
+			        alert("failed: "+response.data);
+			    });
+	    	}
+		}
+
+	});
+
+
+</script>

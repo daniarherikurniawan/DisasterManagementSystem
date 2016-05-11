@@ -33,8 +33,8 @@ app.use(session({
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(__dirname + '/public'));
 
-var routes = require('./routes/index');
-var db = require('./routes/db');
+var routes = require('./routes/index_router');
+var db = require('./routes/db_router');
 app.use('/', routes);
 app.use('/db', db);
 

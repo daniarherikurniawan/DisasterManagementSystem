@@ -1,15 +1,23 @@
 var Village = require('../dbhelper/village_model');
 
 module.exports = { 
-	hello: function() {
-		return "hai daniar";
+	find: function(search_term, callback){
+		Village.object
+			.find({ name: new RegExp(search_term, "i")})
+			.sort({name: 'desc'})
+			.limit(10)
+			.exec(function(err, village){
+				callback(village);
+				return;
+		})
 	},
 
-	insert: function(){
-		var villageObj = new Village({name: "Daniar"});
+	insert: function(data){
+		var villageObj = new Village.model(data);
 	    villageObj.save(function(err){
-		  if(err) console.log(err); 
+		  if(err) 
+	    	return null;
 		});
-	    return ;
+	    return villageObj._id;
 	}
 }

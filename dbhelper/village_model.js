@@ -15,4 +15,7 @@ var VillageSchema = new mongoose.Schema({
     geo_region  : {type : String, default:"[{342, 5345},{3432, 535}, {32, 45}]"} 
   })
 
-module.exports = mongoose.model('villages', VillageSchema);
+module.exports = { 
+  model : mongoose.model('villages', VillageSchema),
+  object: mongoose.model('villages')
+}

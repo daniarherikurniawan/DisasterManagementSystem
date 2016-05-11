@@ -1,15 +1,24 @@
 var RefugeeCamp = require('../dbhelper/refugee_camp_model');
 
 module.exports = { 
-	hello: function() {
-		return "hai daniar";
+	find: function(search_term, callback){
+		RefugeeCamp.object
+			.find({ name: new RegExp(search_term, "i")})
+			.sort({name: 'desc'})
+			.limit(10)
+			.exec(function(err, refugee_camp){
+				callback(refugee_camp);
+				return;
+		})
 	},
 
-	insert: function(){
-		var refugeeCampObj = new RefugeeCamp({name: "Banjir Palembangan"});
+
+	insert: function(data){
+		var refugeeCampObj = new RefugeeCamp.model(data);
 	    refugeeCampObj.save(function(err){
-		  if(err) console.log(err); 
+		  if(err) 
+	    	return null;
 		});
-	    return ;
+	    return refugeeCampObj._id;
 	}
 }

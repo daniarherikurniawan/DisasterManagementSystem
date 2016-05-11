@@ -11,4 +11,7 @@ var RefugeeCampSchema = new mongoose.Schema({
     capicity : { type: Number, default: 100}
   })
 
-module.exports = mongoose.model('refugee_camps', RefugeeCampSchema);
+module.exports = { 
+  model : mongoose.model('refugee_camps', RefugeeCampSchema),
+  object: mongoose.model('refugee_camps')
+}

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>DIMAS</title>
+		<link href="../../stylesheets/bootstrap.min.css" rel="stylesheet">
+	</head>
+	<body>
+		<div class="container" >
+			<div class="row">
+				<h1><%title%></h1>
+			</div>
+			<div ng-app="myApp">
+				<div ng-controller="MedicalFacilityController">
+					<form class="form-horizontal" ng-submit="insertMedicalFacility()">
+					    <div class="row">
+					       <div class="form-group">
+					        <label class="col-sm-2">Name</label>
+					        <div class="col-sm-10"><input type="text" ng-model="name" 
+					        name="name" placeholder="name of the medical facility" class="form-control" required /></div>
+					        </div>
+					   	</div>
+					   
+					    <div class="row">
+					       <div class="form-group">
+						        <label class="col-sm-2">Address</label>
+						        <div class="col-sm-10">
+						        	<br>
+							        <div class="form-group">
+								        <label class="col-sm-2">Street</label>
+								        <div class="col-sm-10"><input type="text" ng-model="street" 
+								        name="street" placeholder="street of the address" class="form-control" required /></div>
+								   	</div>
+							        <div class="form-group">
+								        <label class="col-sm-2">Village</label>
+								        <div class="col-sm-10">
+								        	<span ng-repeat="village in data_village" style="float:left ">
+									            <input type="button" value="{{village.name}}" class="btn-info" />
+						       					<input type="button" value="X" class="btn-danger" style="margin:0 20px 20px -5px" ng-click="deleteVillage($index)"/>
+									        </span>
+									        <div ng-show="data_village.length == 0" >
+									        	<input type="text" ng-change="findVillageOnDB()" ng-model="searchStringMedicalFacility" name="search_query" placeholder="type the name of village to search" class="form-control" required />
+												<br>  
+												<div ng-show="searchStringMedicalFacility.length != 0" >     
+										            <div class="data-ctrl">
+										                <span ng-repeat="village in possibleVillages | searchForName:searchStringMedicalFacility">
+										                    <p><input type="button" value="+" class="btn-success"  ng-click="addVillage($index)"/> {{village.name}}
+										                </span>
+										            </div>
+									            </div>
+								            </div>
+								        </div>
+								   	</div>
+						        </div>
+						   	</div>
+						</div>
+
+					    <div class="row">
+					       <div class="form-group">
+						        <label class="col-sm-2">Type</label>
+						        <div class="col-sm-10">
+						        	<bs-dropdown  select-val="selected_type_medical_facility = selectedVal" preselected-item="selected_type_medical_facility" data-dropdown-data="type_medical_facility">
+									</bs-dropdown> 
+								</div>
+					        </div>
+					   	</div>
+					   
+					  	<input class="btn btn-success" type="submit" id="submit" value="Submit" />
+					</form>
+				</div><!-- cpontroller -->
+			</div><!-- MyApp -->
+		</div>
+	</body>
+</html>
+<script src="../../javascripts/jquery.min.js"></script>
+<script src="../../javascripts/angular.min.js"></script>
+<script src="../../javascripts/angular_directive.js"></script>
+<script src="../../javascripts/angular-ui-router.js"></script>
+<script src="../../javascripts/ui-bootstrap-tpls.min.js"></script>
+<script>
+$app.controller("MedicalFacilityController", function($scope, $http, $templateRequest, $sce, $compile, $window){
+		$scope.name = "";
+		$scope.searchStringMedicalFacility = "";
+		$scope.selected_type_medical_facility = 1;
+		$scope.type_medical_facility = [{
+		        id: 1,
+		        name: "Public Health Center"        
+		    }, {
+		        id: 2,
+		        name: "Clinic"        
+		    }, {
+		        id: 3,
+		        name: "Hospital"        
+		    }];
+
+		$scope.data_village = [];
+
+		$scope.possibleVillages = [];
+
+		$scope.addVillage = function(id) {
+			$scope.data_village.push($scope.possibleVillages[id]);
+	    };
+	    $scope.deleteVillage = function(id) {
+	    	$scope.data_village.splice(id, 1);
+	    };
+
+	    $scope.insertMedicalFacility = function(){
+	    	if($scope.data_village.length == 0){
+	    		alert("Please input data village!")
+	    	}else{
+	    		$http({
+			        url: '/db/medical_facility/insert',
+			        method: "POST",
+			        data: {
+		                name: $scope.name,
+		                address: {
+		                	'street' : $scope.street,
+		                	'id_village' : $scope.data_village[0]._id
+		                },
+		                type: $scope.type_medical_facility[$scope.selected_type_medical_facility - 1].name
+		            }
+			    })
+			    .then(function(response) {
+			        alert("Data medical facility has been saved successfully!");
+			    }, 
+			    function(response) { // optional
+			        alert("failed: "+response.data);
+			    });
+	    	}
+		};
+
+		$scope.findVillageOnDB = function(){
+			if($scope.searchStringMedicalFacility != undefined &&
+				$scope.searchStringMedicalFacility.length%3 == 0){
+				$http({
+			        url: '/db/village/find',
+			        method: "POST",
+			        data: {
+		                search_term: $scope.searchStringMedicalFacility
+		            }
+			    })
+			    .then(function(response) {
+			    	$scope.possibleVillages = response.data;
+			    }, 
+			    function(response) { 
+			        alert("failed: findVillageOnDB"+response.data);
+			    });
+			}
+		}
+
+	});
+</script>

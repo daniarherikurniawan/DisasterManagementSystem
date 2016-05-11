@@ -15,22 +15,23 @@ var VictimSchema = new mongoose.Schema({
   	status		: { type: Boolean, default: false},
   	name_heirs	: { type: [{ type: String}], default: []}
   },
-  is_major_injury	: { 
-  	status		: { type: Boolean, default: false},
-    date_end  : { type: Date, default: null},
-  	record_medical_facilities	: { type: [{
-  		date_enter: { type: Date, default: Date.now},
+  record_medical_facilities	: { type: [{
+  		date_start: { type: Date, default: Date.now},
+      date_end: { type: Date, default: Date.now},
   		id_medical_facility :{ type: mongoose.Schema.Types.ObjectId, ref: 'MedicalFacility' }	
-  	}], default: []}
+  	}], default: []
   },
   is_refugee	: { 
   	status		: { type: Boolean, default: false},
-    date_end  : { type: Date, default: null},
   	record_refugee_camps	: { type: [{
-  		date_enter: { type: Date, default: Date.now},
+      date_start: { type: Date, default: Date.now},
+      date_end: { type: Date, default: Date.now},
   		id_refugee_camp :{ type: mongoose.Schema.Types.ObjectId, ref: 'RefugeeCamp' }	
   	}], default: []}
   }
 })
 
-module.exports = mongoose.model('victims', VictimSchema);
+module.exports = { 
+  model : mongoose.model('victims', VictimSchema),
+  object: mongoose.model('victims')
+}

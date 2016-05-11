@@ -15,9 +15,6 @@
 				<li><a href="/db/disaster_event">Table Disaster Event</a></li>
 					<ul>- <a href="/db/disaster_event/insert">Insert</a></ul>
 					<ul>- <a href="/db/disaster_event/find">Find</a></ul>
-				<li><a href="/db/disaster">Table Disaster</a></li>
-					<ul>- <a href="/db/disaster/insert">Insert</a></ul>
-					<ul>- <a href="/db/disaster/find">Find</a></ul>
 				<li><a href="/db/victim">Table Victim</a></li>
 					<ul>- <a href="/db/victim/insert">Insert</a></ul>
 					<ul>- <a href="/db/victim/find">Find</a></ul>

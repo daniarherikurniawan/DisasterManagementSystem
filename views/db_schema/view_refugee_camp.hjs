@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>DIMAS</title>
+		<link href="../../stylesheets/bootstrap.min.css" rel="stylesheet">
+	</head>
+	<body>
+		<div class="container" >
+			<div class="row">
+				<h1><%title%></h1>
+			</div>
+			<div ng-app="myApp">
+				<div ng-controller="RefugeeCampController">
+					<form class="form-horizontal" ng-submit="insertRefugeeCamp()">
+					    <div class="row">
+					       <div class="form-group">
+					        <label class="col-sm-2">Name</label>
+					        <div class="col-sm-10"><input type="text" ng-model="name" 
+					        name="name" placeholder="name of the refugee camp" class="form-control" required /></div>
+					        </div>
+					   	</div>
+					   
+					    <div class="row">
+					       <div class="form-group">
+						        <label class="col-sm-2">Address</label>
+						        <div class="col-sm-10">
+						        	<br>
+							        <div class="form-group">
+								        <label class="col-sm-2">Street</label>
+								        <div class="col-sm-10"><input type="text" ng-model="street" 
+								        name="street" placeholder="street of the address" class="form-control" required /></div>
+								   	</div>
+							        <div class="form-group">
+								        <label class="col-sm-2">Village</label>
+								        <div class="col-sm-10">
+								        	<span ng-repeat="village in data_village" style="float:left ">
+									            <input type="button" value="{{village.name}}" class="btn-info" />
+						       					<input type="button" value="X" class="btn-danger" style="margin:0 20px 20px -5px" ng-click="deleteVillage($index)"/>
+									        </span>
+									        <div ng-show="data_village.length == 0" >
+									        	<input type="text" ng-change="findVillageOnDB()" ng-model="searchStringVillage" name="search_query" placeholder="type the name of village to search" class="form-control" required />
+												<br>  
+												<div ng-show="searchStringVillage.length != 0" >     
+										            <div class="data-ctrl">
+										                <span ng-repeat="village in possibleVillages | searchForName:searchStringVillage">
+										                    <p><input type="button" value="+" class="btn-success"  ng-click="addVillage($index)"/> {{village.name}}
+										                </span>
+										            </div>
+									            </div>
+								            </div><!-- ng-show -->
+								        </div>
+								   	</div>
+						        </div>
+						   	</div>
+						</div>
+
+					    <div class="row">
+					       <div class="form-group">
+						        <label class="col-sm-2">Type</label>
+						        <div class="col-sm-10">
+						        	<bs-dropdown  select-val="selected_type_camp = selectedVal" preselected-item="selected_type_camp" data-dropdown-data="type_camp">
+									</bs-dropdown> 
+								</div>
+					        </div>
+					   	</div>
+					   
+					    <div class="row">
+					       <div class="form-group">
+					        <label class="col-sm-2">Capacity (person)</label>
+					        <div class="col-sm-10"><input type="number" ng-model="capacity" 
+					        name="capacity" placeholder="capacity of the refugee camp" class="form-control" required /></div>
+					        </div>
+					   	</div>
+					   
+					  	<input class="btn btn-success" type="submit" id="submit" value="Submit" />
+					</form>
+				</div><!-- cpontroller -->
+			</div><!-- MyApp -->
+
+		</div>
+	</body>
+</html>
+<script src="../../javascripts/jquery.min.js"></script>
+<script src="../../javascripts/angular.min.js"></script>
+<script src="../../javascripts/angular_directive.js"></script>
+<script src="../../javascripts/angular-ui-router.js"></script>
+<script src="../../javascripts/ui-bootstrap-tpls.min.js"></script>
+<script>
+$app.controller("RefugeeCampController", function($scope, $http, $templateRequest, $sce, $compile, $window){
+		$scope.record_weather = [];
+		$scope.name = "";
+		$scope.searchStringVillage = "";
+		$scope.capacity = "";
+		$scope.selected_type_camp = 1;
+		$scope.type_camp = [{
+		        id: 1,
+		        name: "School"        
+		    }, {
+		        id: 2,
+		        name: "Village Hall"        
+		    }, {
+		        id: 3,
+		        name: "Praying Place"        
+		    }, {
+		        id: 4,
+		        name: "House"        
+		    }, {
+		        id: 5,
+		        name: "Field"        
+		    }];
+		$scope.data_village = [];
+
+		$scope.possibleVillages = [];
+
+		$scope.addVillage = function(id) {
+			$scope.data_village.push($scope.possibleVillages[id]);
+	    };
+	    $scope.deleteVillage = function(id) {
+	    	$scope.data_village.splice(id, 1);
+	    };
+
+	    $scope.insertRefugeeCamp = function(){
+	    	if($scope.data_village.length == 0){
+	    		alert("Please input data village!")
+	    	}else{
+	    		$http({
+			        url: '/db/refugee_camp/insert',
+			        method: "POST",
+			        data: {
+		                name: $scope.name,
+		                address: {
+		                	'street' : $scope.street,
+		                	'id_village' : $scope.data_village[0]._id
+		                },
+		                type: $scope.type,
+		                capicity: $scope.capicity
+		            }
+			    })
+			    .then(function(response) {
+			        alert("Data refugee camp has been saved successfully!");
+			    }, 
+			    function(response) { // optional
+			        alert("failed: "+response.data);
+			    });
+	    	}
+		};
+
+		$scope.findVillageOnDB = function(){
+			if($scope.searchStringVillage != undefined &&
+				$scope.searchStringVillage.length%3 == 0){
+				$http({
+			        url: '/db/village/find',
+			        method: "POST",
+			        data: {
+		                search_term: $scope.searchStringVillage
+		            }
+			    })
+			    .then(function(response) {
+			    	$scope.possibleVillages = response.data;
+			    }, 
+			    function(response) { 
+			        alert("failed: findVillageOnDB"+response.data);
+			    });
+			}
+		}
+
+	});
+</script>

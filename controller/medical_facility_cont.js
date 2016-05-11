@@ -1,15 +1,23 @@
 var MedicalFacility = require('../dbhelper/medical_facility_model');
 
 module.exports = { 
-	hello: function() {
-		return "hai daniar";
+	find: function(search_term, callback){
+		MedicalFacility.object
+			.find({ name: new RegExp(search_term, "i")})
+			.sort({name: 'desc'})
+			.limit(10)
+			.exec(function(err, medical_facility){
+				callback(medical_facility);
+				return;
+		})
 	},
 
-	insert: function(){
-		var medicalFacilityObj = new MedicalFacility({name: "Banjir Palembangan"});
+	insert: function(data){
+		var medicalFacilityObj = new MedicalFacility.model(data);
 	    medicalFacilityObj.save(function(err){
-		  if(err) console.log(err); 
+		  if(err) 
+	    	return null;
 		});
-	    return ;
+	    return medicalFacilityObj._id;
 	}
 }

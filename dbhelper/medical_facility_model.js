@@ -10,4 +10,7 @@ var MedicalFacilitySchema = new mongoose.Schema({
   type : { type: String, default: "puskesmas"}
 })
 
-module.exports = mongoose.model('medical_facilities', MedicalFacilitySchema);
+module.exports = { 
+  model : mongoose.model('medical_facilities', MedicalFacilitySchema),
+  object: mongoose.model('medical_facilities')
+}

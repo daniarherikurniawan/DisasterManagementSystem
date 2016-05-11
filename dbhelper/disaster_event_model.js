@@ -7,4 +7,7 @@ var DisasterEventSchema = new mongoose.Schema({
     date_end  : { type: Date, default: null},
   })
 
-module.exports = mongoose.model('disaster_events', DisasterEventSchema);
+module.exports = { 
+  model : mongoose.model('disaster_events', DisasterEventSchema),
+  object: mongoose.model('disaster_events')
+}

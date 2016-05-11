@@ -9,48 +9,13 @@
 			<div class="row">
 				<h1><%title%></h1>
 			</div>
-			<div class="row" style=" white-space: pre-wrap; font-family: monospace;">
-				var Victim = new mongoose.Schema({
-				  id_KTP: { type: String, default: "12345678901234567"},
-				  name 	: { type: String, default: "Daniar Heri"},
-				  phone	: {type: [{type: String}], default: [] },
-				  address	: { type: String, default: "Jl Ngrandu No 8"},
-				  original_village: { type: String, default: "Kendalrejo"},
-				  gender	: { type: String, default: "L"},
-				  birthday	: { type: Date, default: Date.now},
-				  status	: { type: String, default: "affected"},
-				  is_pregnant : { type: Boolean, default: false},
-				  is_deceased : { 
-				  	status		: { type: Boolean, default: false},
-				  	name_heirs	: { type: [{ type: String}], default: []}
-				  },
-				  is_major_injury	: { 
-				  	status		: { type: Boolean, default: false},
-    				date_end  : { type: Date, default: null},
-				  	record_medical_facilities	: { type: [{
-				  		date_enter: { type: Date, default: Date.now},
-				  		id_medical_facility :{ type: mongoose.Schema.Types.ObjectId, ref: 'MedicalFacility' }	
-				  	}], default: []}
-				  },
-				  is_refugee	: { 
-				  	status		: { type: Boolean, default: false},
-    				date_end  : { type: Date, default: null},
-				  	record_refugee_camps	: { type: [{
-				  		date_enter: { type: Date, default: Date.now},
-				  		id_refugee_camp :{ type: mongoose.Schema.Types.ObjectId, ref: 'RefugeeCamp' }	
-				  	}], default: []}
-				  }
-				})
-			</div>
-
-
 			<div ng-app="myApp">
 				<div ng-controller="disasterEventController">
 					<form class="form-horizontal" ng-submit="insertDisasterEvent()">
 					    <div class="row">
 					       <div class="form-group">
 					        <label class="col-sm-2">Id KTP</label>
-					        <div class="col-sm-10"><input type="number" ng-model="id_KTP" 
+					        <div class="col-sm-10"><input type="text" ng-model="id_KTP" 
 					        name="id_KTP" placeholder="id KTP of the victim" class="form-control" required /></div>
 					        </div>
 					   	</div>
@@ -90,22 +55,23 @@
 					       <div class="form-group">
 					        <label class="col-sm-2">Village</label>
 					        	<div class="col-sm-10">
-						        	<span ng-repeat="village in original_village" style="float:left ">
-							            <input type="button" value="{{village}}" class="btn-info" ng-click="processForm($index)"/>
-				       					<input type="button" value="X" class="btn-danger" style="margin:0 20px 20px -5px" ng-click="deleteOriginalVillage($index)"/>
+						        	<span ng-repeat="village in data_village" style="float:left ">
+							            <input type="button" value="{{village.name}}" class="btn-info" ng-click="processForm($index)"/>
+				       					<input type="button" value="X" class="btn-danger" style="margin:0 20px 20px -5px" ng-click="deleteVillage($index)"/>
 							        </span>
 							        <div ng-hide="isOriginalVillageFilled">
 								        <span style="float:left ">
 							       			<input type="button" value="+ Register Village" class="btn-success" ng-click="newTabRegisterVillage()"/>
 							       			<br><br>
 								        </span>
-
-							        	<input type="text" ng-model="searchString" name="search_query" placeholder="original village of the victim" class="form-control" required />
-										<br>        
-							            <div class="data-ctrl">
-							                <span ng-repeat="i in items | searchFor:searchString">
-							                    <p><input type="button" value="+" class="btn-success"  ng-click="addOriginalVillage($index)"/> {{i.title}}
-							                </span>
+							        	<input type="text" ng-change="findVillageOnDB()" ng-model="searchStringVillage" name="search_query" placeholder="type the name of village to search" class="form-control" required />
+										<br>  
+										<div ng-show="searchStringVillage.length != 0" >     
+								            <div class="data-ctrl">
+								                <span ng-repeat="village in possibleVillages | searchForName:searchStringVillage">
+								                    <p><input type="button" value="+" class="btn-success"  ng-click="addVillage($index)"/> {{village.name}}
+								                </span>
+								            </div>
 							            </div>
 							        </div>
 						        </div>
@@ -121,7 +87,13 @@
 						        </div>
 						   	</div>
 						</div>
-
+					    <div class="row">
+					       <div class="form-group">
+					        <label class="col-sm-2">Birthday</label>
+					        <div class="col-sm-10"><input type="date" ng-model="birthday" 
+					        name="birthday" class="form-control" required/></div>
+					        </div>
+					   	</div>
 				        <div ng-show="selected_status_gender==2">
 				        	<div class="row">
 						       	<div class="form-group">
@@ -132,7 +104,7 @@
 						        </div>
 						   	</div>
 						</div>
-							<div class="row">
+						<div class="row">
 					       <div class="form-group">
 						        <label class="col-sm-2">Status</label>
 						        <div class="col-sm-10">
@@ -162,26 +134,61 @@
 						   	</div>
 						</div>
 
-						<div ng-show="selected_status_injury==3">
+			        	<div class="row">
+					       	<div class="form-group">
+						        <label class="col-sm-2">Medical facility</label>
+						        <div class="col-sm-10">
+						        	<span ng-repeat="id in id_medical_facility" style="float:left ">
+							            <input type="button" value="{{id}}" class="btn-info" />
+				       					<input type="button" value="X" class="btn-danger" style="margin:0 20px 20px -5px" ng-click="deleteIdMedicalFacility($index)"/>
+							        </span>
+
+							        <span style="float:left ">
+						       			<input type="button" value="+ Register Medical Facility" class="btn-success" ng-click="newTabRegisterMedicalFacility()"/>
+						       			<br><br>
+							        </span>
+
+						        	<input type="text" ng-model="searchStringMedicalFacility" name="search_query" placeholder="input name or KTP number to search" class="form-control" required />
+									<br>        
+						            <div class="data-ctrl">
+						                <span ng-repeat="i in items | searchFor:searchStringMedicalFacility">
+						                    <p><input type="button" value="+" class="btn-success"  ng-click="addIdMedicalFacility($index)"/> {{i.title}}
+						                </span>
+						            </div>
+						            {{status}}
+						        </div>
+					        </div>
+					   	</div>
+
+					   	<div class="row">
+					       	<div class="form-group">
+						        <label class="col-sm-2">Refugee</label>
+						        <div class="col-sm-10">
+						        	<input type="checkbox" ng-model="is_refugee">
+						        </div>
+					        </div>
+					   	</div>
+
+					   	<div ng-show="is_refugee==true">
 				        	<div class="row">
 						       	<div class="form-group">
-							        <label class="col-sm-2">Medical facility</label>
+							        <label class="col-sm-2">Refugee Camp</label>
 							        <div class="col-sm-10">
-							        	<span ng-repeat="id in id_medical_facility" style="float:left ">
+							        	<span ng-repeat="id in id_refugee_camp" style="float:left ">
 								            <input type="button" value="{{id}}" class="btn-info" />
-					       					<input type="button" value="X" class="btn-danger" style="margin:0 20px 20px -5px" ng-click="deleteIdMedicalFacility($index)"/>
+					       					<input type="button" value="X" class="btn-danger" style="margin:0 20px 20px -5px" ng-click="deleteIdRefugeeCamp($index)"/>
 								        </span>
 
 								        <span style="float:left ">
-							       			<input type="button" value="+ Register Medical Facility" class="btn-success" ng-click="newTabRegisterMedicalFacility()"/>
+							       			<input type="button" value="+ Register Refugee Camp" class="btn-success" ng-click="newTabRegisterRefugeeCamp()"/>
 							       			<br><br>
 								        </span>
 
-							        	<input type="text" ng-model="searchStringMedicalFacility" name="search_query" placeholder="input name or KTP number to search" class="form-control" required />
+							        	<input type="text" ng-model="searchStringRefugeeCamp" name="search_query" placeholder="input name or KTP number to search" class="form-control" required />
 										<br>        
 							            <div class="data-ctrl">
-							                <span ng-repeat="i in items | searchFor:searchStringMedicalFacility">
-							                    <p><input type="button" value="+" class="btn-success"  ng-click="addIdMedicalFacility($index)"/> {{i.title}}
+							                <span ng-repeat="i in items | searchFor:searchStringRefugeeCamp">
+							                    <p><input type="button" value="+" class="btn-success"  ng-click="addIdRefugeeCamp($index)"/> {{i.title}}
 							                </span>
 							            </div>
 							            {{status}}
@@ -189,7 +196,6 @@
 						        </div>
 						   	</div>
 						</div>
-
 
 					  	<input class="btn btn-success" type="submit" id="submit" value="Submit" />
 					</form>
@@ -209,13 +215,13 @@
 <script src="../../javascripts/ui-bootstrap-tpls.min.js"></script>
 <script>
 	$app.controller("disasterEventController", function($scope, $http, $templateRequest, $sce, $compile, $window, $modal, $log){
-
+		$scope.possibleVillages = [];
 		$scope.getEnterDate = function (id) {
 			$modal.open({
 		      templateUrl: '/template/template_get_date.hjs',
 		      controller: 'disasterEventController'
 		    });
-	  };
+		};
 
 
 		$http.get('data.json').success(function(data, status, headers, config) {
@@ -224,8 +230,7 @@
 		        console.log("No data found..");
 		});
 
-		$scope.birthday = new Date();
-		$scope.original_village=[];
+		$scope.data_village=[];
 		$scope.phone_numbers=[];
 		$scope.name_heirs=[];		
 		$scope.selected_gender = 1;
@@ -239,6 +244,7 @@
 		        id: 2,
 		        name: "Woman"        
 		    }];
+		    
 		$scope.type_status_injury = [{
 		        id: 1,
 		        name: "Affected"        
@@ -257,19 +263,31 @@
 		    }];
 
 		$scope.id_medical_facility = [];
+		$scope.id_refugee_camp = [];
 
 		$scope.newTabRegisterMedicalFacility = function(){
 	    	$window.open('/db/medical_facility');
-		}
+		};
 		$scope.addIdMedicalFacility = function(id) {
 			$scope.getEnterDate(id);
 		    // $scope.id_medical_facility.push(id);
 	    };
-
-
 	    $scope.deleteIdMedicalFacility = function(id) {
 	    	$scope.id_medical_facility.splice(id, 1);
 	    };
+
+
+	   	$scope.newTabRegisterRefugeeCamp = function(){
+	    	$window.open('/db/refugee_camp');
+		};
+		$scope.addIdRefugeeCamp = function(id) {
+			$scope.getEnterDate(id);
+		    // $scope.id_refugee_camp.push(id);
+	    };
+	    $scope.deleteIdRefugeeCamp = function(id) {
+	    	$scope.id_refugee_camp.splice(id, 1);
+	    };
+
 
 	    $scope.addNewPhone = function(phone) {
 	    	if(phone != ''){
@@ -282,14 +300,14 @@
 	    	$scope.phone_numbers.splice(id, 1);
 	    };
 
-	    $scope.addOriginalVillage = function(id) {
-		    $scope.original_village.push(id);
+	    $scope.addVillage = function(id) {
+		    $scope.data_village.push($scope.possibleVillages[id]);
 			$scope.isOriginalVillageFilled = true;
 	    };
 
-	    $scope.deleteOriginalVillage = function(id) {
+	    $scope.deleteVillage = function(id) {
 			$scope.isOriginalVillageFilled = false;
-	    	$scope.original_village.splice(id, 1);
+	    	$scope.data_village.splice(id, 1);
 	    };
 	    $scope.deleteNameHeir =  function(id) {
 	    	$scope.name_heirs.splice(id, 1);
@@ -305,11 +323,28 @@
 		    alert("Submitting form..");
 		}
 
-		
 	    $scope.newTabRegisterVillage = function() {
 	    	$window.open('/db/village');
 	    };
 
+	    $scope.findVillageOnDB = function(){
+			if($scope.searchStringVillage != undefined &&
+				$scope.searchStringVillage.length%3 == 0){
+				$http({
+			        url: '/db/village/find',
+			        method: "POST",
+			        data: {
+		                search_term: $scope.searchStringVillage
+		            }
+			    })
+			    .then(function(response) {
+			    	$scope.possibleVillages = response.data;
+			    }, 
+			    function(response) { 
+			        alert("failed: findVillageOnDB"+response.data);
+			    });
+			}
+		}
 	   
 	});
 
