@@ -59,9 +59,11 @@
 								        		<input type="date" ng-model="date_recorded" 
 										        name="date_recorded" class="form-control" required/>
 							        		</div>
-							        		<div class="col-md-2">
-									        	<bs-dropdown  select-val="selected_type_weather = selectedVal" preselected-item="selected_weather" data-dropdown-data="type_weather">
-												</bs-dropdown> 
+							        		<div class="col-md-3">
+								        	 <select class="form-control btn btn-success dropdown-toggle" 
+								        	 	ng-init="selected_type_weather = type_weather[0]"
+								        	 	ng-options="t.name for t in type_weather" 
+												ng-model="selected_type_weather"></select>
 							        		</div>
 							        		<div class="col-md-4">
 			       								<input type="button" value="Add" class="btn-success" ng-click="addWeatherRecord()"/>
@@ -116,7 +118,7 @@ $app.controller("villageController", function($scope, $http, $templateRequest, $
 	    $scope.addWeatherRecord = function() {
 		    $scope.record_weather.push({
 		    	'date_recorded' : $scope.date_recorded,
-	    		'type_weather' : $scope.type_weather[$scope.selected_type_weather - 1].name
+	    		'condition' : $scope.selected_type_weather.name
 		    });
 	    };
 	    

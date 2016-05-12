@@ -6,30 +6,48 @@
 	       <div class="form-group">
 		        <label class="col-sm-2">Type</label>
 		        <div class="col-sm-10">
-		        	<bs-dropdown  select-val="selected_status = selectedVal" preselected-item="selected_type_disaster" data-dropdown-data="type_disaster"></bs-dropdown> 
+		         <select class="form-control btn btn-success dropdown-toggle" 
+	        	 	ng-init="selected_type_disaster = type_disaster[0]"
+	        	 	ng-options="t.name for t in type_disaster" 
+					ng-model="selected_type_disaster"></select>
 		        </div>
 	        </div>
 	   	</div>
 	    <div class="row">
 	       <div class="form-group">
 	        <label class="col-sm-2">Date Start</label>
-	        <div class="col-sm-10"><input type="date" ng-model="date_start" 
-	        name="date_start" class="form-control" required/></div>
+	        <div class="col-sm-3"><input type="date" ng-model="date_start_disaster" 
+	        name="date_start_disaster" class="form-control" /></div>
+	        </div>
+	   	</div>
+       	<div class="row ">
+	       <div class="form-group">
+	        <label class="col-sm-2">Still Happening</label>
+	        <div class="col-sm-3">
+	        	<input ng-change="resetDateEnd()" type="checkbox" ng-model="is_not_finish">
+	        </div>
+	        </div>
+        </div>
+	    <div ng-show="is_not_finish == false" class="row">
+	       <div class="form-group">
+	        <label class="col-sm-2">Date End</label>
+	        <div class="col-sm-3"><input type="date" ng-model="date_end_disaster" 
+	        name="date_end_disaster" class="form-control"   min="{{date_start_disaster != undefined ? date_start_disaster : '0001-01-01' | date: 'yyyy-MM-dd'}}"/></div>
 	        </div>
 	   	</div>
 	    <div class="row">
 	       <div class="form-group">
 	        <label class="col-sm-2">Cause</label>
 	        <div class="col-sm-10"><input type="text" ng-model="cause" 
-	        name="cause" placeholder="cause of the disaster" class="form-control" required /></div>
+	        name="cause" placeholder="cause of the disaster" class="form-control"  /></div>
 	        </div>
 	   	</div>
 	    <div class="row" >
 	       <div class="form-group">
 		        <label class="col-sm-2">Id Victims</label>
 		        <div class="col-sm-10">
-		        	<span ng-repeat="id in id_victims" style="float:left ">
-			            <input type="button" value="{{id}}" class="btn-info" ng-click="processForm($index)"/>
+		        	<span ng-repeat="victim in id_victims" style="float:left ">
+			            <input type="button" value="{{victim.name}}" class="btn-info"/>
        					<input type="button" value="X" class="btn-danger" style="margin:0 20px 20px -5px" ng-click="deleteIdVictim($index)"/>
 			        </span>
 
@@ -38,24 +56,42 @@
 		       			<br><br>
 			        </span>
 
-		        	<input type="text" ng-model="searchString" name="search_query" placeholder="input name or KTP number to search" class="form-control" required />
-					<br>        
-		            <div class="data-ctrl">
-		                <span ng-repeat="i in items | searchFor:searchString">
-		                    <p><input type="button" value="+" class="btn-success"  ng-click="addIdVictim($index)"/> {{i.title}}
+		        	<input type="text" ng-change="findVictimOnDB()" ng-model="searchStringVictim" name="search_query" placeholder="input name of the person to search" class="form-control"  />
+					<br>   
+					<div class="data-ctrl">
+		                <span ng-repeat="victim in possibleVictim| searchForName:searchStringVictim">
+		                    <p><input type="button" value="+" class="btn-success"  ng-click="addIdVictim($index)"/> {{victim.name}}
 		                </span>
-		            </div>
-
+		            </div>     
 		        </div>
 	        </div>
 	   	</div>
-	    <div class="row" >
+	    <div class="row" >        
 	       <div class="form-group">
-	        <label class="col-sm-2">Region Affected</label>
-	        <div class="col-sm-10"><textarea type="text" ng-model="geo_region" 
-	        name="geo_region" placeholder="geo region of the disaster" class="form-control" required rows="5"/></div>
+	        <label class="col-sm-2">Record Region</label>
+	        <div class="col-sm-10">
+		    	<span ng-repeat="region in record_region" style="float:left ">
+		            <input type="button" value="{{region.date_start}}" class="btn-info" />
+						<input type="button" value="X" class="btn-danger" style="margin:0 20px 20px -5px" ng-click="deleteIdRegion($index)"/>
+		        </span>
+				<br>		
+	        	<div class="container col-md-12" >
+			       <div class="form-group">
+				        <label class="col-sm-2">Date Recorded</label>
+				        <div class="col-sm-3"><input type="date" ng-model="date_start" 
+				        name="date_start" class="form-control"  min="{{date_start_disaster != undefined ? date_start_disaster : '0001-01-01' | date: 'yyyy-MM-dd'}}"/></div>
+			        </div>
+			       	<div class="form-group">
+			        	<label class="col-sm-2">Region</label>
+			        <div class="col-sm-10"><textarea type="text" ng-model="geo_region" 
+			        name="geo_region" placeholder="geo region of the disaster" class="form-control"  rows="5"/></div>
+			        </div>
+					<input type="button" value="Add" class="btn-success" ng-click="addRecordedRegion()"/>
+			   	</div>
+	        </div>
 	        </div>
 	   	</div>
 		<input type="button" value="Save" class="btn-success" ng-click="addIdDisaster()"/>
+		<input type="button" value="Cancel" class="btn-warning" ng-click="cancelAddDisaster()"/>
 	</div>
 </div>

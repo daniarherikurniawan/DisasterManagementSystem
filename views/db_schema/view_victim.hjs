@@ -11,7 +11,7 @@
 			</div>
 			<div ng-app="myApp">
 				<div ng-controller="disasterEventController">
-					<form class="form-horizontal" ng-submit="insertDisasterEvent()">
+					<form class="form-horizontal" ng-submit="insertVIctim()">
 					    <div class="row">
 					       <div class="form-group">
 					        <label class="col-sm-2">Id KTP</label>
@@ -37,7 +37,7 @@
 							        </span>
 							        <div class="row col-md-12">
 						        	<span  style="float:left ">
-						        		<input type="text" ng-model="phone" name="phone" placeholder="victim's phone number" class="form-control" maxlength="13" required style="    display: inline-block; width: inherit;" />
+						        		<input type="text" ng-model="phone" name="phone" placeholder="victim's phone number" class="form-control" maxlength="13"  style="    display: inline-block; width: inherit;" />
 		       							<input type="button" value="Save" class="btn-success" ng-click="addNewPhone(phone)"/>
 						        	</span>
 						        	</div>
@@ -64,7 +64,7 @@
 							       			<input type="button" value="+ Register Village" class="btn-success" ng-click="newTabRegisterVillage()"/>
 							       			<br><br>
 								        </span>
-							        	<input type="text" ng-change="findVillageOnDB()" ng-model="searchStringVillage" name="search_query" placeholder="type the name of village to search" class="form-control" required />
+							        	<input type="text" ng-change="findVillageOnDB()" ng-model="searchStringVillage" name="search_query" placeholder="type the name of village to search" class="form-control"  />
 										<br>  
 										<div ng-show="searchStringVillage.length != 0" >     
 								            <div class="data-ctrl">
@@ -82,19 +82,16 @@
 					       <div class="form-group">
 						        <label class="col-sm-2">Gender</label>
 						        <div class="col-sm-10">
-						        	<bs-dropdown  select-val="selected_status_gender = selectedVal" preselected-item="selected_gender" data-dropdown-data="type_gender">
-						        	</bs-dropdown> 
+
+						        	 <select class="form-control btn btn-success dropdown-toggle" 
+						        	 	ng-init="selected_status_gender = type_gender[0]"
+						        	 	ng-options="t.name for t in type_gender" 
+										ng-model="selected_status_gender"></select>
+
 						        </div>
 						   	</div>
 						</div>
-					    <div class="row">
-					       <div class="form-group">
-					        <label class="col-sm-2">Birthday</label>
-					        <div class="col-sm-10"><input type="date" ng-model="birthday" 
-					        name="birthday" class="form-control" required/></div>
-					        </div>
-					   	</div>
-				        <div ng-show="selected_status_gender==2">
+				        <div ng-show="selected_status_gender.id==2">
 				        	<div class="row">
 						       	<div class="form-group">
 							        <label class="col-sm-2">Pregnant</label>
@@ -104,15 +101,25 @@
 						        </div>
 						   	</div>
 						</div>
+					    <div class="row">
+					       <div class="form-group">
+					        <label class="col-sm-2">Birthday</label>
+					        <div class="col-sm-4"><input type="date" ng-model="birthday" 
+					        name="birthday" class="form-control" required/></div>
+					        </div>
+					   	</div>
 						<div class="row">
 					       <div class="form-group">
 						        <label class="col-sm-2">Status</label>
 						        <div class="col-sm-10">
-						        	<bs-dropdown  select-val="selected_status_injury = selectedVal" preselected-item="selected_status_injury" data-dropdown-data="type_status_injury"></bs-dropdown> 
+						        	 <select class="form-control btn btn-success dropdown-toggle" 
+						        	 	ng-init="selected_status_injury = type_status_injury[0]"
+						        	 	ng-options="t.name for t in type_status_injury" 
+										ng-model="selected_status_injury"></select>
 						        </div>
 						   	</div>
 						</div>
-						<div ng-show="selected_status_injury==5">
+						<div ng-show="selected_status_injury.id==5">
 				        	<div class="row">
 						       	<div class="form-group">
 							        <label class="col-sm-2">Name of heirs</label>
@@ -124,7 +131,7 @@
 
 								        <div class="row col-md-12">
 								        	<span  style="float:left ">
-								        		<input type="text" ng-model="name_heir" name="name_heir" placeholder="victim's heir" class="form-control" maxlength="13" required style="    display: inline-block; width: inherit;" />
+								        		<input type="text" ng-model="name_heir" name="name_heir" placeholder="victim's heir" class="form-control" maxlength="13"  style="    display: inline-block; width: inherit;" />
 				       							<input type="button" value="Save" class="btn-success" ng-click="addNewNameHeir(name_heir)"/>
 								        	</span>
 							        	</div>
@@ -133,13 +140,12 @@
 						        </div>
 						   	</div>
 						</div>
-
 			        	<div class="row">
 					       	<div class="form-group">
 						        <label class="col-sm-2">Medical facility</label>
 						        <div class="col-sm-10">
-						        	<span ng-repeat="id in id_medical_facility" style="float:left ">
-							            <input type="button" value="{{id}}" class="btn-info" />
+						        	<span ng-repeat="medical_facility in id_medical_facility" style="float:left ">
+							            <input type="button" value="{{medical_facility.name}}" class="btn-info" />
 				       					<input type="button" value="X" class="btn-danger" style="margin:0 20px 20px -5px" ng-click="deleteIdMedicalFacility($index)"/>
 							        </span>
 
@@ -148,14 +154,16 @@
 						       			<br><br>
 							        </span>
 
-						        	<input type="text" ng-model="searchStringMedicalFacility" name="search_query" placeholder="input name or KTP number to search" class="form-control" required />
-									<br>        
-						            <div class="data-ctrl">
-						                <span ng-repeat="i in items | searchFor:searchStringMedicalFacility">
-						                    <p><input type="button" value="+" class="btn-success"  ng-click="addIdMedicalFacility($index)"/> {{i.title}}
-						                </span>
+						        	<input type="text" ng-change="findMedicalFacilityOnDB()"  ng-model="searchStringMedicalFacility" name="search_query" placeholder="input the name of medical facility to search" class="form-control"  />
+									<br>   
+									<div ng-show="searchStringMedicalFacility.length != 0" >     
+							            <div class="data-ctrl">
+							                <span ng-repeat="medicalFacility in possibleMedicalFacility | searchForName:searchStringMedicalFacility">
+							                    <p><input type="button" value="+" class="btn-success"  ng-click="addMedicalFacility($index)"/> {{medicalFacility.name}}
+							                </span>
+							            </div>
 						            </div>
-						            {{status}}
+
 						        </div>
 					        </div>
 					   	</div>
@@ -174,8 +182,8 @@
 						       	<div class="form-group">
 							        <label class="col-sm-2">Refugee Camp</label>
 							        <div class="col-sm-10">
-							        	<span ng-repeat="id in id_refugee_camp" style="float:left ">
-								            <input type="button" value="{{id}}" class="btn-info" />
+							        	<span ng-repeat="refugee_camp in id_refugee_camp" style="float:left ">
+								            <input type="button" value="{{refugee_camp.name}}" class="btn-info" />
 					       					<input type="button" value="X" class="btn-danger" style="margin:0 20px 20px -5px" ng-click="deleteIdRefugeeCamp($index)"/>
 								        </span>
 
@@ -184,14 +192,16 @@
 							       			<br><br>
 								        </span>
 
-							        	<input type="text" ng-model="searchStringRefugeeCamp" name="search_query" placeholder="input name or KTP number to search" class="form-control" required />
-										<br>        
-							            <div class="data-ctrl">
-							                <span ng-repeat="i in items | searchFor:searchStringRefugeeCamp">
-							                    <p><input type="button" value="+" class="btn-success"  ng-click="addIdRefugeeCamp($index)"/> {{i.title}}
-							                </span>
-							            </div>
-							            {{status}}
+							        	<input type="text" ng-change="findRefugeeCampOnDB()" ng-model="searchStringRefugeeCamp" name="search_query" placeholder="input the name of refugee camp to search" class="form-control"  />
+										<br> 
+										<div ng-show="searchStringRefugeeCamp.length != 0" >     
+								            <div class="data-ctrl">
+								                <span ng-repeat="refugeeCamp in possibleRefugeeCamp | searchForName:searchStringRefugeeCamp">
+								                    <p><input type="button" value="+" class="btn-success"  ng-click="addIdRefugeeCamp($index)"/> {{refugeeCamp.name}}
+								                </span>
+								            </div>
+							            </div>       
+
 							        </div>
 						        </div>
 						   	</div>
@@ -199,8 +209,6 @@
 
 					  	<input class="btn btn-success" type="submit" id="submit" value="Submit" />
 					</form>
-
-					  <button ng-click="open()">Open Modal</button>
 				</div><!-- cpontroller -->
 
 			</div><!-- MyApp -->
@@ -218,89 +226,13 @@
 <script src="../../javascripts//angular-animate.js"></script>
 <script>
 
-	$app.controller('ModalInstanceCtrl', function ($scope, $modalInstance, items) {
 
-	  $scope.address = "items";
-	  $scope.selected = {
-	    // item: $scope.items[0]
-	  };
-
-	  $scope.ok = function () {
-	    $modalInstance.close($scope.address);
-	  };
-
-	  $scope.cancel = function () {
-	    $modalInstance.dismiss('cancel');
-	  };
-	});
-
-	$app.controller("disasterEventController", function($scope, $http,$uibModal, $log){
-		
-		 $scope.open = function (size) {
-
-		    var modalInstance = $uibModal.open({
-		      animation: $scope.animationsEnabled,
-		      templateUrl: '/template/template_get_date.hjs',
-		      controller: 'ModalInstanceCtrl',
-		      size: size,
-		      resolve: {
-		        items: function () {
-		          return $scope.items;
-		        }
-		      }
-		    });
-
-		    modalInstance.result.then(function (data) {
-		      $log.info('husssh: ' + data);
-		    }, function () {
-		      $log.info('Modal dismissed at: ' + new Date());
-		    });
-		  };
-
+	$app.controller("disasterEventController", function($scope, $http,$uibModal, $log, $window){
+		$scope.possibleMedicalFacility = [];
+		$scope.possibleRefugeeCamp = [];
 		$scope.possibleVillages = [];
+		$scope.is_refugee = false;
 		$scope.date_start = new Date();
-
-		$scope.getEnterDate = function (id) {
-
-			var modalInstance = $uibModal.open({
-		      templateUrl: '/template/template_get_date.hjs',
-		      controller: function($scope, $modalInstance, modalInstance){
-			      	$scope.date_start = new Date();
-			      	$scope.id = id;
-					$scope.is_not_finish = true;
-
-					$scope.ok = function() {
-					    modalInstance.close;
-					};
-
-					$scope.saveTheDate = function(){
-						$modal.dissmiss();
-						// $window.history.back()
-						//close($scope.date_end);
-					}
-					$scope.clearDateEnd = function(){
-						if ($scope.is_not_finish)
-							$scope.date_end = undefined;
-						else		
-							$scope.date_end = $scope.date_start;
-					}
-		      },
-		      resolve: {
-		        items: function () {
-		          return $scope.date_start;
-		        }
-		      }
-		    });
-
-		    modalInstance.result.then(function (date_start) {
-		      $scope.date_start = date_start;
-		      $log.info('husssh: ' + date_start);
-		    }, function () {
-		      $log.info('Modal dismissed at: ' + new Date());
-		    });
-		};
-
-
 		$http.get('data.json').success(function(data, status, headers, config) {
 		        $scope.items = data.data;
 		    }).error(function(data, status, headers, config) {
@@ -342,13 +274,43 @@
 		$scope.id_medical_facility = [];
 		$scope.id_refugee_camp = [];
 
+		$scope.enteredDate = [];
+
+		$scope.getEnterDate = function (id, callback) {
+		    var modalInstance = $uibModal.open({
+		      animation: $scope.animationsEnabled,
+		      templateUrl: '/template/template_get_date.hjs',
+		      controller: 'ModalInstanceCtrl',
+		      resolve: {
+		        items: function () {
+		          return $scope.items;
+		        }
+		      }
+		    });
+		    modalInstance.result.then(function (data) {
+		    	callback(data);
+		    }, function () {
+		      	$log.info('Modal dismissed at: ' + new Date());
+		    });
+		};
+
 		$scope.newTabRegisterMedicalFacility = function(){
 	    	$window.open('/db/medical_facility');
 		};
-		$scope.addIdMedicalFacility = function(id) {
-			$scope.getEnterDate(id);
-		    // $scope.id_medical_facility.push(id);
+		$scope.addMedicalFacility = function(id) {
+			$scope.getEnterDate(id, function(result){
+				console.log($scope.enteredDate);
+				if (result != 0){
+				    $scope.id_medical_facility.push({
+				    	'name' : $scope.possibleMedicalFacility[id].name,
+				    	'_id' : $scope.possibleMedicalFacility[id]._id,
+				    	'date_start' : result.date_start,
+				    	'date_end' : result.date_end
+				    });
+				}
+				});
 	    };
+
 	    $scope.deleteIdMedicalFacility = function(id) {
 	    	$scope.id_medical_facility.splice(id, 1);
 	    };
@@ -358,9 +320,19 @@
 	    	$window.open('/db/refugee_camp');
 		};
 		$scope.addIdRefugeeCamp = function(id) {
-			$scope.getEnterDate(id);
-		    // $scope.id_refugee_camp.push(id);
+			$scope.getEnterDate(id, function(result){
+				console.log($scope.enteredDate);
+				if (result != 0){
+				    $scope.id_refugee_camp.push({
+				    	'name' : $scope.possibleRefugeeCamp[id].name,
+				    	'_id' : $scope.possibleRefugeeCamp[id]._id,
+				    	'date_start' : result.date_start,
+				    	'date_end' : result.date_end
+				    });
+				}
+				});
 	    };
+
 	    $scope.deleteIdRefugeeCamp = function(id) {
 	    	$scope.id_refugee_camp.splice(id, 1);
 	    };
@@ -396,12 +368,122 @@
 				$scope.name_heir='';	
 	    	}
 	    };
-	    $scope.processForm = function(){
-		    alert("Submitting form..");
-		}
+
+	    $scope.insertVIctim = function(){
+		    if($scope.data_village.length == 0){
+	    		alert("Please input data village!")
+	    	}else{
+	    		if($scope.selected_status_gender.id==1){
+	    			$scope.is_pregnant = false;
+	    		}
+
+	    		if($scope.selected_status_injury.id != 5 ){
+	    			$scope.name_heirs = [];
+	    		}
+
+	    		if($scope.is_refugee == true && $scope.id_refugee_camp.length == 0){
+    				alert("Please input data about refugee camp!")
+	    		} else{
+	    			if($scope.is_refugee == false)
+	    				$scope.id_refugee_camp = 0;
+	    			
+		    		$scope.record_medical_facilities = []
+		    		if($scope.id_medical_facility.length != 0){
+		    			for (var i = 0; i < $scope.id_medical_facility.length ;  i++) {
+		    				$scope.record_medical_facilities.push({
+		    					date_start: $scope.id_medical_facility[i].date_start,
+								date_end: $scope.id_medical_facility[i].date_end,
+								id_medical_facility : $scope.id_medical_facility[i]._id
+		    				});
+		    			}
+		    		}
+
+		    		$scope.record_refugee_camps = []
+		    		if($scope.id_refugee_camp.length != 0){
+		    			for (var i = 0; i < $scope.id_refugee_camp.length ;  i++) {
+		    				$scope.record_refugee_camps.push({
+		    					date_start: $scope.id_refugee_camp[i].date_start,
+								date_end: $scope.id_refugee_camp[i].date_end,
+								id_refugee_camp : $scope.id_refugee_camp[i]._id
+		    				});
+		    			}
+		    		}
+
+    				$http({
+				        url: '/db/victim/insert',
+				        method: "POST",
+				        data: {
+			                id_KTP: $scope.id_KTP,
+			                name: $scope.name,
+			                phone: $scope.phone_numbers,
+			                address: $scope.address,
+			                original_village: $scope.data_village[0]._id,
+			                gender: $scope.selected_status_gender.name,
+			                birthday: $scope.birthday,
+			                status: $scope.selected_status_injury.name,
+			                is_pregnant: $scope.is_pregnant,
+			                is_deceased: {
+			                	'name_heirs' : $scope.name_heirs,
+			                	'status' :($scope.selected_status_injury.id == 5)
+			                },
+			                record_medical_facilities : $scope.record_medical_facilities,
+			                is_refugee: {
+			                	'record_refugee_camps' : $scope.record_refugee_camps,
+			                	'status' :($scope.is_refugee)
+			                }
+			            }
+				    })
+				    .then(function(response) {
+				        alert("Data victim has been saved successfully!");
+				    }, 
+				    function(response) { // optional
+				        alert("failed: "+response.data);
+				    });
+    			}
+	    		
+	    	}
+		};
 
 	    $scope.newTabRegisterVillage = function() {
 	    	$window.open('/db/village');
+	    };
+
+	    $scope.findMedicalFacilityOnDB = function(){
+	    	if($scope.searchStringMedicalFacility != undefined &&
+				$scope.searchStringMedicalFacility.length%3 == 0){
+				$http({
+			        url: '/db/medical_facility/find',
+			        method: "POST",
+			        data: {
+		                search_term: $scope.searchStringMedicalFacility
+		            }
+			    })
+			    .then(function(response) {
+			    	$scope.possibleMedicalFacility = response.data;
+			    }, 
+			    function(response) { 
+			        alert("failed: findMedicalFacilityOnDB"+response.data);
+			    });
+			}
+	    };
+
+	     $scope.findRefugeeCampOnDB = function(){
+	    	if($scope.searchStringRefugeeCamp != undefined &&
+				$scope.searchStringRefugeeCamp.length%3 == 0){
+				$http({
+			        url: '/db/refugee_camp/find',
+			        method: "POST",
+			        data: {
+		                search_term: $scope.searchStringRefugeeCamp
+		            }
+			    })
+			    .then(function(response) {
+			    	$scope.possibleRefugeeCamp = response.data;
+			    }, 
+			    function(response) { 
+			        alert("failed: findRefugeeCampOnDB"+response.data);
+			    });
+			}
 	    };
 
 	    $scope.findVillageOnDB = function(){
@@ -424,27 +506,42 @@
 		};	   
 	});
 
-	$app.controller("datePickerController", function($scope, $window, $modal, customer){
+
+
+
+
+	$app.controller('ModalInstanceCtrl', function ($scope, $modalInstance, items) {
 		$scope.date_start = new Date();
-		$scope.is_not_finish = true;
+		$scope.date_end = new Date();
+	  	$scope.is_finish = true;
+	  	$scope.result = [];
+	  	$scope.selected = {
+	    // item: $scope.items[0]
+	  	};
 
-		$scope.ok = function() {
-		    // modalInstance.close();
-		};
+	  	$scope.ok = function () {
+		  	if($scope.date_start==undefined){
+		  		alert("fill the date start!");
+		  	} else if($scope.is_finish && $scope.date_end==undefined){
+		  		alert("fill the date end!");
+		  	}else{
+		  		if(!$scope.is_finish)
+		  			$scope.date_end = null;
+		  		
+		  		$scope.result = {
+		    		'date_start' : $scope.date_start,
+		    		'date_end' : $scope.date_end
+			    };
+			    $modalInstance.close($scope.result);
+			}
+	  	};
 
-		$scope.saveTheDate = function(){
-			$modal.dissmiss();
-			// $window.history.back()
-			//close($scope.date_end);
-		}
-		$scope.clearDateEnd = function(){
-			if ($scope.is_not_finish)
-				$scope.date_end = undefined;
-			else		
-				$scope.date_end = $scope.date_start;
-		}
-	   
+	  	$scope.resetDateEnd = function(){
+	  		$scope.date_end = $scope.date_start;
+	  	};
+
+	  	$scope.cancel = function () {
+	    	$modalInstance.dismiss('cancel');
+	  	};
 	});
-
-
 </script>

@@ -1,9 +1,43 @@
-<div>
-  <h3>Modal</h3>
-  {{name}}
-  <input type="text" ng-model="address" 
-  placeholder="address of the victim" class="form-control" required />
-  <button data-ng-click="vm.selectCustomer()">Select Customer</button>
-            <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
-            <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
-</div>
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<link href="../../stylesheets/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+	<div class="container" style="width:100%">
+		<h3>Input the date:</h3>
+		<br>
+		    <div class=" row col-md-12">
+		       <div class="row">
+			        <label  class="col-sm-6" style="    margin-top: 6px;">Date start</label>
+			        <div class="col-sm-6">
+				        <input ng-change="resetDateEnd()" type="date"
+					       ng-model="date_start"
+					       required >
+       				</div>
+		        </div>
+		       	<div class="row ">
+			        <label class="col-sm-6">Already finished</label>
+			        <div class="col-sm-3">
+			        	<input ng-change="resetDateEnd()" type="checkbox" ng-model="is_finish">
+			        </div>
+		        </div>
+		       <div ng-show="is_finish == true" class="row">
+			        <label class="col-sm-6" style="    margin-top: 6px;">Date end</label>
+			        <div class="col-sm-6">
+						<input type="date"
+							required
+					       ng-model="date_end"
+					       min="{{date_start != undefined ? date_start : '0001-01-01' | date: 'yyyy-MM-dd'}}">
+			        </div>
+		        </div>
+
+		        <div class="row ">
+		            <button class="btn btn-success"  style="    margin: 15px;" type="button" ng-click="ok()">OK</button>
+		            <button class="btn btn-warning"  style="    margin: 15px;" type="button" ng-click="cancel()">Cancel</button>
+	            </div>
+		   	</div>
+	</div>
+</body>
+</html>

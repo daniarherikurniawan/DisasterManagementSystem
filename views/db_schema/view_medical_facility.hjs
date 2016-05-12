@@ -58,8 +58,12 @@
 					       <div class="form-group">
 						        <label class="col-sm-2">Type</label>
 						        <div class="col-sm-10">
-						        	<bs-dropdown  select-val="selected_type_medical_facility = selectedVal" preselected-item="selected_type_medical_facility" data-dropdown-data="type_medical_facility">
-									</bs-dropdown> 
+
+						        	 <select class="form-control btn btn-success dropdown-toggle" 
+						        	 	ng-init="selected_type_medical_facility = type_medical_facility[0]"
+						        	 	ng-options="t.name for t in type_medical_facility" 
+										ng-model="selected_type_medical_facility"></select>
+
 								</div>
 					        </div>
 					   	</div>
@@ -117,7 +121,7 @@ $app.controller("MedicalFacilityController", function($scope, $http, $templateRe
 		                	'street' : $scope.street,
 		                	'id_village' : $scope.data_village[0]._id
 		                },
-		                type: $scope.type_medical_facility[$scope.selected_type_medical_facility - 1].name
+		                type: $scope.selected_type_medical_facility.name
 		            }
 			    })
 			    .then(function(response) {

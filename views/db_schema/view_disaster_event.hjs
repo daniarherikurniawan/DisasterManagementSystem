@@ -10,15 +10,6 @@
 			<div class="row">
 				<h1><%title%></h1>
 			</div>
-			<div class="row" style="white-space: pre-wrap; font-family: monospace;">
-				var DisasterEvent = new mongoose.Schema({
-				  name: { type: String, default: "Banjir Tamansari"},
-				  id_disasters : {type : [{ type: mongoose.Schema.Types.ObjectId, ref: 
-				  'Disaster' }], default: []},
-				  date_start: { type: Date, default: Date.now},
-				  date_end	: { type: Date, default: null},
-				})
-			</div>
 
 			<div ng-app="myApp">
 				<div ng-controller="disasterEventController">
@@ -33,24 +24,42 @@
 					    <div class="row">
 					       <div class="form-group">
 					        <label class="col-sm-2">Date Start</label>
-					        <div class="col-sm-10"><input type="date" ng-model="date_start" 
-					        name="date_start" class="form-control" required/></div>
+					        <div class="col-sm-3"><input type="date" ng-model="date_start" class="form-control" required/></div>
+					        </div>
+					   	</div>
+				       	<div class="row ">
+					       <div class="form-group">
+					        <label class="col-sm-2">Still Happening</label>
+					        <div class="col-sm-3">
+					        	<input ng-change="resetDateEnd()" type="checkbox" ng-model="is_not_finish">
+					        </div>
+					        </div>
+				        </div>
+					    <div ng-show="is_not_finish == false" class="row">
+					       <div class="form-group">
+					        <label class="col-sm-2">Date End</label>
+					        <div class="col-sm-3"><input type="date" ng-model="date_end" 
+					        name="date_end" class="form-control"   min="{{date_start != undefined ? date_start : '0001-01-01' | date: 'yyyy-MM-dd'}}"/></div>
 					        </div>
 					   	</div>
 					    <div class="row">
 					       <div class="form-group">
 						        <label class="col-sm-2">Id Disasters</label>
 						        <div class="col-sm-10">
-						        	<div class="row col-md-12">
-								        <span ng-repeat="id in id_disasters" style="float:left ">
-								            <input type="button" value="{{id}}" class="btn-info" ng-click="processForm($index)"/>
-					       					<input type="button" value="X" class="btn-danger" style="margin:0 20px 20px -5px" ng-click="deleteIdDisaster($index)"/>
-								        </span>
-								        <span style="float:left ">
+						        	<div class="container col-md-12">
+						        		<div class="row">
+									        <span ng-repeat="id in id_disasters" style="float:left ">
+									            <input type="button" value="{{id}}" class="btn-info" ng-click="processForm($index)"/>
+						       					<input type="button" value="X" class="btn-danger" style="margin:0 20px 20px -5px" ng-click="deleteIdDisaster($index)"/>
+									        </span>
+								        </div>
+								        <div class="row ">
+									        <span style="float:left ">
 												<div ng-hide="isFormVissible">
 							       					<input type="button" value="+ Add" class="btn-success" ng-click="showDisasterForm()"/>
 							       				</div>
-								        </span>
+									        </span>
+								        </div>
 							        </div>
 									<div ng-show="isFormVissible">
 										<div id="disaster_form">
@@ -81,44 +90,113 @@
 
 		$scope.name = '';
 		$scope.date_start = new Date();
+		$scope.date_start_disaster = new Date();
 		$scope.id_disasters=[];
 		$scope.id_victims=[];
 		$scope.checked = true;
 		$scope.isFormVissible = false;
 		$scope.selected_type_disaster = 1;
-
+		$scope.record_region = [];
+		$scope.is_not_finish = true;
+		$scope.is_not_finish_disaster = true;
 	    $scope.insertDisasterEvent = function() {
-	    	alert("submitting form");
+	    	if($scope.id_disasters.length == 0){
+	    		alert("Please input data about the disaster");
+	    	}else{
+	    		if($scope.is_not_finish)
+	    				$scope.date_end = null;
+
+	    		$http({
+			        url: '/db/disaster_event/insert',
+			        method: "POST",
+			        data: {
+		                name: $scope.name,
+		                date_end: $scope.date_end,
+		                id_disasters: $scope.id_disasters,
+		                date_start: $scope.date_start
+		            }
+			    })
+			    .then(function(response) {
+			        alert("Data disaster event has been saved successfully!");
+    				$scope.id_disasters = [];
+    				$scope.name = "";
+			    }, 
+			    function(response) { // optional
+			        alert("failed: "+response.data);
+			    });
+	    	}
 	    };
 
 	    $scope.addIdDisaster = function() {
-			$scope.isFormVissible = false;
-	        $scope.id_disasters.push(Math.floor(Math.random()*10000));	
+	        if($scope.cause == undefined){
+	    		alert("Please input data about the disaster's cause!")
+	    	}else{
+	    		if($scope.record_region.length == 0){
+	    			alert("Please input data record region!")
+	    		}else{
+	    			if($scope.is_not_finish_disaster)
+	    				$scope.date_end_disaster = null;
 
-	        /*Normalize the variable*/
-		    $scope.selected_type_disaster = 1;
-	        $scope.id_victims = [];
-	        $scope.cause = '';
-	        $scope.geo_region = '';
+	    			$scope.id_victims_formated = [];
+	    			for (var i = $scope.id_victims.length - 1; i >= 0; i--) {
+	    				$scope.id_victims_formated.push($scope.id_victims[i]._id);
+	    			}
+
+		    		$http({
+				        url: '/db/disaster/insert',
+				        method: "POST",
+				        data: {
+			                date_start: $scope.date_start_disaster,
+			                date_end: $scope.date_end_disaster,
+			                type: $scope.selected_type_disaster.name,
+			                cause: $scope.cause,
+			                id_disaster_event: null,
+			                record_region: $scope.record_region,
+			                id_victims: $scope.id_victims_formated
+			            }
+				    })
+				    .then(function(response) {
+				        alert("Data disaster has been saved successfully!");
+	    				$scope.id_disasters.push(response.data);
+				        /*Normalize the variable*/
+						$scope.isFormVissible = false;
+					    $scope.selected_type_disaster = 1;
+				        $scope.id_victims = [];
+				        $scope.cause = '';
+				        $scope.geo_region = '';
+				    }, 
+				    function(response) { // optional
+				        alert("failed: "+response.data);
+				    });
+				}
+	    	}
+	        
 	    };
 
-	    $scope.testGet = function(){
-			$http({
-					method:'GET',
-					url: '/db/disaster/find'})
-				.then(function (response){
-					$scope.name = response.data;
-				}, function(reason){
-					console.log(reason.data);
-				});
+	    $scope.cancelAddDisaster = function(){
+	    	$scope.isFormVissible = false;
 	    }
+
+	    $scope.addRecordedRegion = function(){
+	    	if($scope.geo_region == undefined){
+	    		alert ("fill the geo region field!");
+	    	}else{
+				$scope.record_region.push({
+					date_start : $scope.date_start,
+					geo_region : $scope.geo_region
+				});
+			}
+	    }
+	    $scope.deleteIdRegion = function(id) {
+	    	$scope.record_region.splice(id, 1);
+	    };
 
 	    $scope.deleteIdDisaster = function(id) {
 	    	$scope.id_disasters.splice(id, 1);
 	    };
 
-	    $scope.addIdVictim = function() {
-	        $scope.id_victims.push(Math.floor(Math.random()*10000000));	
+	    $scope.addIdVictim = function(id) {
+	        $scope.id_victims.push($scope.possibleVictim[id]);	
 	    };
 
 	    $scope.deleteIdVictim = function(id) {
@@ -169,7 +247,24 @@
 		    alert("Submitting form..");
 		}
 
-		
+		$scope.findVictimOnDB = function(){
+	    	if($scope.searchStringVictim != undefined &&
+				$scope.searchStringVictim.length%3 == 0){
+				$http({
+			        url: '/db/victim/find',
+			        method: "POST",
+			        data: {
+		                search_term: $scope.searchStringVictim
+		            }
+			    })
+			    .then(function(response) {
+			    	$scope.possibleVictim = response.data;
+			    }, 
+			    function(response) { 
+			        alert("failed: findVictimOnDB"+response.data);
+			    });
+			}
+		}
 	   
 	});
 

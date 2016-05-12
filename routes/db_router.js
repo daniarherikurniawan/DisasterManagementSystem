@@ -27,6 +27,10 @@ router.get('/data.json', function(req, res, next) {
 	});
 });
 
+/* GET Schema Declaration */
+router.get('/disaster_event', function(req, res, next) {
+  res.render('db_schema/view_disaster_event', {title:"Disaster Event"});
+});
 
 /* GET Schema Declaration */
 router.get('/disaster_event', function(req, res, next) {
@@ -51,16 +55,39 @@ router.get('/refugee_camp', function(req, res, next) {
 
 /* DB INSERT. */
 router.post('/disaster_event/insert', function(req, res, next) {
-	disaster_event_cont.insert();
-  res.send('respond with a resource db');
+  if(req.body != null){
+    disaster_event_id = disaster_event_cont.insert(req.body);
+    if(disaster_event_id != null )
+      res.send(disaster_event_id);
+    else
+      res.res.sendStatus(500);
+  }else{
+    res.res.sendStatus(500);
+  }
 });
+
 router.post('/disaster/insert', function(req, res, next) {
-	disaster_cont.insert();
-  res.send('respond with a resource db');
+  if(req.body != null){
+    disaster_id = disaster_cont.insert(req.body);
+    if(disaster_id != null )
+      res.send(disaster_id);
+    else
+      res.res.sendStatus(500);
+  }else{
+    res.res.sendStatus(500);
+  }
 });
+
 router.post('/victim/insert', function(req, res, next) {
-	victim_cont.insert();
-  res.send('respond with a resource db');
+  if(req.body != null){
+    victim_id = victim_cont.insert(req.body);
+    if(victim_id != null )
+      res.send(victim_id);
+    else
+      res.res.sendStatus(500);
+  }else{
+    res.res.sendStatus(500);
+  }
 });
 
 router.post('/village/insert', function(req, res, next) {
@@ -113,8 +140,10 @@ router.get('/disaster/find', function(req, res, next) {
   res.send('respond with a resource db');
 });
 
-router.get('/victim/find', function(req, res, next) {
-  res.send('respond with a resource db');
+router.post('/victim/find', function(req, res, next) {
+  victim_cont.find(req.body.search_term, function(response){
+    res.send(response);
+  });
 });
 
 router.post('/village/find', function(req, res, next) {
@@ -123,12 +152,16 @@ router.post('/village/find', function(req, res, next) {
   });
 });
 
-router.get('/medical_facility/find', function(req, res, next) {
-  res.send('respond with a resource db');
+router.post('/medical_facility/find', function(req, res, next) {
+  medical_facility_cont.find(req.body.search_term, function(response){
+    res.send(response);
+  });
 });
 
-router.get('/refugee_camp/find', function(req, res, next) {
-  res.send('respond with a resource db');
+router.post('/refugee_camp/find', function(req, res, next) {
+  refugee_camp_cont.find(req.body.search_term, function(response){
+    res.send(response);
+  });
 });
 
 

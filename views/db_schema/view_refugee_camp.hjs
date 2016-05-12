@@ -53,17 +53,17 @@
 						        </div>
 						   	</div>
 						</div>
-
 					    <div class="row">
 					       <div class="form-group">
 						        <label class="col-sm-2">Type</label>
 						        <div class="col-sm-10">
-						        	<bs-dropdown  select-val="selected_type_camp = selectedVal" preselected-item="selected_type_camp" data-dropdown-data="type_camp">
-									</bs-dropdown> 
+						        	 <select class="form-control btn btn-success dropdown-toggle" 
+						        	 	ng-init="selected_type_camp = type_camp[0]"
+						        	 	ng-options="t.name for t in type_camp" 
+										ng-model="selected_type_camp"></select>
 								</div>
 					        </div>
 					   	</div>
-					   
 					    <div class="row">
 					       <div class="form-group">
 					        <label class="col-sm-2">Capacity (person)</label>
@@ -133,7 +133,7 @@ $app.controller("RefugeeCampController", function($scope, $http, $templateReques
 		                	'street' : $scope.street,
 		                	'id_village' : $scope.data_village[0]._id
 		                },
-		                type: $scope.type,
+		                type: $scope.selected_type_camp.name,
 		                capicity: $scope.capicity
 		            }
 			    })

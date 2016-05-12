@@ -1,15 +1,23 @@
 var Disaster = require('../dbhelper/disaster_model');
 
 module.exports = { 
-	hello: function() {
-		return "hai daniar";
+	find: function(search_term, callback){
+		Disaster.object
+			.find({ cause: new RegExp(search_term, "i")})
+			.sort({cause: 'desc'})
+			.limit(10)
+			.exec(function(err, Disaster){
+				callback(Disaster);
+				return;
+		})
 	},
 
-	insert: function(){
-		var disasterObj = new Disaster({cause: "Sungai tersumbat"});
+	insert: function(data){
+		var disasterObj = new Disaster.model(data);
 	    disasterObj.save(function(err){
-		  if(err) console.log(err); 
+		  if(err) 
+	    	return null;
 		});
-	    return ;
+	    return disasterObj._id;
 	}
 }

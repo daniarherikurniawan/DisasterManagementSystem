@@ -1,15 +1,24 @@
 var DisasterEvent = require('../dbhelper/disaster_event_model');
 
 module.exports = { 
-	hello: function() {
-		return "hai daniar";
+	find: function(search_term, callback){
+		DisasterEvent.object
+			.find({ cause: new RegExp(search_term, "i")})
+			.sort({cause: 'desc'})
+			.limit(10)
+			.exec(function(err, DisasterEvent){
+				callback(DisasterEvent);
+				return;
+		})
 	},
 
-	insert: function(){
-		var disasterEventObj = new DisasterEvent({name: "Banjir Palembangan"});
+	insert: function(data){
+		console.log("masuuuuk"+data);
+		var disasterEventObj = new DisasterEvent.model(data);
 	    disasterEventObj.save(function(err){
-		  if(err) console.log(err); 
+		  if(err) 
+	    	return null;
 		});
-	    return ;
+	    return disasterEventObj._id;
 	}
 }
