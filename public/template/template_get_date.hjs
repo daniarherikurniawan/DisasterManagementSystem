@@ -1,34 +1,9 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title></title>
-	<link href="../../stylesheets/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
-	<div class="container">
-		<h3>Input the date:</h3>
-		<br>
-		<form class="form-horizontal" ng-submit="insertDisasterEvent()">
-		    <div class="row col-md-6">
-		       <div class="form-group">
-			        <label class="col-sm-6" style="    margin-top: 6px;">Date start</label>
-			        <div class="col-sm-6"><input type="date" ng-model="birthday" 
-			        name="birthday" class="form-control" required/></div>
-		        </div>
-		       	<div class="form-group">
-			        <label class="col-sm-6">Is not finished yet</label>
-			        <div class="col-sm-6">
-			        	<input type="checkbox" ng-model="is_pregnant">
-			        </div>
-		        </div>
-		       <div class="form-group">
-			        <label class="col-sm-6" style="    margin-top: 6px;">Date end</label>
-			        <div class="col-sm-6"><input type="date" ng-model="birthday" 
-			        name="birthday" class="form-control" required/></div>
-		        </div>
-				<input class="btn btn-success" style="    margin: 15px;" type="submit" id="submit" value="Submit" />
-		   	</div>
-	   	</form>
-	</div>
-</body>
-</html>
+<div>
+  <h3>Modal</h3>
+  {{name}}
+  <input type="text" ng-model="address" 
+  placeholder="address of the victim" class="form-control" required />
+  <button data-ng-click="vm.selectCustomer()">Select Customer</button>
+            <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
+            <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+</div>

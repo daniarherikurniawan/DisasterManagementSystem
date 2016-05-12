@@ -1,4 +1,4 @@
-var $app = angular.module("myApp", ['ui.router','ui.bootstrap']);
+var $app = angular.module("myApp", ['ngAnimate','ui.router','ui.bootstrap']);
 
 $app.directive('bsDropdown', function ($compile) {
     return {

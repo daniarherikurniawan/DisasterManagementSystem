@@ -199,6 +199,8 @@
 
 					  	<input class="btn btn-success" type="submit" id="submit" value="Submit" />
 					</form>
+
+					  <button ng-click="open()">Open Modal</button>
 				</div><!-- cpontroller -->
 
 			</div><!-- MyApp -->
@@ -213,13 +215,88 @@
 <script src="../../javascripts/angular_directive.js"></script>
 <script src="../../javascripts/angular-ui-router.js"></script>
 <script src="../../javascripts/ui-bootstrap-tpls.min.js"></script>
+<script src="../../javascripts//angular-animate.js"></script>
 <script>
-	$app.controller("disasterEventController", function($scope, $http, $templateRequest, $sce, $compile, $window, $modal, $log){
-		$scope.possibleVillages = [];
-		$scope.getEnterDate = function (id) {
-			$modal.open({
+
+	$app.controller('ModalInstanceCtrl', function ($scope, $modalInstance, items) {
+
+	  $scope.address = "items";
+	  $scope.selected = {
+	    // item: $scope.items[0]
+	  };
+
+	  $scope.ok = function () {
+	    $modalInstance.close($scope.address);
+	  };
+
+	  $scope.cancel = function () {
+	    $modalInstance.dismiss('cancel');
+	  };
+	});
+
+	$app.controller("disasterEventController", function($scope, $http,$uibModal, $log){
+		
+		 $scope.open = function (size) {
+
+		    var modalInstance = $uibModal.open({
+		      animation: $scope.animationsEnabled,
 		      templateUrl: '/template/template_get_date.hjs',
-		      controller: 'disasterEventController'
+		      controller: 'ModalInstanceCtrl',
+		      size: size,
+		      resolve: {
+		        items: function () {
+		          return $scope.items;
+		        }
+		      }
+		    });
+
+		    modalInstance.result.then(function (data) {
+		      $log.info('husssh: ' + data);
+		    }, function () {
+		      $log.info('Modal dismissed at: ' + new Date());
+		    });
+		  };
+
+		$scope.possibleVillages = [];
+		$scope.date_start = new Date();
+
+		$scope.getEnterDate = function (id) {
+
+			var modalInstance = $uibModal.open({
+		      templateUrl: '/template/template_get_date.hjs',
+		      controller: function($scope, $modalInstance, modalInstance){
+			      	$scope.date_start = new Date();
+			      	$scope.id = id;
+					$scope.is_not_finish = true;
+
+					$scope.ok = function() {
+					    modalInstance.close;
+					};
+
+					$scope.saveTheDate = function(){
+						$modal.dissmiss();
+						// $window.history.back()
+						//close($scope.date_end);
+					}
+					$scope.clearDateEnd = function(){
+						if ($scope.is_not_finish)
+							$scope.date_end = undefined;
+						else		
+							$scope.date_end = $scope.date_start;
+					}
+		      },
+		      resolve: {
+		        items: function () {
+		          return $scope.date_start;
+		        }
+		      }
+		    });
+
+		    modalInstance.result.then(function (date_start) {
+		      $scope.date_start = date_start;
+		      $log.info('husssh: ' + date_start);
+		    }, function () {
+		      $log.info('Modal dismissed at: ' + new Date());
 		    });
 		};
 
@@ -344,8 +421,30 @@
 			        alert("failed: findVillageOnDB"+response.data);
 			    });
 			}
+		};	   
+	});
+
+	$app.controller("datePickerController", function($scope, $window, $modal, customer){
+		$scope.date_start = new Date();
+		$scope.is_not_finish = true;
+
+		$scope.ok = function() {
+		    // modalInstance.close();
+		};
+
+		$scope.saveTheDate = function(){
+			$modal.dissmiss();
+			// $window.history.back()
+			//close($scope.date_end);
+		}
+		$scope.clearDateEnd = function(){
+			if ($scope.is_not_finish)
+				$scope.date_end = undefined;
+			else		
+				$scope.date_end = $scope.date_start;
 		}
 	   
 	});
+
 
 </script>

@@ -75,6 +75,7 @@
 <script src="../../javascripts/angular_directive.js"></script>
 <script src="../../javascripts/angular-ui-router.js"></script>
 <script src="../../javascripts/ui-bootstrap-tpls.min.js"></script>
+<script src="../../javascripts//angular-animate.js"></script>
 <script>
 	$app.controller("disasterEventController", function($scope, $http, $templateRequest, $sce, $compile, $window){
 
