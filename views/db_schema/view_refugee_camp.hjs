@@ -134,7 +134,7 @@ $app.controller("RefugeeCampController", function($scope, $http, $templateReques
 		                	'id_village' : $scope.data_village[0]._id
 		                },
 		                type: $scope.selected_type_camp.name,
-		                capicity: $scope.capicity
+		                capacity: $scope.capacity
 		            }
 			    })
 			    .then(function(response) {
