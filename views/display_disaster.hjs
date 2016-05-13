@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>DIMAS</title>
+	<link href="../../stylesheets/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+		<div class="container">
+			<div class="row">
+				<h1><%title%></h1>
+			</div>
+			<div class="row">
+<pre id="json">
+ <h3><%data%></h3>
+</pre>
+			</div>
+		</div>
+daniar
+</body>
+</html>
+<script src="../javascripts/leaflet.js"></script>
+<script type="text/javascript">
+	
+	
+</script>

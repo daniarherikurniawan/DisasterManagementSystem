@@ -16,7 +16,7 @@ router.get('/disaster_event/:id', function(req, res, next) {
 });
 router.get('/disaster/:id', function(req, res, next) {
 	disaster_cont.findById(req.params.id, function(result){	
-		res.render('display_json',{data: result, title: 'Disaster'});
+		res.render('display_disaster',{data: result, title: 'Disaster'});
 	});
 });
 router.get('/village/:id', function(req, res, next) {
@@ -30,7 +30,8 @@ router.get('/victim/:id', function(req, res, next) {
 	});
 });
 router.get('/medical_facility/:id', function(req, res, next) {
-	medical_facility_cont.findById(req.params.id, function(result){	
+	medical_facility_cont.findById(req.params.id, function(result){
+		console.log(result);	
 		res.render('display_json',{data: result, title: 'Medical Facility'});
 	});
 });

@@ -10,6 +10,17 @@ module.exports = {
 				callback(disasterEvent);
 				return;
 		})
+	}
+	,find_id_and_type: function(search_term, callback){
+		DisasterEvent.object
+			.find({ name: new RegExp(search_term, "i")})
+			.populate('id_disasters', 'type')
+			.sort({name: 'desc'})
+			.limit(10)
+			.exec(function(err, disasterEvent){
+				callback(disasterEvent);
+				return;
+		})
 	},
 	findByCause: function(search_term, callback){
 		console.log("cdsc"+search_term);

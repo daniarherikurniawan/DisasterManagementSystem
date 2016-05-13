@@ -128,7 +128,11 @@ router.post('/disaster_event/find', function(req, res, next) {
     res.send(response);
   });
 });
-
+router.post('/disaster_event/find_id_and_type', function(req, res, next) {
+  disaster_event_cont.find_id_and_type(req.body.search_term, function(response){
+    res.send(response);
+  });
+});
 router.post('/disaster/find', function(req, res, next) {
   disaster_cont.find(req.body.search_term, function(response){
     res.send(response);
