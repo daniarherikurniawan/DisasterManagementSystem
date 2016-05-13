@@ -17,7 +17,7 @@
 	       <div class="form-group">
 	        <label class="col-sm-2">Date Start</label>
 	        <div class="col-sm-3"><input type="date" ng-model="date_start_disaster" 
-	        name="date_start_disaster" class="form-control" /></div>
+	        name="date_start_disaster" class="form-control" min="{{date_start != undefined ? date_start : '0001-01-01' | date: 'yyyy-MM-dd'}}" /></div>
 	        </div>
 	   	</div>
        	<div class="row ">
@@ -78,8 +78,8 @@
 	        	<div class="container col-md-12" >
 			       <div class="form-group">
 				        <label class="col-sm-2">Date Recorded</label>
-				        <div class="col-sm-3"><input type="date" ng-model="date_start" 
-				        name="date_start" class="form-control"  min="{{date_start_disaster != undefined ? date_start_disaster : '0001-01-01' | date: 'yyyy-MM-dd'}}"/></div>
+				        <div class="col-sm-3"><input type="date" ng-model="date_start_region" 
+				        class="form-control"  min="{{date_start_disaster != undefined ? date_start_disaster : '0001-01-01' | date: 'yyyy-MM-dd'}}"/></div>
 			        </div>
 			       	<div class="form-group">
 			        	<label class="col-sm-2">Region</label>

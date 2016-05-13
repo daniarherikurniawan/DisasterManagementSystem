@@ -58,7 +58,7 @@
 					        <label class="col-sm-2">Period Date</label>
 					        <div class="col-sm-3"><input type="date" ng-model="certain_date1"  class="form-control"   /></div>
 					        <label class="col-sm-1" style="text-align: center;">-</label>
-					        <div class="col-sm-3"><input type="date" ng-model="certain_date2"  class="form-control"   /></div>
+					        <div class="col-sm-3"><input type="date" ng-model="certain_date2"  class="form-control"   min="{{certain_date1 != undefined ? certain_date1 : '0001-01-01' | date: 'yyyy-MM-dd'}}"  /></div>
 					        </div>
 					   	</div>
 					    <div class="row">
@@ -66,7 +66,7 @@
 					        <label class="col-sm-2">Period Month</label>
 					        <div class="col-sm-3"><input type="month" ng-model="certain_month1"  class="form-control"   /></div>
 					        <label class="col-sm-1" style="text-align: center;">-</label>
-					        <div class="col-sm-3"><input type="month" ng-model="certain_month2"  class="form-control"   /></div>
+					        <div class="col-sm-3"><input type="month" ng-model="certain_month2"  class="form-control"   min="{{certain_month1 != undefined ? certain_month1 : '0001-01-01' | date: 'yyyy-MM-dd'}}"   /></div>
 					        </div>
 					   	</div>
 					    <div class="row">
@@ -74,7 +74,7 @@
 					        <label class="col-sm-2">Period Year</label>
 					        <div class="col-sm-3"><input type="number" placeholder="year between 2000 and 2020" ng-model="certain_year1" min="2000" max="2020" class="form-control"   /></div>
 					        <label class="col-sm-1" style="text-align: center;">-</label>
-					        <div class="col-sm-3"><input type="number" placeholder="year between 2000 and 2020" ng-model="certain_year2" min="2000" max="2020" class="form-control"   /></div>
+					        <div class="col-sm-3"><input type="number" placeholder="year between 2000 and 2020" ng-model="certain_year2" max="2020" class="form-control"   min="{{certain_year1 }}"   /></div>
 					        </div>
 					   	</div>
 					  	<input class="btn btn-success" type="submit" id="submit" value="Submit" />
@@ -184,17 +184,71 @@ $app.controller("villageController", function($scope, $http, $templateRequest, $
 	    
 
 	  	$scope.executePoin2 = function(){
-	  		
+	  		$scope.result = [];
+	  		$http({
+		        url: '/query/query_1/poin2',
+		        method: "POST",
+		        data: {
+	                certain_date1: $scope.certain_date1,
+	                certain_month1: $scope.certain_month1,
+	                certain_year1: $scope.certain_year1,
+	                certain_date2: $scope.certain_date2,
+	                certain_month2: $scope.certain_month2,
+	                certain_year2: $scope.certain_year2
+	            }
+		    })
+		    .then(function(response) {
+		    	for (var i = response.data.length - 1; i >= 0; i--) {
+		    		$scope.result.push(response.data[i]);
+		    	}
+		    }, 
+		    function(response) { // optional
+		        alert("failed: "+response.data);
+		    });
 	  	}
 	    
 
 	  	$scope.executePoin3 = function(){
-	  		
+	  		$scope.result = [];
+	  		$http({
+		        url: '/query/query_1/poin3',
+		        method: "POST",
+		        data: {
+	                certain_date: $scope.certain_date,
+	                certain_month: $scope.certain_month,
+	                certain_year: $scope.certain_year
+	            }
+		    })
+		    .then(function(response) {
+		    	for (var i = response.data.length - 1; i >= 0; i--) {
+		    		$scope.result.push(response.data[i]);
+		    	}
+		    }, 
+		    function(response) { // optional
+		        alert("failed: "+response.data);
+		    });
 	  	}
 	    
 
 	  	$scope.executePoin4 = function(){
-	  		
+	  		$scope.result = [];
+	  		$http({
+		        url: '/query/query_1/poin4',
+		        method: "POST",
+		        data: {
+	                certain_date: $scope.certain_date,
+	                certain_month: $scope.certain_month,
+	                certain_year: $scope.certain_year
+	            }
+		    })
+		    .then(function(response) {
+		    	for (var i = response.data.length - 1; i >= 0; i--) {
+		    		$scope.result.push(response.data[i]);
+		    	}
+		    }, 
+		    function(response) { // optional
+		        alert("failed: "+response.data);
+		    });
 	  	}
 	    
 	    $scope.redirect_disaster_event = function(id){

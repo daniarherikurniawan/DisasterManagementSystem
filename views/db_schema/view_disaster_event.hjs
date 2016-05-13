@@ -119,6 +119,8 @@
 			    .then(function(response) {
 			        alert("Data disaster event has been saved successfully!");
     				$scope.id_disasters = [];
+					$scope.date_start = new Date();
+					$scope.date_end = null;
     				$scope.name = "";
 			    }, 
 			    function(response) { // optional
@@ -182,7 +184,7 @@
 	    		alert ("fill the geo region field!");
 	    	}else{
 				$scope.record_region.push({
-					date_start : $scope.date_start,
+					date_start : $scope.date_start_region,
 					geo_region : $scope.geo_region
 				});
 			}
@@ -208,12 +210,6 @@
 	    };
 
 	    $scope.showDisasterForm = function(){
-		    $http.get('data.json').success(function(data, status, headers, config) {
-			        $scope.items = data.data;
-			    }).error(function(data, status, headers, config) {
-			        console.log("No data found..");
-			});
-
 	    	$scope.type_disaster = [{
 		        id: 1,
 		        name: "Flood"        
@@ -242,10 +238,6 @@
 		    });
 			$scope.isFormVissible = true;
 	    }
-
-	    $scope.processForm = function(){
-		    alert("Submitting form..");
-		}
 
 		$scope.findVictimOnDB = function(){
 	    	if($scope.searchStringVictim != undefined &&

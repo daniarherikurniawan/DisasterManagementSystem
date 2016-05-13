@@ -46,5 +46,20 @@ router.post('/query_1/poin1', function(req, res, next) {
 		res.send(result);
 	});
 });
+router.post('/query_1/poin2', function(req, res, next) {
+  disaster_event_cont.query_1_poin2(req.body, function(result){
+    res.send(result);
+  });
+});
+router.post('/query_1/poin3', function(req, res, next) {
+  disaster_event_cont.query_1_poin3(req.body, function(result){
+    res.send(result);
+  });
+});
+router.post('/query_1/poin4', function(req, res, next) {
+  disaster_event_cont.query_1_poin4(req.body, function(result){
+    res.send(result);
+  });
+});
 
 module.exports = router;
