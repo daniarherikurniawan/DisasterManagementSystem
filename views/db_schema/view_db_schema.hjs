@@ -15,14 +15,7 @@
 				<li><a href="/db/village">Table VIllage</a></li>
 				<li><a href="/db/medical_facility">Table Medical Facility</a></li>
 				<li><a href="/db/refugee_camp">Table Refugee Camp</a></li>
-				<li><a href="/db/query">Query</a></li>
 			</ol>
 		</div>
 	</body>
 </html>	
-<script src="../../javascripts/jquery.min.js"></script>
-<script src="../../javascripts/angular.min.js"></script>
-<script src="../../javascripts/angular_directive.js"></script>
-<script src="../../javascripts/angular-ui-router.js"></script>
-<script src="../../javascripts/ui-bootstrap-tpls.min.js"></script>
-<script src="../../javascripts//angular-animate.js"></script>

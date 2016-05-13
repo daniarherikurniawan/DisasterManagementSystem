@@ -12,6 +12,15 @@ module.exports = {
 		})
 	},
 
+	findById: function(id, callback){
+		Victim.object
+			.findById(id)
+			.exec(function(err, victim){
+				callback(victim);
+				return;
+		})
+	},
+
 	insert: function(data){
 		var victimObj = new Victim.model(data);
 	    victimObj.save(function(err){

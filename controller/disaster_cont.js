@@ -6,8 +6,17 @@ module.exports = {
 			.find({ cause: new RegExp(search_term, "i")})
 			.sort({cause: 'desc'})
 			.limit(10)
-			.exec(function(err, Disaster){
-				callback(Disaster);
+			.exec(function(err, disaster){
+				callback(disaster);
+				return;
+		})
+	},
+
+	findById: function(id, callback){
+		Disaster.object
+			.findById(id)
+			.exec(function(err, disaster){
+				callback(disaster);
 				return;
 		})
 	},

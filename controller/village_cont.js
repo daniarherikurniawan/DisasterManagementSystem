@@ -12,6 +12,15 @@ module.exports = {
 		})
 	},
 
+	findById: function(id, callback){
+		Village.object
+			.findById(id)
+			.exec(function(err, village){
+				callback(village);
+				return;
+		})
+	},
+
 	insert: function(data){
 		var villageObj = new Village.model(data);
 	    villageObj.save(function(err){

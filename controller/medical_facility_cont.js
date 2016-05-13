@@ -12,6 +12,15 @@ module.exports = {
 		})
 	},
 
+	findById: function(id, callback){
+		MedicalFacility.object
+			.findById(id)
+			.exec(function(err, medical_facility){
+				callback(medical_facility);
+				return;
+		})
+	},
+
 	insert: function(data){
 		var medicalFacilityObj = new MedicalFacility.model(data);
 	    medicalFacilityObj.save(function(err){

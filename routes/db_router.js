@@ -31,11 +31,6 @@ router.get('/data.json', function(req, res, next) {
 router.get('/disaster_event', function(req, res, next) {
   res.render('db_schema/view_disaster_event', {title:"Disaster Event"});
 });
-
-/* GET Schema Declaration */
-router.get('/disaster_event', function(req, res, next) {
-  res.render('db_schema/view_disaster_event', {title:"Disaster Event"});
-});
 router.get('/disaster', function(req, res, next) {
   res.render('db_schema/view_disaster', {title:"Disaster"});
 });

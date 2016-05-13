@@ -12,6 +12,15 @@ module.exports = {
 		})
 	},
 
+	findById: function(id, callback){
+		RefugeeCamp.object
+			.findById(id)
+			.exec(function(err, refugee_camp){
+				callback(refugee_camp);
+				return;
+		})
+	},
+
 
 	insert: function(data){
 		var refugeeCampObj = new RefugeeCamp.model(data);

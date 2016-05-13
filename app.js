@@ -35,8 +35,12 @@ app.use(express.static(__dirname + '/public'));
 
 var routes = require('./routes/index_router');
 var db = require('./routes/db_router');
+var query = require('./routes/query_router');
+var show = require('./routes/show_router');
 app.use('/', routes);
 app.use('/db', db);
+app.use('/query', query);
+app.use('/show', show);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -44,8 +48,6 @@ app.use(function(req, res, next) {
   err.status = 404;
   next(err);
 });
-
-// error handlers
 
 // development error handler
 // will print stacktrace

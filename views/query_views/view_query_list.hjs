@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>DIMAS</title>
+		<link href="../../stylesheets/bootstrap.min.css" rel="stylesheet">
+	</head>
+	<body>
+		<div class="container" >
+			<div class="row">
+				<h1><%title%></h1>
+			</div>
+			<ol>
+				<li><a href="/query/query_1">Query 1</a></li>
+				<li><a href="/query/query_2">Query 2</a></li>
+				<li><a href="/query/query_3">Query 3</a></li>
+				<li><a href="/query/query_4">Query 4</a></li>
+				<li><a href="/query/query_5">Query 5</a></li>
+				<li><a href="/query/query_6">Query 6</a></li>
+				<li><a href="/query/query_7">Query 7</a></li>
+				<li><a href="/query/query_8">Query 8</a></li>
+			</ol>
+		</div>
+	</body>
+</html>	

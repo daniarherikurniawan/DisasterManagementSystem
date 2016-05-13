@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>DIMAS</title>
+		<link href="../../stylesheets/bootstrap.min.css" rel="stylesheet">
+	</head>
+	<body>
+		<div class="container">
+			<div class="row">
+				<h1><%title%></h1>
+			</div>
+			<div class="row" style=" white-space: pre-wrap; font-family: monospace;">
+	The number of victims of a a certain disaster event (or a certain type of disaster) in a certain village (or subdistrict
+	or district or province) on a certain date (or month or year) according to one of the following conditions:
+	- Status (affected, minor injury, major injury, missing, or deceased).
+	- Age groups.
+	The known age groups are:
+		o Baby: less than 1 year old,
+		o Toddler: 1-5 years old,
+		o Child: 5-12 years old,
+		o Teenager: 13-17 years old,
+		o Adult: 18-59 years old,
+		o Elderly: 60 years old or more.
+	The age must be calculated based on the age of a victim during the disaster event, not the current age of a
+	person.
+	- Gender (male, female).
+	- Name or type of refugee camps/medical facilities.
+	Note: Show as many as possible attributes for each information.
+			</div>
+			<div ng-app="myApp">
+				<div ng-controller="villageController">
+					<form class="form-horizontal" ng-submit="insertVillage()">
+					    <div class="row">
+					       <div class="form-group">
+					        <label class="col-sm-2">Name</label>
+					        <div class="col-sm-10"><input type="text" ng-model="name" 
+					        name="name" placeholder="name of the victim" class="form-control" required /></div>
+					        </div>
+					   	</div>
+
+					  	<input class="btn btn-success" type="submit" id="submit" value="Submit" />
+					</form>
+				</div><!-- cpontroller -->
+			</div><!-- MyApp -->
+
+
+		</div>
+	</body>
+</html>
+<script src="../../javascripts/jquery.min.js"></script>
+<script src="../../javascripts/angular.min.js"></script>
+<script src="../../javascripts/angular_directive.js"></script>
+<script src="../../javascripts/angular-ui-router.js"></script>
+<script src="../../javascripts/ui-bootstrap-tpls.min.js"></script>
+<script src="../../javascripts//angular-animate.js"></script>
+<script>
+$app.controller("villageController", function($scope, $http, $templateRequest, $sce, $compile, $window){
+		
+	  
+	    
+	    $scope.insertVillage = function(){
+	    	if($scope.record_weather.length == 0){
+	    		alert("Please input data recorded weather!")
+	    	}else{
+	    		$http({
+			        url: '/db/village/insert',
+			        method: "POST",
+			        data: {
+		                name: $scope.name,
+		                location: {
+		                	'sub_district' : $scope.sub_district,
+		                	'district' : $scope.district,
+		                	'province' : $scope.province
+		                },
+		                geo_region: $scope.geo_region,
+		                record_weather: $scope.record_weather
+		            }
+			    })
+			    .then(function(response) {
+			        alert("Data village has been saved successfully!");
+			    }, 
+			    function(response) { // optional
+			        alert("failed: "+response.data);
+			    });
+	    	}
+		}
+
+	});
+
+
+</script>
