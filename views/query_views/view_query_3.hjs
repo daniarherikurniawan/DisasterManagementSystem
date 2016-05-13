@@ -13,16 +13,41 @@
 				The movement of a victim from one place to another
 			</div>
 			<div ng-app="myApp">
-				<div ng-controller="villageController">
-					<form class="form-horizontal" ng-submit="insertVillage()">
-					    <div class="row">
+				<div ng-controller="query3Controller">
+					<form class="form-horizontal" ng-submit="runQuery()">
+					<div class="row">
+						<div class="row col-md-3" > 
+						<select class="form-control btn btn-success dropdown-toggle" 
+			        	 	ng-init="selected_option = type_option[0]"
+			        	 	ng-options="t.name for t in type_option" 
+							ng-model="selected_option"></select>
+						</div>
+					</div>
+					<hr>
+
+					    <div ng-show="selected_option.id == 1" class="row">
 					       <div class="form-group">
-					        <label class="col-sm-2">Name</label>
-					        <div class="col-sm-10"><input type="text" ng-model="name" 
-					        name="name" placeholder="name of the victim" class="form-control" required /></div>
+						        <label class="col-sm-2">Name of Victim</label>
+						        <div class="col-sm-10">
+						        	<span ng-repeat="victim in id_victims" style="float:left ">
+							            <input type="button" value="{{victim.name}}" ng-click="redirect_victim(victim._id)" class="btn-info"/>
+				       					<input type="button" value="X" class="btn-danger" style="margin:0 20px 20px -5px" ng-click="deleteIdVictim($index)"/>
+							        </span>
+							        <div ng-show="id_victims.length == 0">
+							        	<input type="text" ng-change="findVictimOnDB()" ng-model="searchStringVictim" name="search_query" placeholder="input name of the person to search" class="form-control"  />
+										<br>   
+										<div class="data-ctrl">
+							                <span ng-repeat="victim in possibleVictim| searchForName:searchStringVictim">
+							                    <p><input type="button" value="+" class="btn-success"  ng-click="addIdVictim($index)"/> {{victim.name}}
+							                </span>
+							            </div>     
+							        </div>
+						        </div>
+
 					        </div>
 					   	</div>
-
+					   	<br>
+					   	<br>
 					  	<input class="btn btn-success" type="submit" id="submit" value="Submit" />
 					</form>
 				</div><!-- cpontroller -->
@@ -39,37 +64,61 @@
 <script src="../../javascripts/ui-bootstrap-tpls.min.js"></script>
 <script src="../../javascripts//angular-animate.js"></script>
 <script>
-$app.controller("villageController", function($scope, $http, $templateRequest, $sce, $compile, $window){
-		
-	  
-	    
-	    $scope.insertVillage = function(){
-	    	if($scope.record_weather.length == 0){
-	    		alert("Please input data recorded weather!")
-	    	}else{
-	    		$http({
-			        url: '/db/village/insert',
+$app.controller("query3Controller", function($scope, $http, $templateRequest, $sce, $compile, $window){
+		$scope.id_victims = [];
+	  	
+	  	$scope.type_option = [{
+		        id: 1,
+		        name: "By Victim's Name"        
+		    }];
+
+
+	  	$scope.findVictimOnDB = function(){
+	    	if($scope.searchStringVictim != undefined &&
+				$scope.searchStringVictim.length%3 == 0){
+				$http({
+			        url: '/db/victim/find',
 			        method: "POST",
 			        data: {
-		                name: $scope.name,
-		                location: {
-		                	'sub_district' : $scope.sub_district,
-		                	'district' : $scope.district,
-		                	'province' : $scope.province
-		                },
-		                geo_region: $scope.geo_region,
-		                record_weather: $scope.record_weather
+		                search_term: $scope.searchStringVictim
 		            }
 			    })
 			    .then(function(response) {
-			        alert("Data village has been saved successfully!");
+			    	$scope.possibleVictim = response.data;
 			    }, 
-			    function(response) { // optional
-			        alert("failed: "+response.data);
+			    function(response) { 
+			        alert("failed: findVictimOnDB"+response.data);
 			    });
-	    	}
+			}
 		}
+	    
+	    $scope.addIdVictim = function(id) {
+	        $scope.id_victims.push($scope.possibleVictim[id]);	
+	    };
 
+	    $scope.deleteIdVictim = function(id) {
+	    	$scope.id_victims.splice(id, 1);
+	    };
+
+
+	    $scope.redirect_disaster_event = function(id){
+            $window.open("/show/disaster_event/"+id, '_blank');
+        };
+	    $scope.redirect_disaster = function(id){
+            $window.open("/show/disaster/"+id, '_blank');
+        };
+	    $scope.redirect_victim = function(id){
+            $window.open("/show/victim/"+id, '_blank');
+        };
+	    $scope.redirect_village = function(id){
+            $window.open("/show/village/"+id, '_blank');
+        };
+	    $scope.redirect_medical_facility = function(id){
+            $window.open("/show/medical_facility/"+id, '_blank');
+        };
+	    $scope.redirect_refugee_camp = function(id){
+            $window.open("/show/refugee_camp/"+id, '_blank');
+        };
 	});
 
 

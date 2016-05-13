@@ -8,7 +8,7 @@ var RefugeeCampSchema = new mongoose.Schema({
       id_village : { type: mongoose.Schema.Types.ObjectId, ref: 'Village' }
     },
     type : { type: String, default: "puskesmas"},
-    capicity : { type: Number, default: 100}
+    capacity : { type: Number, default: 100}
   });
 mongoose.model('RefugeeCamp',RefugeeCampSchema);
 

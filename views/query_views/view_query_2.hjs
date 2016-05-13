@@ -42,7 +42,7 @@
 						        </div>
 					        </div>
 					   	</div>
-						<div class="form-horizontal row">
+						<div class="row">
 						<label class="col-sm-2">Consist of (Disasters)</label>
 					        <div class="col-sm-10">
 					        	<span ng-repeat="disaster in id_disasters" style="float:left; margin: 10px ">
@@ -50,7 +50,7 @@
 						        </span>
 					        </div>
 				        </div>
-
+				        <br>
 					  	<input class="btn btn-success" type="submit" id="submit" value="Submit" />
 					</form>
 				</div><!-- cpontroller -->
@@ -99,39 +99,24 @@ $app.controller("villageController", function($scope, $http, $templateRequest, $
 	    	$scope.data_disaster_event.splice(id, 1);
 	    };
 	    
-	    $scope.insertVillage = function(){
-	    	if($scope.record_weather.length == 0){
-	    		alert("Please input data recorded weather!")
-	    	}else{
-	    		$http({
-			        url: '/db/village/insert',
-			        method: "POST",
-			        data: {
-		                name: $scope.name,
-		                location: {
-		                	'sub_district' : $scope.sub_district,
-		                	'district' : $scope.district,
-		                	'province' : $scope.province
-		                },
-		                geo_region: $scope.geo_region,
-		                record_weather: $scope.record_weather
-		            }
-			    })
-			    .then(function(response) {
-			        alert("Data village has been saved successfully!");
-			    }, 
-			    function(response) { // optional
-			        alert("failed: "+response.data);
-			    });
-	    	}
-		}
 	    
 	    $scope.redirect_disaster_event = function(id){
             $window.open("/show/disaster_event/"+id, '_blank');
         };
-
 	    $scope.redirect_disaster = function(id){
             $window.open("/show/disaster/"+id, '_blank');
+        };
+	    $scope.redirect_victim = function(id){
+            $window.open("/show/victim/"+id, '_blank');
+        };
+	    $scope.redirect_village = function(id){
+            $window.open("/show/village/"+id, '_blank');
+        };
+	    $scope.redirect_medical_facility = function(id){
+            $window.open("/show/medical_facility/"+id, '_blank');
+        };
+	    $scope.redirect_refugee_camp = function(id){
+            $window.open("/show/refugee_camp/"+id, '_blank');
         };
 
 	});
