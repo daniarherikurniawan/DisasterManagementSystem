@@ -12,8 +12,8 @@ var DisasterSchema = new mongoose.Schema({
       date_start  : { type: Date, default: Date.now},
       geo_region  : {type : String, default:"[{342, 5345},{3432, 535}, {32, 45}]"}
     }]
-  })
-
+  });
+mongoose.model('Disaster',DisasterSchema);
 module.exports = { 
   model : mongoose.model('disasters', DisasterSchema),
   object: mongoose.model('disasters')

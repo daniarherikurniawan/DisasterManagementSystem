@@ -17,11 +17,39 @@
 					<form class="form-horizontal" ng-submit="insertVillage()">
 					    <div class="row">
 					       <div class="form-group">
-					        <label class="col-sm-2">Name</label>
-					        <div class="col-sm-10"><input type="text" ng-model="name" 
-					        name="name" placeholder="name of the victim" class="form-control" required /></div>
+					        <label class="col-sm-2">Name of Disaster Event</label>
+						        <div class="col-sm-10">
+						        	<span ng-repeat="disaster_event in data_disaster_event" style="float:left ">
+							            <input type="button" value="{{disaster_event.name}}" class="btn-info" ng-click="redirect_disaster_event(disaster_event._id)"/>
+				       					<input type="button" value="X" class="btn-danger" style="margin:0 20px 20px -5px" ng-click="deleteDisasterEvent($index)"/>
+							        </span>
+							        <div ng-show="data_disaster_event.length == 0">
+							        	<input type="text"  ng-change="findDisasterEventOnDB()"  ng-model="searchStringDisasterEvent" placeholder="name of the disaster event" class="form-control" required />
+							        	<br>  
+							        	<span ng-repeat="village in data_village" style="float:left ">
+								            <input type="button" value="{{village.name}}" class="btn-info" />
+					       					<input type="button" value="X" class="btn-danger" style="margin:0 20px 20px -5px" ng-click="deleteVillage($index)"/>
+								        </span>
+										<div ng-show="searchStringDisasterEvent.length != 0" >     
+								            <div class="data-ctrl">
+								                <span ng-repeat="disasterEvent in possibleDisasterEvent | searchForName:searchStringDisasterEvent">
+								                    <p><input type="button" value="+" class="btn-success"  ng-click="addDisasterEvent($index)"/> {{disasterEvent.name}}
+								                </span>
+								            </div>
+							            </div>
+						            </div>
+
+						        </div>
 					        </div>
 					   	</div>
+						<div class="form-horizontal row">
+						<label class="col-sm-2">Consist of (Disasters)</label>
+					        <div class="col-sm-10">
+					        	<span ng-repeat="disaster in id_disasters" style="float:left; margin: 10px ">
+						            <input type="button" value="{{disaster}}" class="btn-info" ng-click="redirect_disaster(disaster)"/>
+						        </span>
+					        </div>
+				        </div>
 
 					  	<input class="btn btn-success" type="submit" id="submit" value="Submit" />
 					</form>
@@ -40,8 +68,36 @@
 <script src="../../javascripts//angular-animate.js"></script>
 <script>
 $app.controller("villageController", function($scope, $http, $templateRequest, $sce, $compile, $window){
-		
-	  
+		$scope.possibleDisasterEvent = [];
+		$scope.data_disaster_event =[];
+		$scope.id_disasters = [];
+	  	$scope.findDisasterEventOnDB = function(){
+			if($scope.searchStringDisasterEvent != undefined &&
+				$scope.searchStringDisasterEvent.length%3 == 0){
+				$http({
+			        url: '/db/disaster_event/find',
+			        method: "POST",
+			        data: {
+		                search_term: $scope.searchStringDisasterEvent
+		            }
+			    })
+			    .then(function(response) {
+			    	$scope.possibleDisasterEvent = response.data;
+			    }, 
+			    function(response) { 
+			        alert("failed: findDisasterEventOnDB"+response.data);
+			    });
+			}
+		}
+
+	    $scope.addDisasterEvent = function(id) {
+			$scope.id_disasters = $scope.possibleDisasterEvent[id].id_disasters ;
+		    $scope.data_disaster_event.push($scope.possibleDisasterEvent[id]);
+	    };
+
+	    $scope.deleteDisasterEvent = function(id) {
+	    	$scope.data_disaster_event.splice(id, 1);
+	    };
 	    
 	    $scope.insertVillage = function(){
 	    	if($scope.record_weather.length == 0){
@@ -69,6 +125,14 @@ $app.controller("villageController", function($scope, $http, $templateRequest, $
 			    });
 	    	}
 		}
+	    
+	    $scope.redirect_disaster_event = function(id){
+            $window.open("/show/disaster_event/"+id, '_blank');
+        };
+
+	    $scope.redirect_disaster = function(id){
+            $window.open("/show/disaster/"+id, '_blank');
+        };
 
 	});
 

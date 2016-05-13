@@ -17,123 +17,156 @@
 		- on a certain type of disaster.
 			</div>
 			<div ng-app="myApp">
-				<div ng-controller="villageController">
-					<div class="row">
-						<div class="container col-md-3">
-				         	<select class="form-control btn btn-success dropdown-toggle" 
-			        	 	ng-init="selected_query = type_of_query[0]"
-			        	 	ng-options="t.name for t in type_of_query" 
-							ng-model="selected_query"></select>
-						</div>
+				<div ng-controller="query1Controller">
+
+					<div class="row " >
+				       <div class="form-group col-md-3">
+				        <label class="col-sm-6">{{type_of_query[0].name}}</label>
+				        <div class="col-sm-6">
+				        	<input ng-change="resetDateEnd()" type="checkbox" ng-model="poin_1">
+				        </div>
+				        </div>
+				       <div class="form-group col-md-3">
+				        <label class="col-sm-6">{{type_of_query[1].name}}</label>
+				        <div class="col-sm-6">
+				        	<input ng-change="resetDateEnd()" type="checkbox" ng-model="poin_2">
+				        </div>
+				        </div>
+				       <div class="form-group col-md-3">
+				        <label class="col-sm-6">{{type_of_query[2].name}}</label>
+				        <div class="col-sm-6">
+				        	<input ng-change="resetDateEnd()" type="checkbox" ng-model="poin_3">
+				        </div>
+				        </div>
+				       <div class="form-group col-md-3">
+				        <label class="col-sm-6">{{type_of_query[3].name}}</label>
+				        <div class="col-sm-6">
+				        	<input ng-change="resetDateEnd()" type="checkbox" ng-model="poin_4">
+				        </div>
+				        </div>
 					</div>
+				
+					<form class="form-horizontal" ng-submit="executeQuery()">
+					
+						<div ng-show="poin_1" class="form-horizontal" >
+							<br>
+							<hr>
+							<br>
+						    <div class="row">
+						       <div class="form-group">
+						        <label class="col-sm-2">Certain Date</label>
+						        <div class="col-sm-3"><input type="date" ng-model="certain_date"  class="form-control"  /></div>
+						        </div>
+						   	</div>
+						    <div class="row">
+						       <div class="form-group">
+						        <label class="col-sm-2">Certain Month</label>
+						        <div class="col-sm-3">
+						        <input type="month" ng-model="certain_month"  class="form-control"   /></div>
+						        </div>
+						   	</div>
+						    <div class="row">
+						       <div class="form-group">
+						        <label class="col-sm-2">Certain Year</label>
+						        <div class="col-sm-3"><input type="number" placeholder="year between 2000 and 2020" ng-model="certain_year" min="2000" max="2020" class="form-control"   /></div>
+						        </div>
+						   	</div>
+						  	
+						</div>
+
+						<div ng-show="poin_2"  class="form-horizontal" >
+							<br>
+							<hr>
+							<br>
+						    <div class="row">
+						       <div class="form-group">
+						        <label class="col-sm-2">Period Date</label>
+						        <div class="col-sm-3"><input type="date" ng-model="certain_date1"  class="form-control"   /></div>
+						        <label class="col-sm-1" style="text-align: center;">-</label>
+						        <div class="col-sm-3"><input type="date" ng-model="certain_date2"  class="form-control"   min="{{certain_date1 != undefined ? certain_date1 : '0001-01-01' | date: 'yyyy-MM-dd'}}"  /></div>
+						        </div>
+						   	</div>
+						    <div class="row">
+						       <div class="form-group">
+						        <label class="col-sm-2">Period Month</label>
+						        <div class="col-sm-3"><input type="month" ng-model="certain_month1"  class="form-control"   /></div>
+						        <label class="col-sm-1" style="text-align: center;">-</label>
+						        <div class="col-sm-3"><input type="month" ng-model="certain_month2"  class="form-control"   min="{{certain_month1 != undefined ? certain_month1 : '0001-01-01' | date: 'yyyy-MM-dd'}}"   /></div>
+						        </div>
+						   	</div>
+						    <div class="row">
+						       <div class="form-group">
+						        <label class="col-sm-2">Period Year</label>
+						        <div class="col-sm-3"><input type="number" placeholder="year between 2000 and 2020" ng-model="certain_year1" min="2000" max="2020" class="form-control"   /></div>
+						        <label class="col-sm-1" style="text-align: center;">-</label>
+						        <div class="col-sm-3"><input type="number" placeholder="year between 2000 and 2020" ng-model="certain_year2" max="2020" class="form-control"   min="{{certain_year1 }}"   /></div>
+						        </div>
+						   	</div>
+						</div>
+
+						<div class="form-horizontal" ng-show="poin_3" >
+							<br>
+							<hr>
+							<br>
+						    <div class="row">
+						       <div class="form-group">
+						        <label class="col-sm-2">Certain Village</label>
+						        <div class="col-sm-3"><input type="text" ng-model="certain_village"  class="form-control"   /></div>
+						        </div>
+						   	</div>
+						    <div class="row">
+						       <div class="form-group">
+						        <label class="col-sm-2">Certain Subdistrict</label>
+						        <div class="col-sm-3"><input type="text" ng-model="certain_subdistrict"  class="form-control"   /></div>
+						        </div>
+						   	</div>
+						    <div class="row">
+						       <div class="form-group">
+						        <label class="col-sm-2">Certain District</label>
+						        <div class="col-sm-3"><input type="text" ng-model="certain_district"  class="form-control"   /></div>
+						        </div>
+						   	</div>
+						    <div class="row">
+						       <div class="form-group">
+						        <label class="col-sm-2">Certain Province</label>
+						        <div class="col-sm-3"><input type="text" ng-model="certain_province"  class="form-control"   /></div>
+						        </div>
+						   	</div>
+						</div>
+
+						<div class="form-horizontal" ng-show="poin_4" >
+							<br>
+							<hr>
+							<br>
+						    <div class="row">
+						       <div class="form-group">
+						        <label class="col-sm-2">Certain Type of Disaster</label>
+						        <div class="col-sm-3">
+							         <select class="form-control btn btn-success dropdown-toggle" 
+						        	 	ng-init="certain_type = type_disaster[0]"
+						        	 	ng-options="t.name for t in type_disaster" 
+										ng-model="certain_type"></select>
+						       </div>
+						        </div>
+						   	</div>
+						</div>
+						<div ng-show="poin_1 || poin_2 || poin_3 || poin_4">
+							<br>
+							<hr>
+							<input class="btn btn-success" type="submit" id="submit" value="Submit" />
+						</div>
+					</form>
 					<br>
-					<br>
-
-					<form ng-show="selected_query.id == 1" class="form-horizontal" ng-submit="executePoin1()">
-					    <div class="row">
-					       <div class="form-group">
-					        <label class="col-sm-2">Certain Date</label>
-					        <div class="col-sm-3"><input type="date" ng-model="certain_date"  class="form-control"   /></div>
-					        </div>
-					   	</div>
-					    <div class="row">
-					       <div class="form-group">
-					        <label class="col-sm-2">Certain Month</label>
-					        <div class="col-sm-3">
-					        <input type="month" ng-model="certain_month"  class="form-control"   /></div>
-					        </div>
-					   	</div>
-					    <div class="row">
-					       <div class="form-group">
-					        <label class="col-sm-2">Certain Year</label>
-					        <div class="col-sm-3"><input type="number" placeholder="year between 2000 and 2020" ng-model="certain_year" min="2000" max="2020" class="form-control"   /></div>
-					        </div>
-					   	</div>
-					  	<input class="btn btn-success" type="submit" id="submit" value="Submit" />
-					</form>
-
-					<form ng-show="selected_query.id == 2"  class="form-horizontal" ng-submit="executePoin2()">
-					    <div class="row">
-					       <div class="form-group">
-					        <label class="col-sm-2">Period Date</label>
-					        <div class="col-sm-3"><input type="date" ng-model="certain_date1"  class="form-control"   /></div>
-					        <label class="col-sm-1" style="text-align: center;">-</label>
-					        <div class="col-sm-3"><input type="date" ng-model="certain_date2"  class="form-control"   min="{{certain_date1 != undefined ? certain_date1 : '0001-01-01' | date: 'yyyy-MM-dd'}}"  /></div>
-					        </div>
-					   	</div>
-					    <div class="row">
-					       <div class="form-group">
-					        <label class="col-sm-2">Period Month</label>
-					        <div class="col-sm-3"><input type="month" ng-model="certain_month1"  class="form-control"   /></div>
-					        <label class="col-sm-1" style="text-align: center;">-</label>
-					        <div class="col-sm-3"><input type="month" ng-model="certain_month2"  class="form-control"   min="{{certain_month1 != undefined ? certain_month1 : '0001-01-01' | date: 'yyyy-MM-dd'}}"   /></div>
-					        </div>
-					   	</div>
-					    <div class="row">
-					       <div class="form-group">
-					        <label class="col-sm-2">Period Year</label>
-					        <div class="col-sm-3"><input type="number" placeholder="year between 2000 and 2020" ng-model="certain_year1" min="2000" max="2020" class="form-control"   /></div>
-					        <label class="col-sm-1" style="text-align: center;">-</label>
-					        <div class="col-sm-3"><input type="number" placeholder="year between 2000 and 2020" ng-model="certain_year2" max="2020" class="form-control"   min="{{certain_year1 }}"   /></div>
-					        </div>
-					   	</div>
-					  	<input class="btn btn-success" type="submit" id="submit" value="Submit" />
-					</form>
-
-					<form class="form-horizontal" ng-show="selected_query.id == 3"  ng-submit="executePoin3()">
-					    <div class="row">
-					       <div class="form-group">
-					        <label class="col-sm-2">Certain Village</label>
-					        <div class="col-sm-3"><input type="text" ng-model="certain_village"  class="form-control"   /></div>
-					        </div>
-					   	</div>
-					    <div class="row">
-					       <div class="form-group">
-					        <label class="col-sm-2">Certain Subdistrict</label>
-					        <div class="col-sm-3"><input type="text" ng-model="certain_subdistrict"  class="form-control"   /></div>
-					        </div>
-					   	</div>
-					    <div class="row">
-					       <div class="form-group">
-					        <label class="col-sm-2">Certain District</label>
-					        <div class="col-sm-3"><input type="text" ng-model="certain_district"  class="form-control"   /></div>
-					        </div>
-					   	</div>
-					    <div class="row">
-					       <div class="form-group">
-					        <label class="col-sm-2">Certain Province</label>
-					        <div class="col-sm-3"><input type="text" ng-model="certain_province"  class="form-control"   /></div>
-					        </div>
-					   	</div>
-					  	<input class="btn btn-success" type="submit" id="submit" value="Submit" />
-					</form>
-
-					<form class="form-horizontal" ng-show="selected_query.id == 4"  ng-submit="executePoin4()">
-					    <div class="row">
-					       <div class="form-group">
-					        <label class="col-sm-2">Certain Type of Disaster</label>
-					        <div class="col-sm-3">
-						         <select class="form-control btn btn-success dropdown-toggle" 
-					        	 	ng-init="selected_type_disaster = type_disaster[0]"
-					        	 	ng-options="t.name for t in type_disaster" 
-									ng-model="selected_type_disaster"></select>
-					        <input type="text" ng-model="certain_type"  class="form-control"   /></div>
-					        </div>
-					   	</div>
-					  	<input class="btn btn-success" type="submit" id="submit" value="Submit" />
-					</form>
-
-					<br>
+					<hr>
 					<br>
 					<div class="form-horizontal row">
-						<label class="col-sm-2">Result</label>
+					<label class="col-sm-2">Result</label>
 				        <div class="col-sm-10">
 				        	<span ng-repeat="r in result" style="float:left; margin: 10px ">
-					            <input type="button" value="{{r._id}}" class="btn-info" ng-click="redirect_disaster_event(r._id)"/>
+					            <input type="button" value="{{r}}" class="btn-info" ng-click="redirect_disaster_event(r)"/>
 					        </span>
 				        </div>
-				        </div>
-					</div>
+			        </div>
 
 				</div><!-- cpontroller -->
 			</div><!-- MyApp -->
@@ -149,21 +182,21 @@
 <script src="../../javascripts/ui-bootstrap-tpls.min.js"></script>
 <script src="../../javascripts//angular-animate.js"></script>
 <script>
-$app.controller("villageController", function($scope, $http, $templateRequest, $sce, $compile, $window){
+$app.controller("query1Controller", function($scope, $http, $templateRequest, $sce, $compile, $window){
 		$scope.certain_year = null;
 		$scope.result = [];
 		$scope.type_of_query = [{
 		        id: 1,
-		        name: "Poin 1"        
+		        name: "Query 1.1"        
 		    }, {
 		        id: 2,
-		        name: "Poin 2"       
+		        name: "Query 1.2"       
 		    }, {
 		        id: 3,
-		        name: "Poin 3"        
+		        name: "Query 1.3"        
 		    }, {
 		        id: 4,
-		        name: "Poin 4"       
+		        name: "Query 1.4"       
 		    }];
 
 		$scope.type_disaster = [{
@@ -185,101 +218,152 @@ $app.controller("villageController", function($scope, $http, $templateRequest, $
 		        id: 6,
 		        name: "Tsunami"        
 		    }];
-
-
-	  	$scope.executePoin1 = function(){
-	  		$scope.result = [];
+		$scope.getAllIdDisasterEvent = function(callback){
 	  		$http({
-		        url: '/query/query_1/poin1',
+		        url: '/db/disaster_event/get_id',
 		        method: "POST",
-		        data: {
-	                certain_date: $scope.certain_date,
-	                certain_month: $scope.certain_month,
-	                certain_year: $scope.certain_year
-	            }
+		        data: {}
 		    })
 		    .then(function(response) {
-		    	for (var i = response.data.length - 1; i >= 0; i--) {
-		    		$scope.result.push(response.data[i]);
-		    	}
+		    	callback(response.data);
 		    }, 
 		    function(response) { // optional
-		        alert("failed: "+response.data);
+		        callback("failed: "+response.data);
 		    });
+	  	}
+
+	  	$scope.executePoin1 = function(result, callback){
+	  		if($scope.poin_1){
+			    	console.log("masudcsck")
+		  		$http({
+			        url: '/query/query_1/poin1',
+			        method: "POST",
+			        data: {
+			        	result: result,
+		                certain_date: $scope.certain_date,
+		                certain_month: $scope.certain_month,
+		                certain_year: $scope.certain_year
+		            }
+			    })
+			    .then(function(response) {
+			    	console.log("masuk")
+			    	callback(response.data);
+			    }, 
+			    function(response) { // optional
+			    	console.log("masuk2")
+			        callback("failed: "+response.data);
+			    });
+			 }else{
+			    callback(result);
+			 }
 	  	}
 	    
 
-	  	$scope.executePoin2 = function(){
-	  		$scope.result = [];
-	  		$http({
-		        url: '/query/query_1/poin2',
-		        method: "POST",
-		        data: {
-	                certain_date1: $scope.certain_date1,
-	                certain_month1: $scope.certain_month1,
-	                certain_year1: $scope.certain_year1,
-	                certain_date2: $scope.certain_date2,
-	                certain_month2: $scope.certain_month2,
-	                certain_year2: $scope.certain_year2
-	            }
-		    })
-		    .then(function(response) {
-		    	for (var i = response.data.length - 1; i >= 0; i--) {
-		    		$scope.result.push(response.data[i]);
-		    	}
-		    }, 
-		    function(response) { // optional
-		        alert("failed: "+response.data);
-		    });
+	  	$scope.executePoin2 = function(result, callback){
+	  		if($scope.poin_2){
+		  		$http({
+			        url: '/query/query_1/poin2',
+			        method: "POST",
+			        data: {
+			        	result: result,
+		                certain_date1: $scope.certain_date1,
+		                certain_month1: $scope.certain_month1,
+		                certain_year1: $scope.certain_year1,
+		                certain_date2: $scope.certain_date2,
+		                certain_month2: $scope.certain_month2,
+		                certain_year2: $scope.certain_year2
+		            }
+			    })
+			    .then(function(response) {
+		  			callback(response.data);
+			    }, 
+			    function(response) { // optional
+			        callback("failed: "+response.data);
+			    });
+			 }else{
+			    callback(result);
+			 }
 	  	}
 	    
 
-	  	$scope.executePoin3 = function(){
-	  		$scope.result = [];
-	  		$http({
-		        url: '/query/query_1/poin3',
-		        method: "POST",
-		        data: {
-	                certain_date: $scope.certain_date,
-	                certain_month: $scope.certain_month,
-	                certain_year: $scope.certain_year
-	            }
-		    })
-		    .then(function(response) {
-		    	for (var i = response.data.length - 1; i >= 0; i--) {
-		    		$scope.result.push(response.data[i]);
-		    	}
-		    }, 
-		    function(response) { // optional
-		        alert("failed: "+response.data);
-		    });
+	  	$scope.executePoin3 = function(result, callback){
+	  		if($scope.poin_3){
+		  		$http({
+			        url: '/query/query_1/poin3',
+			        method: "POST",
+			        data: {
+			        	result: result,
+		                certain_village: $scope.certain_village,
+		                certain_subdistrict: $scope.certain_subdistrict,
+		                certain_district: $scope.certain_district,
+		                certain_province: $scope.certain_province
+		            }
+			    })
+			    .then(function(response) {
+		  			callback(response.data);
+			    }, 
+			    function(response) { // optional
+			        callback("failed: "+response.data);
+			    });
+			 }else{
+			    callback(result);
+			 }
 	  	}
 	    
 
-	  	$scope.executePoin4 = function(){
-	  		$scope.result = [];
-	  		$http({
-		        url: '/query/query_1/poin4',
-		        method: "POST",
-		        data: {
-	                certain_date: $scope.certain_date,
-	                certain_month: $scope.certain_month,
-	                certain_year: $scope.certain_year
-	            }
-		    })
-		    .then(function(response) {
-		    	for (var i = response.data.length - 1; i >= 0; i--) {
-		    		$scope.result.push(response.data[i]);
-		    	}
-		    }, 
-		    function(response) { // optional
-		        alert("failed: "+response.data);
-		    });
+	  	$scope.executePoin4 = function(result, callback){
+							console.log("Ddscsd "+result)
+	  		if($scope.poin_4){
+		  		$http({
+			        url: '/query/query_1/poin4',
+			        method: "POST",
+			        data: {
+			        	result: result,
+		                certain_type: $scope.certain_type.name
+		            }
+			    })
+			    .then(function(response) {
+		  			callback(response.data);
+			    }, 
+			    function(response) { // optional
+			        callback("failed: "+response.data);
+			    });
+			 }else{
+			    callback(result);
+			 }
 	  	}
 	    
 	    $scope.redirect_disaster_event = function(id){
             $window.open("/show/disaster_event/"+id, '_blank');
         };
+
+
+		$scope.executeQuery = function(){
+			$scope.getAllIdDisasterEvent(function(response){
+				/*Execute poin 1*/
+				$scope.executePoin1( response, function(response){
+					// console.log("A"+JSON.stringify(response))
+					/*Execute poin 2*/
+					$scope.executePoin2( response, function(response){
+						// console.log("B"+JSON.stringify(response))
+						/*Execute poin 3*/
+						$scope.executePoin3( response, function(response){
+							// console.log("C"+JSON.stringify(response))
+							/*Execute poin 4*/
+							$scope.executePoin4( response, function(response){
+								// console.log("D"+JSON.stringify(response))
+								$scope.result = [];
+								for (var i = response.length - 1; i >= 0; i--) {
+						    		$scope.result.push(response[i]);
+						    	}
+							});
+						});
+					});
+				});
+			})
+			
+		}
+
 	});
 
 

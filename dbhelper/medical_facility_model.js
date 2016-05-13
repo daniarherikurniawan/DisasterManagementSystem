@@ -8,7 +8,8 @@ var MedicalFacilitySchema = new mongoose.Schema({
     id_village : { type: mongoose.Schema.Types.ObjectId, ref: 'Village' }
   },
   type : { type: String, default: "puskesmas"}
-})
+});
+mongoose.model('MedicalFacility',MedicalFacilitySchema);
 
 module.exports = { 
   model : mongoose.model('medical_facilities', MedicalFacilitySchema),

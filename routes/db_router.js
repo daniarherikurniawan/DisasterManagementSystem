@@ -123,16 +123,16 @@ router.post('/refugee_camp/insert', function(req, res, next) {
 
 
 /* GET users listing. */
-router.get('/refugee_camp/find', function(req, res, next) {
-  res.send('respond with a resource db');
+router.post('/disaster_event/find', function(req, res, next) {
+  disaster_event_cont.find(req.body.search_term, function(response){
+    res.send(response);
+  });
 });
 
-router.get('/disaster_event/find', function(req, res, next) {
-  res.send('respond with a resource db');
-});
-
-router.get('/disaster/find', function(req, res, next) {
-  res.send('respond with a resource db');
+router.post('/disaster/find', function(req, res, next) {
+  disaster_cont.find(req.body.search_term, function(response){
+    res.send(response);
+  });
 });
 
 router.post('/victim/find', function(req, res, next) {
@@ -159,5 +159,12 @@ router.post('/refugee_camp/find', function(req, res, next) {
   });
 });
 
+
+/* Modified */
+router.post('/disaster_event/get_id', function(req, res, next) {
+  disaster_event_cont.get_id(function(response){
+    res.send(response);
+  });
+});
 
 module.exports = router;

@@ -3,6 +3,17 @@ var DisasterEvent = require('../dbhelper/disaster_event_model');
 module.exports = { 
 	find: function(search_term, callback){
 		DisasterEvent.object
+			.find({ name: new RegExp(search_term, "i")})
+			.sort({name: 'desc'})
+			.limit(10)
+			.exec(function(err, disasterEvent){
+				callback(disasterEvent);
+				return;
+		})
+	},
+	findByCause: function(search_term, callback){
+		console.log("cdsc"+search_term);
+		DisasterEvent.object
 			.find({ cause: new RegExp(search_term, "i")})
 			.sort({cause: 'desc'})
 			.limit(10)
@@ -18,6 +29,19 @@ module.exports = {
 			.exec(function(err, disasterEvent){
 				callback(disasterEvent);
 				return;
+		})
+	},
+
+	get_id: function(callback){
+		DisasterEvent.object
+			.find()
+			.exec(function(err, disasterEvent){
+			id_disaster_event = [];
+			for (var i = disasterEvent.length - 1; i >= 0; i--) {
+				id_disaster_event.push(disasterEvent[i]._id)
+			}
+			callback(id_disaster_event);
+			return;
 		})
 	},
 
@@ -39,7 +63,7 @@ module.exports = {
 			console.log(current_date);
 			console.log(next_date);
 			DisasterEvent.object
-				.find({  $or:[{
+				.find({$or:[{
 								$and: [
 							{ 'date_start': {'$gte': current_date}},
 							{ 'date_end': { '$lt': next_date}},
@@ -53,8 +77,11 @@ module.exports = {
 				})
 				.sort({date_start: 'desc'})
 				.exec(function(err, disasterEvent){
-					// console.log(DisasterEvent);
-					callback(disasterEvent);
+					id_disaster_event = [];
+					for (var i = disasterEvent.length - 1; i >= 0; i--) {
+						id_disaster_event.push(disasterEvent[i]._id)
+					}
+					callback(id_disaster_event);
 					return;
 			})
 		} else
@@ -79,8 +106,11 @@ module.exports = {
 					})
 				.sort({date_start: 'desc'})
 				.exec(function(err, disasterEvent){
-					// console.log(DisasterEvent);
-					callback(disasterEvent);
+					id_disaster_event = [];
+					for (var i = disasterEvent.length - 1; i >= 0; i--) {
+						id_disaster_event.push(disasterEvent[i]._id)
+					}
+					callback(id_disaster_event);
 					return;
 			})
 		} else
@@ -91,7 +121,7 @@ module.exports = {
 			console.log(current_year);
 			console.log(next_year);
 			DisasterEvent.object
-				.find({ $or:[{
+				.find({$or:[{
 								$and: [
 							{ 'date_start': {'$gte': current_year}},
 							{ 'date_end': { '$lt': next_year}},
@@ -105,10 +135,16 @@ module.exports = {
 					})
 				.sort({date_start: 'desc'})
 				.exec(function(err, disasterEvent){
-					// console.log(DisasterEvent);
-					callback(disasterEvent);
+					id_disaster_event = [];
+					for (var i = disasterEvent.length - 1; i >= 0; i--) {
+						id_disaster_event.push(disasterEvent[i]._id)
+					}
+					callback(id_disaster_event);
 					return;
 			})
+		}else{
+			callback(data.result);
+			return;
 		}
 	},
 
@@ -124,7 +160,9 @@ module.exports = {
 			console.log(current_date);
 			console.log(next_date);
 			DisasterEvent.object
-				.find({ $or:[{
+				.find({ $and:[{
+						'_id': {$in : data.result}}, 
+						{$or:[{
 								$and: [
 							{ 'date_start': {'$gte': current_date}},
 							{ 'date_end': { '$lt': next_date}},
@@ -134,12 +172,15 @@ module.exports = {
 							{ $or:[ 
 								{'date_end': { '$gte': current_date}},
 								{'date_end': null }]
-							}]}]
-				})
+							}]}]}
+				]})
 				.sort({date_start: 'desc'})
 				.exec(function(err, disasterEvent){
-					// console.log(DisasterEvent);
-					callback(disasterEvent);
+					id_disaster_event = [];
+					for (var i = disasterEvent.length - 1; i >= 0; i--) {
+						id_disaster_event.push(disasterEvent[i]._id)
+					}
+					callback(id_disaster_event);
 					return;
 			})
 		} else
@@ -152,7 +193,9 @@ module.exports = {
 			console.log(current_month);
 			console.log(next_month);
 			DisasterEvent.object
-				.find({ $or:[{
+				.find({ $and:[{
+						'_id': {$in : data.result}}, 
+						{$or:[{
 								$and: [
 							{ 'date_start': {'$gte': current_month}},
 							{ 'date_end': { '$lt': next_month}},
@@ -162,12 +205,15 @@ module.exports = {
 							{ $or:[ 
 								{'date_end': { '$gte': current_month}},
 								{'date_end': null }]
-							}]}]
-					})
+							}]}]}
+					]})
 				.sort({date_start: 'desc'})
 				.exec(function(err, disasterEvent){
-					// console.log(DisasterEvent);
-					callback(disasterEvent);
+					id_disaster_event = [];
+					for (var i = disasterEvent.length - 1; i >= 0; i--) {
+						id_disaster_event.push(disasterEvent[i]._id)
+					}
+					callback(id_disaster_event);
 					return;
 			})
 		} else
@@ -180,7 +226,9 @@ module.exports = {
 			console.log(current_year);
 			console.log(next_year);
 			DisasterEvent.object
-				.find({ $or:[{
+				.find({ $and:[{
+						'_id': {$in : data.result}}, 
+						{$or:[{
 								$and: [
 							{ 'date_start': {'$gte': current_year}},
 							{ 'date_end': { '$lt': next_year}},
@@ -190,15 +238,62 @@ module.exports = {
 							{ $or:[ 
 								{'date_end': { '$gte': current_year}},
 								{'date_end': null }]
-							}]}]
-					})
+							}]}]}
+					]})
 				.sort({date_start: 'desc'})
 				.exec(function(err, disasterEvent){
-					// console.log(DisasterEvent);
-					callback(disasterEvent);
+					id_disaster_event = [];
+					for (var i = disasterEvent.length - 1; i >= 0; i--) {
+						id_disaster_event.push(disasterEvent[i]._id)
+					}
+					callback(id_disaster_event);
 					return;
 			})
+		}else{
+			callback(data.result);
+			return;
 		}
-		console.log("query is not proccessed");
+	},
+	query_1_poin4: function(data, callback){
+		console.log(data.result);
+		DisasterEvent.object
+			.find({'_id': {$in : data.result}})
+			.populate('id_disasters', 'type')
+			.exec(function(err, disasterEvent){
+				id_event_disasters = [];
+				for (var i = disasterEvent.length - 1; i >= 0; i--) {
+					is_found = false;
+					for (var j = disasterEvent[i].id_disasters.length - 1; !is_found && j >= 0; j--) {
+						if (disasterEvent[i].id_disasters[j].type == data.certain_type){
+							is_found = true;
+							id_event_disasters.push(disasterEvent[i]._id);
+						}
+					}
+				}
+				callback(id_event_disasters);
+				return;
+		})
+	},
+	query_1_poin3: function(data, callback){
+		callback(data.result);
+			return;
+		// console.log(data.result);
+		// DisasterEvent.object
+		// 	.find({'_id': {$in : data.result}})
+		// 	.populate('id_disasters', 'type')
+		// 	.exec(function(err, disasterEvent){
+		// 		id_event_disasters = [];
+		// 		for (var i = disasterEvent.length - 1; i >= 0; i--) {
+		// 			is_found = false;
+		// 			for (var j = disasterEvent[i].id_disasters.length - 1; !is_found && j >= 0; j--) {
+		// 				if (disasterEvent[i].id_disasters[j].type == data.certain_type){
+		// 					is_found = true;
+		// 					id_event_disasters.push(disasterEvent[i]._id);
+		// 				}
+		// 			}
+		// 		}
+		// 		callback(id_event_disasters);
+		// 		return;
+		// })
 	}
 }

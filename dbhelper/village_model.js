@@ -13,8 +13,9 @@ var VillageSchema = new mongoose.Schema({
       condition : {type : String, default:"Sunny"} 
     }],
     geo_region  : {type : String, default:"[{342, 5345},{3432, 535}, {32, 45}]"} 
-  })
+  });
 
+mongoose.model('Village',VillageSchema);
 module.exports = { 
   model : mongoose.model('villages', VillageSchema),
   object: mongoose.model('villages')

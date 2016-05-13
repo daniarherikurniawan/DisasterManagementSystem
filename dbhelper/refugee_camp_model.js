@@ -9,7 +9,8 @@ var RefugeeCampSchema = new mongoose.Schema({
     },
     type : { type: String, default: "puskesmas"},
     capicity : { type: Number, default: 100}
-  })
+  });
+mongoose.model('RefugeeCamp',RefugeeCampSchema);
 
 module.exports = { 
   model : mongoose.model('refugee_camps', RefugeeCampSchema),

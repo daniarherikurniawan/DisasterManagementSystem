@@ -29,7 +29,8 @@ var VictimSchema = new mongoose.Schema({
   		id_refugee_camp :{ type: mongoose.Schema.Types.ObjectId, ref: 'RefugeeCamp' }	
   	}], default: []}
   }
-})
+});
+mongoose.model('Victim',VictimSchema);
 
 module.exports = { 
   model : mongoose.model('victims', VictimSchema),
