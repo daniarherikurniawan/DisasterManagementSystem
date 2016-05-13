@@ -112,7 +112,12 @@
 					    <div class="row">
 					       <div class="form-group">
 					        <label class="col-sm-2">Certain Type of Disaster</label>
-					        <div class="col-sm-3"><input type="text" ng-model="certain_type"  class="form-control"   /></div>
+					        <div class="col-sm-3">
+						         <select class="form-control btn btn-success dropdown-toggle" 
+					        	 	ng-init="selected_type_disaster = type_disaster[0]"
+					        	 	ng-options="t.name for t in type_disaster" 
+									ng-model="selected_type_disaster"></select>
+					        <input type="text" ng-model="certain_type"  class="form-control"   /></div>
 					        </div>
 					   	</div>
 					  	<input class="btn btn-success" type="submit" id="submit" value="Submit" />
@@ -160,6 +165,27 @@ $app.controller("villageController", function($scope, $http, $templateRequest, $
 		        id: 4,
 		        name: "Poin 4"       
 		    }];
+
+		$scope.type_disaster = [{
+		        id: 1,
+		        name: "Flood"        
+		    }, {
+		        id: 2,
+		        name: "Landslide"        
+		    }, {
+		        id: 3,
+		        name: "Earthquake"        
+		    }, {
+		        id: 4,
+		        name: "Tornado"        
+		    }, {
+		        id: 5,
+		        name: "Volcanic Eruption"        
+		    }, {
+		        id: 6,
+		        name: "Tsunami"        
+		    }];
+
 
 	  	$scope.executePoin1 = function(){
 	  		$scope.result = [];
