@@ -5,6 +5,7 @@ module.exports = {
 		Village.object
 			.find({ name: new RegExp(search_term, "i")})
 			.sort({name: 'asc'})
+			.select({name : 1, _id: 1})
 			.limit(10)
 			.exec(function(err, village){
 				callback(village);

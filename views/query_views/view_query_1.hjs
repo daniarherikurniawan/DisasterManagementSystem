@@ -234,7 +234,6 @@ $app.controller("query1Controller", function($scope, $http, $templateRequest, $s
 
 	  	$scope.executePoin1 = function(result, callback){
 	  		if($scope.poin_1){
-			    	console.log("masudcsck")
 		  		$http({
 			        url: '/query/query_1/poin1',
 			        method: "POST",
@@ -247,6 +246,7 @@ $app.controller("query1Controller", function($scope, $http, $templateRequest, $s
 			    })
 			    .then(function(response) {
 			    	console.log("masuk")
+			    	alert(response.data)
 			    	callback(response.data);
 			    }, 
 			    function(response) { // optional

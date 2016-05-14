@@ -87,6 +87,17 @@ router.post('/query_5/get_id_disaster_from_user', function(req, res, next) {
     res.send(result);
   });
 });
+router.post('/query_5/poin3', function(req, res, next) {
+  victim_cont.query_5_poin3(req.body, function(result){
+    res.send(result);
+  });
+});
+
+router.post('/query_5/get_disaster_event_query5', function(req, res, next) {
+  disaster_event_cont.get_disaster_event_query5(function(result){
+    res.send(result);
+  });
+});
 
 
 

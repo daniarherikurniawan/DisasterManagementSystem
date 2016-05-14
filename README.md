@@ -27,3 +27,5 @@ WriteResult({ "nMatched" : 4, "nUpserted" : 0, "nModified" : 4 })
 > db.disasters.drop()
 
 db.test_users.remove( {"_id": ObjectId("4d512b45cc9374271b02ec4f")});
+
+mongoimport --db disasterdb --collection victims --file Downloads/dump/victims.json 

@@ -59,7 +59,49 @@ module.exports = {
 			return;
 		})
 	},
-	
+
+	query_5_poin3: function(data, callback){
+		console.log(data);
+		if(data.id_original_village!=null){
+			Victim.object
+			.find({$and: [
+				{'_id': {$in: data.id_victims}},
+				{'id_original_village': data.id_original_village}]
+			})
+			.select( {_id:1, name : 1})
+			.exec(function(err, victims){
+				callback(victims);
+			});
+		}else if((data.certain_subdistrict == null) && (data.certain_district == null) && (data.certain_province == null)){
+			Victim.object
+			.find({'_id': {$in: data.id_victims}})
+			.select( {_id:1, name : 1})
+			.exec(function(err, victims){
+				callback(victims);
+			});
+		}else {
+			Victim.object
+			.find({'_id': {$in: data.id_victims}})
+			.populate('id_original_village', 'location')
+			.select( {'id_original_village' : 1})
+			.exec(function(err, victims){
+				id_victims = [];
+				for (var i = victims.length - 1; i >= 0; i--) {
+					if ( ((victims[i].id_original_village.location.sub_district == data.certain_subdistrict) &&
+						 (data.certain_subdistrict != null)) 
+						|| ((victims[i].id_original_village.location.district == data.certain_district) &&
+						 (data.certain_district != null)) 
+						|| ((victims[i].id_original_village.location.province == data.certain_province) &&
+						 (data.certain_province != null)) 
+					){
+						id_victims.push(victims[i]);
+					}
+
+				}
+				callback(id_victims);
+			});
+		} 
+	},
 	get_id_disaster_from_user: function(data, callback){
 		// console.log(data.id_victims)
 		Victim.object

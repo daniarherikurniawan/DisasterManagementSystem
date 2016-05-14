@@ -71,6 +71,16 @@ module.exports = {
 		})
 	},
 
+	get_disaster_event_query5: function(callback){
+		DisasterEvent.object
+			.find()
+			.populate('id_disasters', 'type id_victims')
+			.exec(function(err, disasterEvent){
+			callback(disasterEvent);
+			return;
+		})
+	},
+
 	insert: function(data, callback){
 		var disasterEventObj = new DisasterEvent.model(data);
 	    disasterEventObj.save(function(err){
