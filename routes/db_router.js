@@ -187,4 +187,9 @@ router.post('/victim/get_id', function(req, res, next) {
     res.send(response);
   });
 });
+router.post('/disaster/get_array_id', function(req, res, next) {
+  disaster_cont.get_array_id(req.body, function(response){
+    res.send(response);
+  });
+});
 module.exports = router;

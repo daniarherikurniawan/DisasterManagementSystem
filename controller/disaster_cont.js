@@ -21,7 +21,15 @@ module.exports = {
 				return;
 		})
 	},
-	
+	get_array_id: function(data, callback){
+		Disaster.object
+			.find({'_id' : { $in : data.array_id}})
+			.select({id_victims : 1, type : 1, _id: 1})
+			.exec(function(err, disaster){
+				callback (disaster);
+				return;
+		})
+	},
 	filter_by_date_show_victim: function(data, callback){
 		certain_date = new Date(data.date);
 		next_date = new Date(certain_date.getFullYear(), certain_date.getMonth(), certain_date.getDate()+1);/*A day before the current month started*/
