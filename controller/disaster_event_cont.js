@@ -1,5 +1,5 @@
 var DisasterEvent = require('../dbhelper/disaster_event_model');
-
+var Disaster = require('../dbhelper/disaster_model');
 module.exports = { 
 	find: function(search_term, callback){
 		DisasterEvent.object
@@ -75,13 +75,17 @@ module.exports = {
 		  	if(err)	return null;
 		});
 	    /*add id_disaster_event to the victims*/
-		DisasterEvent.object
-			.findById(disasterEventObj._id)
-			.lean()
-			.populate('id_disasters', 'id_victims')
-			.exec(function(err, disaster_event){
-				console.log(disaster_event);
-				return disasterEventObj._id;
+				console.log(data.id_disasters);	
+		Disaster.object
+			.find({'_id': {$in: data.id_disasters}})
+			.select('id_victims')
+			.exec(function(err, disaster){
+				id_victims = [];
+				for (var i = disaster.id_victims.length - 1; i >= 0; i--) {
+					id_victims = id_victims.concat(disaster.id_victims[i])
+				}
+				console.log("A:"+id_victims);
+				return data._id;
 		})
 	},
 
@@ -164,7 +168,7 @@ module.exports = {
 								{'date_end': null }]
 							}]}]
 					})
-				.sort({date_start: 'desc'})
+				.sort({date_start: 'asc'})
 				.exec(function(err, disasterEvent){
 					id_disaster_event = [];
 					for (var i = disasterEvent.length - 1; i >= 0; i--) {
@@ -205,7 +209,7 @@ module.exports = {
 								{'date_end': null }]
 							}]}]}
 				]})
-				.sort({date_start: 'desc'})
+				.sort({date_start: 'asc'})
 				.exec(function(err, disasterEvent){
 					id_disaster_event = [];
 					for (var i = disasterEvent.length - 1; i >= 0; i--) {

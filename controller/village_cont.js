@@ -4,7 +4,7 @@ module.exports = {
 	find: function(search_term, callback){
 		Village.object
 			.find({ name: new RegExp(search_term, "i")})
-			.sort({name: 'desc'})
+			.sort({name: 'asc'})
 			.limit(10)
 			.exec(function(err, village){
 				callback(village);

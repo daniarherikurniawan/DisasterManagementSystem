@@ -4,7 +4,7 @@ module.exports = {
 	find: function(search_term, callback){
 		MedicalFacility.object
 			.find({ name: new RegExp(search_term, "i")})
-			.sort({name: 'desc'})
+			.sort({name: 'asc'})
 			.limit(10)
 			.exec(function(err, medical_facility){
 				callback(medical_facility);

@@ -4,7 +4,7 @@ module.exports = {
 	find: function(search_term, callback){
 		Disaster.object
 			.find({ cause: new RegExp(search_term, "i")})
-			.sort({cause: 'desc'})
+			.sort({cause: 'asc'})
 			.limit(10)
 			.select({cause : 1, type : 1, _id: 1})
 			.exec(function(err, disaster){

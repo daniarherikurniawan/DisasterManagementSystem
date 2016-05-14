@@ -8,7 +8,7 @@ module.exports = {
 			.find({ name: new RegExp(search_term, "i")})
 			.limit(10)
 			.select({name : 1, _id: 1})
-			.sort({name: 'desc'})
+			.sort({name: 'asc'})
 			.exec(function(err, victim){
 				callback(victim);
 				return;
@@ -29,7 +29,7 @@ module.exports = {
 				    model: RefugeeCamp.object
 				    // ,select: 'name'
 				  })
-			.sort({name: 'desc'})
+			.sort({name: 'asc'})
 			.exec(function(err, victim){
 				if(err) console.log(err)
 				callback(victim);
