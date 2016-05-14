@@ -92,7 +92,7 @@
 		$scope.date_start = new Date();
 		$scope.date_end = new Date();
 		$scope.date_start_disaster = new Date();
-		$scope.id_disasters=['5736c587da1aa4576ac4af68', '5736c62eda1aa4576ac4af6c'];
+		$scope.id_disasters=[];
 		$scope.id_victims=[];
 		$scope.checked = true;
 		$scope.isFormVissible = false;
@@ -120,9 +120,7 @@
 			    .then(function(response) {
 			        alert("Data disaster event has been saved successfully!");
     				$scope.id_disasters = [];
-					$scope.date_start = new Date();
-					$scope.date_end = null;
-    				$scope.name = "";
+    				$scope.is_not_finish = false;
 			    }, 
 			    function(response) { // optional
 			        alert("failed: "+response.data);
@@ -131,7 +129,9 @@
 	    };
 
 	    $scope.addIdDisaster = function() {
-	        if($scope.cause == undefined){
+	    	if($scope.is_not_finish_disaster == false && $scope.date_end_disaster == undefined){
+	    		alert("Please input data about date end of current disaster!")
+	    	}else if($scope.cause == undefined){
 	    		alert("Please input data about the disaster's cause!")
 	    	}else{
 	    		if($scope.record_region.length == 0){
@@ -198,8 +198,8 @@
 	    }
 
 	    $scope.addRecordedRegion = function(){
-	    	if($scope.geo_region == undefined){
-	    		alert ("fill the geo region field!");
+	    	if($scope.geo_region == undefined || $scope.date_start_region == undefined){
+	    		alert ("Complete the data on date recorded and geo region field!");
 	    	}else{
 				$scope.record_region.push({
 					date_start : $scope.date_start_region,
