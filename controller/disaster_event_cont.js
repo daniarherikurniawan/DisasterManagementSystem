@@ -1,5 +1,7 @@
 var DisasterEvent = require('../dbhelper/disaster_event_model');
 var Disaster = require('../dbhelper/disaster_model');
+var Victim = require('../dbhelper/victim_model');
+
 module.exports = { 
 	find: function(search_term, callback){
 		DisasterEvent.object
@@ -69,23 +71,34 @@ module.exports = {
 		})
 	},
 
-	insert: function(data){
+	insert: function(data, callback){
 		var disasterEventObj = new DisasterEvent.model(data);
 	    disasterEventObj.save(function(err){
 		  	if(err)	return null;
 		});
-	    /*add id_disaster_event to the victims*/
-				console.log(data.id_disasters);	
+	    /*get id of the victims*/
 		Disaster.object
 			.find({'_id': {$in: data.id_disasters}})
 			.select('id_victims')
 			.exec(function(err, disaster){
 				id_victims = [];
-				for (var i = disaster.id_victims.length - 1; i >= 0; i--) {
-					id_victims = id_victims.concat(disaster.id_victims[i])
+				for (var i = disaster.length - 1; i >= 0; i--) {
+					id_victims = id_victims.concat(disaster[i].id_victims)
 				}
-				console.log("A:"+id_victims);
-				return data._id;
+				/*add id_disaster_event to the victims*/
+				Victim.object
+					.find({'_id': {$in: id_victims}})
+					.exec( function(err, victims){
+						// console.log(victims);
+						for (var i = victims.length - 1; i >= 0; i--) {
+							if(victims[i].id_disaster_events.indexOf(disasterEventObj._id) == -1 ){
+								victims[i].id_disaster_events.push(disasterEventObj._id);
+								victims[i].save();
+							}
+						}
+						callback(disasterEventObj._id);
+						return;
+					})
 		})
 	},
 

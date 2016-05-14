@@ -51,11 +51,12 @@ router.get('/refugee_camp', function(req, res, next) {
 /* DB INSERT. */
 router.post('/disaster_event/insert', function(req, res, next) {
   if(req.body != null){
-    disaster_event_id = disaster_event_cont.insert(req.body);
-    if(disaster_event_id != null )
-      res.send(disaster_event_id);
-    else
-      res.res.sendStatus(500);
+    disaster_event_id = disaster_event_cont.insert(req.body, function(disaster_event_id){
+      if(disaster_event_id != null )
+        res.send(disaster_event_id);
+      else
+        res.res.sendStatus(500);
+    });
   }else{
     res.res.sendStatus(500);
   }
