@@ -29,7 +29,7 @@ var VictimSchema = new mongoose.Schema({
   		id_refugee_camp :{ type: mongoose.Schema.Types.ObjectId, ref: 'RefugeeCamp' }	
   	}], default: []}
   },
-  id_disaster_events: { type: mongoose.Schema.Types.ObjectId, ref: 'DisasterEvent' }
+  id_disaster_events: {type : [{type: mongoose.Schema.Types.ObjectId, ref: 'DisasterEvent' }], default: []},
 });
 mongoose.model('Victim',VictimSchema);
 
