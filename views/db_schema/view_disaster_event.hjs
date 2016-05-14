@@ -92,7 +92,7 @@
 		$scope.date_start = new Date();
 		$scope.date_end = new Date();
 		$scope.date_start_disaster = new Date();
-		$scope.id_disasters=[];
+		$scope.id_disasters=['5736c587da1aa4576ac4af68', '5736c62eda1aa4576ac4af6c'];
 		$scope.id_victims=[];
 		$scope.checked = true;
 		$scope.isFormVissible = false;
@@ -259,7 +259,7 @@
 
 		$scope.findVictimOnDB = function(){
 	    	if($scope.searchStringVictim != undefined &&
-				$scope.searchStringVictim.length%3 == 0){
+				$scope.searchStringVictim.length>= 3 ){
 				$http({
 			        url: '/db/victim/find',
 			        method: "POST",

@@ -72,15 +72,17 @@ module.exports = {
 	insert: function(data){
 		var disasterEventObj = new DisasterEvent.model(data);
 	    disasterEventObj.save(function(err){
-		  	if(err){ 
-	    		return null;
-	    	}else{
-	    		/*add id_disaster_event to the victims*/
-	    	}
-
-
+		  	if(err)	return null;
 		});
-	    return disasterEventObj._id;
+	    /*add id_disaster_event to the victims*/
+		DisasterEvent.object
+			.findById(disasterEventObj._id)
+			.lean()
+			.populate('id_disasters', 'id_victims')
+			.exec(function(err, disaster_event){
+				console.log(disaster_event);
+				return disasterEventObj._id;
+		})
 	},
 
 	query_1_poin1: function(data, callback){

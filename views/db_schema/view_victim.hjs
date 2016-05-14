@@ -449,7 +449,7 @@
 
 	    $scope.findMedicalFacilityOnDB = function(){
 	    	if($scope.searchStringMedicalFacility != undefined &&
-				$scope.searchStringMedicalFacility.length%3 == 0){
+				$scope.searchStringMedicalFacility.length >= 3){
 				$http({
 			        url: '/db/medical_facility/find',
 			        method: "POST",
@@ -468,7 +468,7 @@
 
 	     $scope.findRefugeeCampOnDB = function(){
 	    	if($scope.searchStringRefugeeCamp != undefined &&
-				$scope.searchStringRefugeeCamp.length%3 == 0){
+				$scope.searchStringRefugeeCamp.length >= 3 ){
 				$http({
 			        url: '/db/refugee_camp/find',
 			        method: "POST",
@@ -487,7 +487,7 @@
 
 	    $scope.findVillageOnDB = function(){
 			if($scope.searchStringVillage != undefined &&
-				$scope.searchStringVillage.length%3 == 0){
+				$scope.searchStringVillage.length >= 3 ){
 				$http({
 			        url: '/db/village/find',
 			        method: "POST",

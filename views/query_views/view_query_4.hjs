@@ -124,7 +124,7 @@ $app.controller("villageController", function($scope, $http, $templateRequest, $
 
 	  	$scope.findDisasterEventOnDB = function(){
 			if($scope.searchStringDisasterEvent != undefined &&
-				$scope.searchStringDisasterEvent.length%3 == 0){
+				$scope.searchStringDisasterEvent.length>= 3 ){
 				$http({
 			        url: '/db/disaster_event/find_id_and_type',
 			        method: "POST",

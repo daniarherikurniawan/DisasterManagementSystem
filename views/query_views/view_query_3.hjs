@@ -126,7 +126,7 @@ $app.controller("query3Controller", function($scope, $http, $templateRequest, $s
 
 	  	$scope.findVictimOnDB = function(){
 	    	if($scope.searchStringVictim != undefined &&
-				$scope.searchStringVictim.length%3 == 0){
+				$scope.searchStringVictim.length>= 3 ){
 				$http({
 			        url: '/db/victim/find_name_medfac',
 			        method: "POST",

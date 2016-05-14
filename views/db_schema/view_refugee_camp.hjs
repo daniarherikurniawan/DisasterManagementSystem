@@ -148,7 +148,7 @@ $app.controller("RefugeeCampController", function($scope, $http, $templateReques
 
 		$scope.findVillageOnDB = function(){
 			if($scope.searchStringVillage != undefined &&
-				$scope.searchStringVillage.length%3 == 0){
+				$scope.searchStringVillage.length >= 3 ){
 				$http({
 			        url: '/db/village/find',
 			        method: "POST",

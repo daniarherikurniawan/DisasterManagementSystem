@@ -135,7 +135,7 @@ $app.controller("MedicalFacilityController", function($scope, $http, $templateRe
 
 		$scope.findVillageOnDB = function(){
 			if($scope.searchStringMedicalFacility != undefined &&
-				$scope.searchStringMedicalFacility.length%3 == 0){
+				$scope.searchStringMedicalFacility.length>= 3 ){
 				$http({
 			        url: '/db/village/find',
 			        method: "POST",
