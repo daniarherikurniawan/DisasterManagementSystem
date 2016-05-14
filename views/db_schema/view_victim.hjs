@@ -384,8 +384,10 @@
     				alert("Please input data about refugee camp!")
 	    		} else{
 	    			if($scope.is_refugee == false)
-	    				$scope.id_refugee_camp = 0;
-	    			
+	    				$scope.id_refugee_camp = [];
+	    			if($scope.id_refugee_camp.length == 0)
+	    				$scope.is_refugee = false;
+
 		    		$scope.record_medical_facilities = []
 		    		if($scope.id_medical_facility.length != 0){
 		    			for (var i = 0; i < $scope.id_medical_facility.length ;  i++) {
