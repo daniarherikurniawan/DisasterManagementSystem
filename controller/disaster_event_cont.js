@@ -76,15 +76,21 @@ module.exports = {
 	    disasterEventObj.save(function(err){
 		  	if(err)	return null;
 		});
-	    /*get id of the victims*/
+
+
+	    /*get id of the victims*/ 
+	    /*insert id_disaster_event to disasters*/
 		Disaster.object
 			.find({'_id': {$in: data.id_disasters}})
-			.select('id_victims')
 			.exec(function(err, disaster){
 				id_victims = [];
+				console.log(disaster);
 				for (var i = disaster.length - 1; i >= 0; i--) {
-					id_victims = id_victims.concat(disaster[i].id_victims)
+					disaster[i].id_disaster_event = disasterEventObj._id;
+					id_victims = id_victims.concat(disaster[i].id_victims);
+					disaster[i].save();
 				}
+				console.log(disaster);
 				/*add id_disaster_event to the victims*/
 				Victim.object
 					.find({'_id': {$in: id_victims}})

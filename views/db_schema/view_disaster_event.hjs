@@ -24,7 +24,7 @@
 					    <div class="row">
 					       <div class="form-group">
 					        <label class="col-sm-2">Date Start</label>
-					        <div class="col-sm-3"><input type="date" ng-model="date_start" class="form-control" required/></div>
+					        <div class="col-sm-3"><input type="date" ng-change="updateDateEnd()" ng-model="date_start" class="form-control" required/></div>
 					        </div>
 					   	</div>
 				       	<div class="row ">
@@ -127,7 +127,9 @@
 			    });
 	    	}
 	    };
-
+	    $scope.updateDateEnd = function(){
+	    	$scope.date_end = $scope.date_start;
+	    };
 	    $scope.addIdDisaster = function() {
 	    	if($scope.is_not_finish_disaster == false && $scope.date_end_disaster == undefined){
 	    		alert("Please input data about date end of current disaster!")
@@ -247,7 +249,8 @@
 		        id: 6,
 		        name: "Tsunami"        
 		    }];
-
+		    $scope.date_start_region = $scope.date_start;
+		    $scope.date_start_disaster = $scope.date_start;
 			var templateUrl = $sce.getTrustedResourceUrl('disaster');
 	    	$templateRequest(templateUrl).then(function(template) {
 		        $compile($("#disaster_form").html(template).contents())($scope);
