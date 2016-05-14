@@ -82,6 +82,12 @@ router.post('/query_5/filter_by_year', function(req, res, next) {
     res.send(result);
   });
 });
+router.post('/query_5/get_id_disaster_from_user', function(req, res, next) {
+  victim_cont.get_id_disaster_from_user(req.body, function(result){
+    res.send(result);
+  });
+});
+
 
 
 module.exports = router;

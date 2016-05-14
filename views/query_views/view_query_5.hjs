@@ -21,19 +21,19 @@
 				       <div class="form-group col-md-4">
 				        <label class="col-sm-6">{{type_of_query[0].name}}</label>
 				        <div class="col-sm-6">
-				        	<input ng-change="resetDateEnd()" type="checkbox" ng-model="poin_1">
+				        	<input ng-change="removeRecordedData()"  type="checkbox" ng-model="poin_1">
 				        </div>
 				        </div>
 				       <div class="form-group col-md-4">
 				        <label class="col-sm-6">{{type_of_query[1].name}}</label>
 				        <div class="col-sm-6">
-				        	<input ng-change="resetDateEnd()" type="checkbox" ng-model="poin_2">
+				        	<input ng-change="removeRecordedData()" type="checkbox" ng-model="poin_2">
 				        </div>
 				        </div>
 				       <div class="form-group col-md-4">
 				        <label class="col-sm-6">{{type_of_query[2].name}}</label>
 				        <div class="col-sm-6">
-				        	<input ng-change="resetDateEnd()" type="checkbox" ng-model="poin_3">
+				        	<input ng-change="removeRecordedData()" type="checkbox" ng-model="poin_3">
 				        </div>
 				        </div>
 					</div>
@@ -141,6 +141,19 @@
 				   	<div class="form-horizontal"  >
 						<div class="row">
 					       <div class="form-group">
+								<label class="col-sm-2">Name of Disaster Event</label>
+							        <div class="col-sm-10">
+							        	<span ng-repeat="disaster_event in data_disaster_event" style="float:left ;margin:10px">
+								            <input type="button" value="{{disaster_event.name}}" class="btn-info" ng-click="redirect_disaster_event(disaster_event._id)"/>
+								        </span>
+								    </div>
+							</div>
+						</div>
+					</div>
+					<br><hr><br>
+				   	<div class="form-horizontal"  >
+						<div class="row">
+					       <div class="form-group">
 								<label class="col-sm-2">Recorded Disaster</label>
 						        <div class="col-sm-10">
 						        	<span ng-repeat="disaster in id_disasters" style="float:left; margin: 10px ">
@@ -241,7 +254,7 @@ $app.controller("villageController", function($scope, $http, $templateRequest, $
 			$scope.id_total_disasters = $scope.possibleDisasterEvent[id].id_disasters ;
 			$scope.id_disasters = $scope.id_total_disasters;
 		    $scope.data_disaster_event.push($scope.possibleDisasterEvent[id]);
-		    $scope.updateIdDisaster($scope.certain_type.id);
+		    $scope.updateIdDisaster();
 	    };
 
 	    $scope.deleteDisasterEvent = function(id) {
@@ -347,7 +360,6 @@ $app.controller("villageController", function($scope, $http, $templateRequest, $
 							callback($scope.result);
 					    }, 
 					    function(response) { // optional
-					    	console.log("masuk2")
 					        callback("failed: "+response.data);
 					    });
 					}else if($scope.certain_month != null){
@@ -367,7 +379,6 @@ $app.controller("villageController", function($scope, $http, $templateRequest, $
 							callback($scope.result);
 					    }, 
 					    function(response) { // optional
-					    	console.log("masuk2")
 					        callback("failed: "+response.data);
 					    });
 					}else if($scope.certain_year != null){
@@ -382,15 +393,11 @@ $app.controller("villageController", function($scope, $http, $templateRequest, $
 				            }
 					    })
 					    .then(function(response) {
-					    	alert(JSON.stringify(response.data))
 				    		$scope.id_disasters = response.data;
-					    	alert(JSON.stringify("B:"+response.data))
 							$scope.updateIdVictims();
-					    	alert(JSON.stringify("A:"+$scope.result))
 							callback($scope.result);
 					    }, 
 					    function(response) { // optional
-					    	console.log("masuk2")
 					        callback("failed: "+response.data);
 					    });
 					} else{
@@ -399,7 +406,24 @@ $app.controller("villageController", function($scope, $http, $templateRequest, $
 					}
 				}else{
 					/*should look at id_disaster_event on victim*/
-			    	callback(id_victims);
+					    	console.log("masuk2cdsc")
+					$http({
+				        url: '/query/query_5/get_id_disaster_from_user',
+				        method: "POST",
+				        data: {
+			                id_victims: id_victims
+			            }
+				    })
+				    .then( function(response) { // optional
+				    		/*id_disaster_events*/
+				    		$scope.data_disaster_event = response.data;
+				    		$scope.updateIdDisaster();
+							$scope.updateIdVictims();
+			    			callback(id_victims);
+				    }, 
+					    function(response) { // optional
+					        callback("failed: "+response.data);
+					});
 
 				}
 			 }else{
@@ -436,6 +460,9 @@ $app.controller("villageController", function($scope, $http, $templateRequest, $
             $window.open("/show/disaster_event/"+id, '_blank');
         };
 
+        $scope.removeRecordedData = function(){
+			$scope.id_disasters = [];
+        }
 
 		$scope.executeQuery = function(){
 			$scope.getAllIdVictim(function(response){

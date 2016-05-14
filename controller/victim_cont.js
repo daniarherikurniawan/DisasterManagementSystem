@@ -1,6 +1,7 @@
 var Victim = require('../dbhelper/victim_model');
 var MedicalFacility = require('../dbhelper/medical_facility_model');
 var RefugeeCamp = require('../dbhelper/refugee_camp_model');
+var DisasterEvent = require('../dbhelper/disaster_event_model');
 
 module.exports = { 
 	find: function(search_term, callback){
@@ -58,6 +59,29 @@ module.exports = {
 			return;
 		})
 	},
+	
+	get_id_disaster_from_user: function(data, callback){
+		// console.log(data.id_victims)
+		Victim.object
+			.find({'_id': {$in: data.id_victims}})
+			.exec(function(err, victims){
+				id_disaster_events = [];
+				possible_duplicate = [];
+		    	for (var i = victims.length - 1; i >= 0; i--) {
+		    		possible_duplicate = possible_duplicate.concat(victims[i].id_disaster_events);
+		    	}
+				id_disaster_events = possible_duplicate.filter(function(item, pos) {
+				    return possible_duplicate.indexOf(item) == pos;
+				})
+				DisasterEvent.object
+					.find({'_id': {$in: id_disaster_events}})
+					.exec(function(err, disaster_events){
+						callback(disaster_events);
+					});
+			});
+		return;
+	},
+
 	insert: function(data){
 		var victimObj = new Victim.model(data);
 	    victimObj.save(function(err){
