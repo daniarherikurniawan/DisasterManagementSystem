@@ -47,8 +47,59 @@
 					        </div>
 					   	</div>
 					   	<br>
+				       <div class="row form-group col-md-5">
+					        <label class="col-sm-6">Show JSON</label>
+					        <div class="col-sm-6">
+					        	<input type="checkbox" ng-model="show_json">
+					        </div>
+				        </div>
 					   	<br>
-					  	<input class="btn btn-success" type="submit" id="submit" value="Submit" />
+					   	<div ng-show="show_json" class="row col-md-12">
+							<pre>{{id_victims[0] | json}}</pre>
+						</div>
+					   	<br>
+					   	<br>
+					   	 <div ng-show="id_victims.length!=0" class="row">
+					       <div class="form-group">
+						        <label class="col-sm-2">Record Medical Facilities</label>
+						        <table class="col-sm-10" style="text-align: center;">
+								  <tr>
+								    <td><b>Date start</b></td>
+								    <td><b>Date end</b></td> 
+								    <td><b>Medical facility's name</b></td>
+								  </tr>
+								  <tr ng-repeat="medfac in id_victims[0].record_medical_facilities ">
+								    <td>{{medfac.date_start | date:'MM/dd/yyyy'}}</td>
+								    <td ng-show="medfac.date_end!=null">{{medfac.date_end | date:'MM/dd/yyyy'}}</td> 
+								    <td ng-hide="medfac.date_end!=null">still staying</td> 
+								    <td>{{medfac.id_medical_facility.name}}</td>
+								  </tr>
+								</table>
+					        </div>
+					   	</div>
+
+					   	<br>
+					   	<br>
+					   	 <div ng-show="id_victims.length!=0" class="row">
+					       <div class="form-group">
+						        <label class="col-sm-2">Record Refugee Camp</label>
+						        <table class="col-sm-10" style="text-align: center;">
+								  <tr>
+								    <td><b>Date start</b></td>
+								    <td><b>Date end</b></td> 
+								    <td><b>Refugee Camp's name</b></td>
+								  </tr>
+								  <tr ng-repeat="camp in id_victims[0].is_refugee.record_refugee_camps ">
+								    <td>{{camp.date_start | date:'MM/dd/yyyy'}}</td>
+								    <td ng-show="camp.date_end!=null">{{camp.date_end | date:'MM/dd/yyyy'}}</td> 
+								    <td ng-hide="camp.date_end!=null">still staying</td> 
+								    <td>{{camp.id_refugee_camp.name}}</td>
+								  </tr>
+								</table>
+					        </div>
+					   	</div>
+
+					  	<!-- <input class="btn btn-success" type="submit" id="submit" value="Submit" /> -->
 					</form>
 				</div><!-- cpontroller -->
 			</div><!-- MyApp -->
@@ -77,7 +128,7 @@ $app.controller("query3Controller", function($scope, $http, $templateRequest, $s
 	    	if($scope.searchStringVictim != undefined &&
 				$scope.searchStringVictim.length%3 == 0){
 				$http({
-			        url: '/db/victim/find',
+			        url: '/db/victim/find_name_medfac',
 			        method: "POST",
 			        data: {
 		                search_term: $scope.searchStringVictim

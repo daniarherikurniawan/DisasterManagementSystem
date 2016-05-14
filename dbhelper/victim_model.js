@@ -6,7 +6,7 @@ var VictimSchema = new mongoose.Schema({
   name 	: { type: String, default: "Daniar Heri"},
   phone	: {type: [{type: String}], default: [] },
   address	: { type: String, default: "Jl Ngrandu No 8"},
-  original_village: { type: String, default: "Kendalrejo"},
+  id_original_village: { type: mongoose.Schema.Types.ObjectId, ref: 'Village' },
   gender	: { type: String, default: "L"},
   birthday	: { type: Date, default: Date.now},
   status	: { type: String, default: "affected"},
@@ -28,7 +28,8 @@ var VictimSchema = new mongoose.Schema({
       date_end: { type: Date, default: Date.now},
   		id_refugee_camp :{ type: mongoose.Schema.Types.ObjectId, ref: 'RefugeeCamp' }	
   	}], default: []}
-  }
+  },
+  id_disaster_events: { type: mongoose.Schema.Types.ObjectId, ref: 'DisasterEvent' }
 });
 mongoose.model('Victim',VictimSchema);
 

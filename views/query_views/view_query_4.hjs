@@ -60,22 +60,24 @@
 							<div class="row">
 						       <div class="form-group">
 						        <label class="col-sm-2">Certain Date</label>
-						        <div class="col-sm-3"><input type="date" ng-model="certain_date"  class="form-control"  /></div>
+						        <div class="col-sm-3"><input ng-change="updateIdDisaster(certain_type.id)" type="date" ng-model="certain_date"  class="form-control"  /></div>
 						        </div>
 						   	</div>
 						</div>
 					   	<div class="form-horizontal"  >
 							<div class="row">
-							<label class="col-sm-2">Consist of (Disasters)</label>
-						        <div class="col-sm-10">
-						        	<span ng-repeat="disaster in id_disasters" style="float:left; margin: 10px ">
-							            <input type="button" value="{{disaster._id}}" class="btn-info" ng-click="redirect_disaster(disaster._id)"/>
-							        </span>
-						        </div>
+						       <div class="form-group">
+									<label class="col-sm-2">Consist of (Disasters)</label>
+							        <div class="col-sm-10">
+							        	<span ng-repeat="disaster in id_disasters" style="float:left; margin: 10px ">
+								            <input type="button" value="{{disaster._id}}" class="btn-info" ng-click="redirect_disaster(disaster._id)"/>
+								        </span>
+							        </div>
+							    </div>
 					        </div>
 					    </div>
 				        <br>
-					  	<input class="btn btn-success" type="submit" id="submit" value="Submit" />
+					  	<!-- <input class="btn btn-success" type="submit" id="submit" value="Submit" /> -->
 					</form>
 				</div><!-- cpontroller -->
 			</div><!-- MyApp -->
@@ -152,7 +154,12 @@ $app.controller("villageController", function($scope, $http, $templateRequest, $
 	    	$scope.id_total_disasters = [];
 	    };
 	    
-	    $scope.updateIdDisaster = function(id) {
+	    $scope.updateIdDisaster = function() {
+	    	$scope.filterByTypeDisaster($scope.certain_type.id);
+	    	$scope.filterByDate();
+	    };
+
+		$scope.filterByTypeDisaster = function(id) {
 	    	switch($scope.certain_type.id){
 	    		case 0 :
 	    			$scope.id_disasters = $scope.id_total_disasters;
@@ -165,6 +172,27 @@ $app.controller("villageController", function($scope, $http, $templateRequest, $
 	    			};
 	    	}
 	    };
+
+
+	    $scope.filterByDate = function(){
+	    	if($scope.certain_date != undefined){
+				$http({
+			        url: '/query/query_4/filter_by_date',
+			        method: "POST",
+			        data: {
+		                array_id: $scope.id_disasters,
+		                date: $scope.certain_date
+		            }
+			    })
+			    .then(function(response) {
+			    	$scope.id_disasters = response.data;
+			    	// $scope.possibleDisasterEvent = response.data;
+			    }, 
+			    function(response) { 
+			        alert("failed: filterByDate"+response.data);
+			    });
+	    	}
+	    }
 	    
 	    $scope.redirect_disaster_event = function(id){
             $window.open("/show/disaster_event/"+id, '_blank');

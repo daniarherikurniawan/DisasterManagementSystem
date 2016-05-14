@@ -17,17 +17,152 @@
 			</div>
 			<div ng-app="myApp">
 				<div ng-controller="villageController">
-					<form class="form-horizontal" ng-submit="insertVillage()">
-					    <div class="row">
-					       <div class="form-group">
-					        <label class="col-sm-2">Name</label>
-					        <div class="col-sm-10"><input type="text" ng-model="name" 
-					        name="name" placeholder="name of the victim" class="form-control" required /></div>
-					        </div>
-					   	</div>
+					<div class="row " >
+				       <div class="form-group col-md-4">
+				        <label class="col-sm-6">{{type_of_query[0].name}}</label>
+				        <div class="col-sm-6">
+				        	<input ng-change="resetDateEnd()" type="checkbox" ng-model="poin_1">
+				        </div>
+				        </div>
+				       <div class="form-group col-md-4">
+				        <label class="col-sm-6">{{type_of_query[1].name}}</label>
+				        <div class="col-sm-6">
+				        	<input ng-change="resetDateEnd()" type="checkbox" ng-model="poin_2">
+				        </div>
+				        </div>
+				       <div class="form-group col-md-4">
+				        <label class="col-sm-6">{{type_of_query[2].name}}</label>
+				        <div class="col-sm-6">
+				        	<input ng-change="resetDateEnd()" type="checkbox" ng-model="poin_3">
+				        </div>
+				        </div>
+					</div>
+					<br>
+					<form class="form-horizontal" ng-submit="executeQuery()">
+
+					   	<div ng-show="poin_1">
+						    <div class="row">
+						       <div class="form-group">
+						        <label class="col-sm-2">Name of Disaster Event</label>
+							        <div class="col-sm-10">
+							        	<span ng-repeat="disaster_event in data_disaster_event" style="float:left ">
+								            <input type="button" value="{{disaster_event.name}}" class="btn-info" ng-click="redirect_disaster_event(disaster_event._id)"/>
+					       					<input type="button" value="X" class="btn-danger" style="margin:0 20px 20px -5px" ng-click="deleteDisasterEvent($index)"/>
+								        </span>
+								        <div ng-show="data_disaster_event.length == 0">
+								        	<input type="text"  ng-change="findDisasterEventOnDB()"  ng-model="searchStringDisasterEvent" placeholder="name of the disaster event" class="form-control"   />
+								        	<br>  
+								        	<span ng-repeat="village in data_village" style="float:left ">
+									            <input type="button" value="{{village.name}}" class="btn-info" />
+						       					<input type="button" value="X" class="btn-danger" style="margin:0 20px 20px -5px" ng-click="deleteVillage($index)"/>
+									        </span>
+											<div ng-show="searchStringDisasterEvent.length != 0" >     
+									            <div class="data-ctrl">
+									                <span ng-repeat="disasterEvent in possibleDisasterEvent | searchForName:searchStringDisasterEvent">
+									                    <p><input type="button" value="+" class="btn-success"  ng-click="addDisasterEvent($index)"/> {{disasterEvent.name}}
+									                </span>
+									            </div>
+								            </div>
+							            </div>
+
+							        </div>
+						        </div>
+						   	</div>
+						   	<div class="form-horizontal"  >
+							    <div class="row">
+							       <div class="form-group">
+							        <label class="col-sm-2">Certain Type of Disaster</label>
+							        <div class="col-sm-3">
+								         <select class="form-control btn btn-success dropdown-toggle" 
+							        	 	ng-init="certain_type = type_disaster[0]"
+							        	 	ng-options="t.name for t in type_disaster" 
+											ng-model="certain_type"
+											ng-change="updateIdDisaster(certain_type.id)"></select>
+							       </div>
+							        </div>
+							   	</div>
+							</div>
+						</div>
+
+					   	<div ng-show="poin_2">
+						    <div class="row">
+						       <div class="form-group">
+						        <label class="col-sm-2">At Certain Date</label>
+						        <div class="col-sm-3"><input type="date" ng-model="certain_date"  class="form-control"  /></div>
+						        </div>
+						   	</div>
+						    <div class="row">
+						       <div class="form-group">
+						        <label class="col-sm-2">At Certain Month</label>
+						        <div class="col-sm-3">
+						        <input type="month" ng-model="certain_month"  class="form-control"   /></div>
+						        </div>
+						   	</div>
+						    <div class="row">
+						       <div class="form-group">
+						        <label class="col-sm-2">At Certain Year</label>
+						        <div class="col-sm-3"><input type="number" placeholder="year between 2000 and 2020" ng-model="certain_year" min="2000" max="2020" class="form-control"   /></div>
+						        </div>
+						   	</div>
+						  	
+						</div>
+
+					   	<div ng-show="poin_3">
+							 <div class="row">
+						       <div class="form-group">
+						        <label class="col-sm-2">From Certain Village</label>
+						        <div class="col-sm-3"><input type="text" ng-model="certain_village"  class="form-control"   /></div>
+						        </div>
+						   	</div>
+						    <div class="row">
+						       <div class="form-group">
+						        <label class="col-sm-2">From Certain Subdistrict</label>
+						        <div class="col-sm-3"><input type="text" ng-model="certain_subdistrict"  class="form-control"   /></div>
+						        </div>
+						   	</div>
+						    <div class="row">
+						       <div class="form-group">
+						        <label class="col-sm-2">From Certain District</label>
+						        <div class="col-sm-3"><input type="text" ng-model="certain_district"  class="form-control"   /></div>
+						        </div>
+						   	</div>
+						    <div class="row">
+						       <div class="form-group">
+						        <label class="col-sm-2">From Certain Province</label>
+						        <div class="col-sm-3"><input type="text" ng-model="certain_province"  class="form-control"   /></div>
+						        </div>
+						   	</div>
+						</div>
+				        <br><hr><br>
 
 					  	<input class="btn btn-success" type="submit" id="submit" value="Submit" />
 					</form>
+					<br><hr><br>
+				   	<div class="form-horizontal"  >
+						<div class="row">
+					       <div class="form-group">
+								<label class="col-sm-2">Recorded Disaster</label>
+						        <div class="col-sm-10">
+						        	<span ng-repeat="disaster in id_disasters" style="float:left; margin: 10px ">
+							            <input type="button" value="{{disaster._id}}" class="btn-info" ng-click="redirect_disaster(disaster._id)"/>
+							        </span>
+						        </div>
+						    </div>
+				        </div>
+				    </div>
+					<br><hr><br>
+				   	<div class="form-horizontal"  >
+						<div class="row">
+					       <div class="form-group">
+								<label class="col-sm-2">Recorded Victims</label>
+						        <div class="col-sm-10">
+						        	<span ng-repeat="victim in result track by $index" style="float:left; margin: 10px ">
+							            <input type="button" value="{{victim}}" class="btn-info" ng-click="redirect_victim(victim)"/>
+							        </span>
+						        </div>
+						    </div>
+				        </div>
+				    </div>
 				</div><!-- cpontroller -->
 			</div><!-- MyApp -->
 
@@ -43,36 +178,285 @@
 <script src="../../javascripts//angular-animate.js"></script>
 <script>
 $app.controller("villageController", function($scope, $http, $templateRequest, $sce, $compile, $window){
-		
-	  
-	    
-	    $scope.insertVillage = function(){
-	    	if($scope.record_weather.length == 0){
-	    		alert("Please input data recorded weather!")
-	    	}else{
-	    		$http({
-			        url: '/db/village/insert',
+		$scope.possibleDisasterEvent = [];
+		$scope.data_disaster_event =[];
+		$scope.id_disasters = [];
+		$scope.id_total_disasters = [];
+		$scope.id_victims = [];
+		$scope.id_total_victims = [];
+
+		$scope.type_disaster = [{
+		        id: 0,
+		        name: "All"        
+		    },{
+		        id: 1,
+		        name: "Flood"        
+		    }, {
+		        id: 2,
+		        name: "Landslide"        
+		    }, {
+		        id: 3,
+		        name: "Earthquake"        
+		    }, {
+		        id: 4,
+		        name: "Tornado"        
+		    }, {
+		        id: 5,
+		        name: "Volcanic Eruption"        
+		    }, {
+		        id: 6,
+		        name: "Tsunami"        
+		    }];
+		$scope.type_of_query = [{
+		        id: 1,
+		        name: "Query 5.1"        
+		    }, {
+		        id: 2,
+		        name: "Query 5.2"       
+		    }, {
+		        id: 3,
+		        name: "Query 5.3"        
+		    }];
+
+	  	$scope.findDisasterEventOnDB = function(){
+			if($scope.searchStringDisasterEvent != undefined &&
+				$scope.searchStringDisasterEvent.length%3 == 0){
+				$http({
+			        url: '/db/disaster_event/find_id_and_type_and_victim',
 			        method: "POST",
 			        data: {
-		                name: $scope.name,
-		                location: {
-		                	'sub_district' : $scope.sub_district,
-		                	'district' : $scope.district,
-		                	'province' : $scope.province
-		                },
-		                geo_region: $scope.geo_region,
-		                record_weather: $scope.record_weather
+		                search_term: $scope.searchStringDisasterEvent
 		            }
 			    })
 			    .then(function(response) {
-			        alert("Data village has been saved successfully!");
+			    	$scope.possibleDisasterEvent = response.data;
 			    }, 
-			    function(response) { // optional
-			        alert("failed: "+response.data);
+			    function(response) { 
+			        alert("failed: findDisasterEventOnDB"+response.data);
 			    });
-	    	}
+			}
 		}
 
+	    $scope.addDisasterEvent = function(id) {
+			$scope.id_total_disasters = $scope.possibleDisasterEvent[id].id_disasters ;
+			$scope.id_disasters = $scope.id_total_disasters;
+		    $scope.data_disaster_event.push($scope.possibleDisasterEvent[id]);
+		    $scope.updateIdDisaster($scope.certain_type.id);
+	    };
+
+	    $scope.deleteDisasterEvent = function(id) {
+	    	$scope.data_disaster_event.splice(id, 1);
+	    	$scope.id_disasters = [];
+	    	$scope.id_total_disasters = [];
+	    	$scope.result = [];
+	    };
+	    
+	    $scope.updateIdDisaster = function() {
+	    	$scope.filterByTypeDisaster($scope.certain_type.id);
+	    	// $scope.filterByDate();
+	    };
+		$scope.updateIdVictims = function() {
+	    	/*collect victim id*/
+	    	possible_duplicate = [];
+	    	$scope.result = [];
+	    	for (var i = $scope.id_disasters.length - 1; i >= 0; i--) {
+	    		console.log($scope.id_disasters[i].id_victims);
+	    		possible_duplicate = possible_duplicate.concat($scope.id_disasters[i].id_victims);
+	    	}
+			$.each(possible_duplicate, function(i, el){
+			    if($.inArray(el, $scope.result) === -1) $scope.result.push(el);
+			});
+	    };
+		$scope.filterByTypeDisaster = function(id) {
+	    	switch($scope.certain_type.id){
+	    		case 0 :
+	    			$scope.id_disasters = $scope.id_total_disasters;
+	    			break;
+	    		default:
+	    			$scope.id_disasters = [];
+	    			for (var i = $scope.id_total_disasters.length - 1; i >= 0; i--) {
+	    				if($scope.id_total_disasters[i].type == $scope.type_disaster[id].name)
+		    				$scope.id_disasters.push($scope.id_total_disasters[i]);
+	    			};
+	    	}
+	    };
+
+	   
+	    $scope.redirect_disaster_event = function(id){
+            $window.open("/show/disaster_event/"+id, '_blank');
+        };
+	    $scope.redirect_disaster = function(id){
+            $window.open("/show/disaster/"+id, '_blank');
+        };
+	    $scope.redirect_victim = function(id){
+            $window.open("/show/victim/"+id, '_blank');
+        };
+	    $scope.redirect_village = function(id){
+            $window.open("/show/village/"+id, '_blank');
+        };
+	    $scope.redirect_medical_facility = function(id){
+            $window.open("/show/medical_facility/"+id, '_blank');
+        };
+	    $scope.redirect_refugee_camp = function(id){
+            $window.open("/show/refugee_camp/"+id, '_blank');
+        };
+        $scope.getAllIdVictim = function(callback){
+	  		$http({
+		        url: '/db/victim/get_id',
+		        method: "POST",
+		        data: {}
+		    })
+		    .then(function(response) {
+		    	callback(response.data);
+		    }, 
+		    function(response) { // optional
+		        callback("failed: "+response.data);
+		    });
+	  	}
+
+	  	$scope.executePoin1 = function(result, callback){
+					    	// alert(JSON.stringify("B"+result))
+	  		if($scope.poin_1){
+	  			$scope.updateIdDisaster();
+				$scope.updateIdVictims();
+					    	// alert(JSON.stringify("A"+$scope.result))
+				callback($scope.result);
+			 }else{
+			    callback(result);
+			 }
+	  	}
+	    
+
+	  	$scope.executePoin2 = function(id_victims, callback){
+	  		if($scope.poin_2){
+	  			if($scope.poin_1){
+	  				if($scope.certain_date != null){
+		  				/*already had id_disaster and id_disaster_event*/
+				    	// alert($scope.id_disasters)
+				  		$http({
+					        url: '/query/query_5/filter_by_date',
+					        method: "POST",
+					        data: {
+				                array_id: $scope.id_disasters,
+				                date: $scope.certain_date
+				            }
+					    })
+					    .then(function(response) {
+				    		$scope.id_disasters = response.data;
+							$scope.updateIdVictims();
+							callback($scope.result);
+					    }, 
+					    function(response) { // optional
+					    	console.log("masuk2")
+					        callback("failed: "+response.data);
+					    });
+					}else if($scope.certain_month != null){
+		  				/*already had id_disaster and id_disaster_event*/
+				    	// alert($scope.id_disasters)
+				  		$http({
+					        url: '/query/query_5/filter_by_month',
+					        method: "POST",
+					        data: {
+				                array_id: $scope.id_disasters,
+				                date: $scope.certain_month
+				            }
+					    })
+					    .then(function(response) {
+				    		$scope.id_disasters = response.data;
+							$scope.updateIdVictims();
+							callback($scope.result);
+					    }, 
+					    function(response) { // optional
+					    	console.log("masuk2")
+					        callback("failed: "+response.data);
+					    });
+					}else if($scope.certain_year != null){
+		  				/*already had id_disaster and id_disaster_event*/
+				    	// alert($scope.id_disasters)
+				  		$http({
+					        url: '/query/query_5/filter_by_year',
+					        method: "POST",
+					        data: {
+				                array_id: $scope.id_disasters,
+				                date: $scope.certain_year
+				            }
+					    })
+					    .then(function(response) {
+					    	alert(JSON.stringify(response.data))
+				    		$scope.id_disasters = response.data;
+					    	alert(JSON.stringify("B:"+response.data))
+							$scope.updateIdVictims();
+					    	alert(JSON.stringify("A:"+$scope.result))
+							callback($scope.result);
+					    }, 
+					    function(response) { // optional
+					    	console.log("masuk2")
+					        callback("failed: "+response.data);
+					    });
+					} else{
+
+			    		callback(id_victims);
+					}
+				}else{
+					/*should look at id_disaster_event on victim*/
+			    	callback(id_victims);
+
+				}
+			 }else{
+			    callback(id_victims);
+			 }
+	  	}
+	    
+
+	  	$scope.executePoin3 = function(result, callback){
+	  		if($scope.poin_3){
+		  		$http({
+			        url: '/query/query_1/poin3',
+			        method: "POST",
+			        data: {
+			        	result: result,
+		                certain_village: $scope.certain_village,
+		                certain_subdistrict: $scope.certain_subdistrict,
+		                certain_district: $scope.certain_district,
+		                certain_province: $scope.certain_province
+		            }
+			    })
+			    .then(function(response) {
+		  			callback(response.data);
+			    }, 
+			    function(response) { // optional
+			        callback("failed: "+response.data);
+			    });
+			 }else{
+			    callback(result);
+			 }
+	  	}
+	    
+	    $scope.redirect_disaster_event = function(id){
+            $window.open("/show/disaster_event/"+id, '_blank');
+        };
+
+
+		$scope.executeQuery = function(){
+			$scope.getAllIdVictim(function(response){
+				/*Execute poin 1 directly using other function*/
+				$scope.executePoin1( response, function(response){
+				/*Execute poin 2*/		
+					$scope.executePoin2( response, function(response){
+					console.log("A"+JSON.stringify(response))
+				// 		// console.log("B"+JSON.stringify(response))
+				// 		/*Execute poin 3*/
+				// 		$scope.executePoin3( response, function(response){
+							$scope.result = [];
+							for (var i = response.length - 1; i >= 0; i--) {
+					    		$scope.result.push(response[i]);
+					    	}
+				// 		});
+					});
+				});
+			})
+			
+		}
 	});
 
 

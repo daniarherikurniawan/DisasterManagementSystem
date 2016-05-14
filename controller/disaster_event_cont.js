@@ -14,7 +14,20 @@ module.exports = {
 	,find_id_and_type: function(search_term, callback){
 		DisasterEvent.object
 			.find({ name: new RegExp(search_term, "i")})
+			.lean()
 			.populate('id_disasters', 'type')
+			.sort({name: 'desc'})
+			.limit(10)
+			.exec(function(err, disasterEvent){
+				callback(disasterEvent);
+				return;
+		})
+	},
+	find_id_and_type_and_victim: function(search_term, callback){
+		DisasterEvent.object
+			.find({ name: new RegExp(search_term, "i")})
+			.lean()
+			.populate('id_disasters', 'type id_victims')
 			.sort({name: 'desc'})
 			.limit(10)
 			.exec(function(err, disasterEvent){

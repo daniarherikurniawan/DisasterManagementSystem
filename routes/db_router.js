@@ -133,12 +133,22 @@ router.post('/disaster_event/find_id_and_type', function(req, res, next) {
     res.send(response);
   });
 });
+router.post('/disaster_event/find_id_and_type_and_victim', function(req, res, next) {
+  disaster_event_cont.find_id_and_type_and_victim(req.body.search_term, function(response){
+    res.send(response);
+  });
+});
 router.post('/disaster/find', function(req, res, next) {
   disaster_cont.find(req.body.search_term, function(response){
     res.send(response);
   });
 });
 
+router.post('/victim/find_name_medfac', function(req, res, next) {
+  victim_cont.find_name_medfac(req.body.search_term, function(response){
+    res.send(response);
+  });
+});
 router.post('/victim/find', function(req, res, next) {
   victim_cont.find(req.body.search_term, function(response){
     res.send(response);
@@ -171,4 +181,9 @@ router.post('/disaster_event/get_id', function(req, res, next) {
   });
 });
 
+router.post('/victim/get_id', function(req, res, next) {
+  victim_cont.get_id(function(response){
+    res.send(response);
+  });
+});
 module.exports = router;

@@ -61,5 +61,27 @@ router.post('/query_1/poin4', function(req, res, next) {
     res.send(result);
   });
 });
+router.post('/query_4/filter_by_date', function(req, res, next) {
+  disaster_cont.filter_by_date(req.body, function(result){
+    res.send(result);
+  });
+});
+router.post('/query_5/filter_by_date', function(req, res, next) {
+  disaster_cont.filter_by_date_show_victim(req.body, function(result){
+    res.send(result);
+  });
+});
+router.post('/query_5/filter_by_month', function(req, res, next) {
+  disaster_cont.filter_by_month_show_victim(req.body, function(result){
+    res.send(result);
+  });
+});
+
+router.post('/query_5/filter_by_year', function(req, res, next) {
+  disaster_cont.filter_by_year_show_victim(req.body, function(result){
+    res.send(result);
+  });
+});
+
 
 module.exports = router;
