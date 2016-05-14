@@ -24,11 +24,11 @@
 	       <div class="form-group">
 	        <label class="col-sm-2">Still Happening</label>
 	        <div class="col-sm-3">
-	        	<input ng-change="resetDateEnd()" type="checkbox" ng-model="is_not_finish">
+	        	<input ng-change="resetDateEnd()" type="checkbox" ng-model="is_not_finish_disaster">
 	        </div>
 	        </div>
         </div>
-	    <div ng-show="is_not_finish == false" class="row">
+	    <div ng-show="is_not_finish_disaster == false" class="row">
 	       <div class="form-group">
 	        <label class="col-sm-2">Date End</label>
 	        <div class="col-sm-3"><input type="date" ng-model="date_end_disaster" 

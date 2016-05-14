@@ -315,7 +315,6 @@
 	    	$scope.id_medical_facility.splice(id, 1);
 	    };
 
-
 	   	$scope.newTabRegisterRefugeeCamp = function(){
 	    	$window.open('/db/refugee_camp');
 		};
@@ -417,7 +416,7 @@
 			                name: $scope.name,
 			                phone: $scope.phone_numbers,
 			                address: $scope.address,
-			                original_village: $scope.data_village[0]._id,
+			                id_original_village: $scope.data_village[0]._id,
 			                gender: $scope.selected_status_gender.name,
 			                birthday: $scope.birthday,
 			                status: $scope.selected_status_injury.name,

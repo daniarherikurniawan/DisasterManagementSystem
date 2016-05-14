@@ -72,8 +72,13 @@ module.exports = {
 	insert: function(data){
 		var disasterEventObj = new DisasterEvent.model(data);
 	    disasterEventObj.save(function(err){
-		  if(err) 
-	    	return null;
+		  	if(err){ 
+	    		return null;
+	    	}else{
+	    		/*add id_disaster_event to the victims*/
+	    	}
+
+
 		});
 	    return disasterEventObj._id;
 	},
