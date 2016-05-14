@@ -1,0 +1,33 @@
+{"_id":{"$oid":"5735d29637879da81fb541d4"},"type":"School","address":{"id_village":{"$oid":"5735beb937879da81fb54164"},"street":"Street 1"},"name":"Refugee Camp 1","__v":0,"capacity":50.0}
+{"_id":{"$oid":"5735d2a337879da81fb541d5"},"type":"Village Hall","address":{"id_village":{"$oid":"5735bf9a37879da81fb5416e"},"street":"Street 2"},"name":"Refugee Camp 2","__v":0,"capacity":100}
+{"_id":{"$oid":"5735d2b137879da81fb541d6"},"type":"Praying Place","address":{"id_village":{"$oid":"5735c01f37879da81fb54178"},"street":"Street 3"},"name":"Refugee Camp 3","__v":0,"capacity":150.0}
+{"_id":{"$oid":"5735d2bd37879da81fb541d7"},"type":"House","address":{"id_village":{"$oid":"5735c16d37879da81fb54181"},"street":"Street 4"},"name":"Refugee Camp 4","__v":0,"capacity":200.0}
+{"_id":{"$oid":"5735d2e137879da81fb541d8"},"type":"Field","address":{"id_village":{"$oid":"5735c1f437879da81fb5418a"},"street":"Street 5"},"name":"Refugee Camp 5","__v":0,"capacity":250.0}
+{"_id":{"$oid":"5735d2f237879da81fb541d9"},"type":"Field","address":{"id_village":{"$oid":"5735c2d237879da81fb54193"},"street":"Street 6"},"name":"Refugee Camp 6","__v":0,"capacity":300.0}
+{"_id":{"$oid":"5735d30a37879da81fb541da"},"type":"Village Hall","address":{"id_village":{"$oid":"5735c4c137879da81fb5419c"},"street":"Street 7"},"name":"Refugee Camp 7","__v":0,"capacity":350.0}
+{"_id":{"$oid":"5735d31e37879da81fb541db"},"type":"Praying Place","address":{"id_village":{"$oid":"5735c55937879da81fb541a5"},"street":"Street 8"},"name":"Refugee Camp 8","__v":0,"capacity":400.0}
+{"_id":{"$oid":"5735d32937879da81fb541dc"},"type":"House","address":{"id_village":{"$oid":"5735c5e537879da81fb541ae"},"street":"Street 9"},"name":"Refugee Camp 9","__v":0,"capacity":450.0}
+{"_id":{"$oid":"5735d35737879da81fb541dd"},"type":"Field","address":{"id_village":{"$oid":"5735cd2337879da81fb541b7"},"street":"Street 10"},"name":"Refugee Camp 10","__v":0,"capacity":500.0}
+{"_id":{"$oid":"5735d36237879da81fb541de"},"type":"School","address":{"id_village":{"$oid":"5735cd8537879da81fb541c0"},"street":"Street 11"},"name":"Refugee Camp 11","__v":0,"capacity":550.0}
+{"_id":{"$oid":"5735d56537879da81fb541f5"},"type":"School","address":{"id_village":{"$oid":"5735beb937879da81fb54164"},"street":"Street 12"},"name":"Refugee Camp 12","__v":0,"capacity":600.0}
+{"_id":{"$oid":"5735d56f37879da81fb541f6"},"type":"Village Hall","address":{"id_village":{"$oid":"5735bf9a37879da81fb5416e"},"street":"Street 13"},"name":"Refugee Camp 13","__v":0,"capacity":650.0}
+{"_id":{"$oid":"5735d57e37879da81fb541f7"},"type":"Praying Place","address":{"id_village":{"$oid":"5735c01f37879da81fb54178"},"street":"Street 14"},"name":"Refugee Camp 14","__v":0,"capacity":700.0}
+{"_id":{"$oid":"5735d58b37879da81fb541f8"},"type":"House","address":{"id_village":{"$oid":"5735c16d37879da81fb54181"},"street":"Street 15"},"name":"Refugee Camp 15","__v":0,"capacity":750.0}
+{"_id":{"$oid":"5735d59837879da81fb541f9"},"type":"Field","address":{"id_village":{"$oid":"5735c1f437879da81fb5418a"},"street":"Street 16"},"name":"Refugee Camp 16","__v":0,"capacity":800.0}
+{"_id":{"$oid":"5735d5a637879da81fb541fa"},"type":"School","address":{"id_village":{"$oid":"5735c2d237879da81fb54193"},"street":"Street 17"},"name":"Refugee Camp 17","__v":0,"capacity":850.0}
+{"_id":{"$oid":"5735d5b037879da81fb541fb"},"type":"Village Hall","address":{"id_village":{"$oid":"5735c4c137879da81fb5419c"},"street":"Street 18"},"name":"Refugee Camp 18","__v":0,"capacity":900.0}
+{"_id":{"$oid":"5735d5ce37879da81fb541fc"},"type":"Praying Place","address":{"id_village":{"$oid":"5735c55937879da81fb541a5"},"street":"Street 19"},"name":"Refugee Camp 19","__v":0,"capacity":950.0}
+{"_id":{"$oid":"5735d5e037879da81fb541fd"},"type":"House","address":{"id_village":{"$oid":"5735c5e537879da81fb541ae"},"street":"Street 20"},"name":"Refugee Camp 20","__v":0,"capacity":1000.0}
+{"_id":{"$oid":"5735d5f237879da81fb541fe"},"type":"Field","address":{"id_village":{"$oid":"5735cd2337879da81fb541b7"},"street":"Street 21"},"name":"Refugee Camp 21","__v":0,"capacity":50.0}
+{"_id":{"$oid":"5735d5fc37879da81fb541ff"},"type":"School","address":{"id_village":{"$oid":"5735cd8537879da81fb541c0"},"street":"Street 22"},"name":"Refugee Camp 22","__v":0,"capacity":100}
+{"_id":{"$oid":"5735d65237879da81fb54200"},"type":"Field","address":{"id_village":{"$oid":"5735beb937879da81fb54164"},"street":"Street 22"},"name":"Refugee Camp 23","__v":0,"capacity":150.0}
+{"_id":{"$oid":"5735e3baf5607d701a5d5dfb"},"capacity":200,"type":"House","address":{"id_village":{"$oid":"5735bf9a37879da81fb5416e"},"street":"Street 24"},"name":"Refugee Camp 24","__v":0}
+{"_id":{"$oid":"5735e3f1f5607d701a5d5dfc"},"capacity":250,"type":"Village Hall","address":{"id_village":{"$oid":"5735c01f37879da81fb54178"},"street":"Street 25"},"name":"Refugee Camp 25","__v":0}
+{"_id":{"$oid":"5735e3fdf5607d701a5d5dfd"},"capacity":300,"type":"School","address":{"id_village":{"$oid":"5735c16d37879da81fb54181"},"street":"Street 26"},"name":"Refugee Camp 26","__v":0}
+{"_id":{"$oid":"5735e40af5607d701a5d5dfe"},"capacity":350,"type":"House","address":{"id_village":{"$oid":"5735c1f437879da81fb5418a"},"street":"Street 27"},"name":"Refugee Camp 27","__v":0}
+{"_id":{"$oid":"5735e418f5607d701a5d5dff"},"capacity":400,"type":"School","address":{"id_village":{"$oid":"5735c2d237879da81fb54193"},"street":"Street 28"},"name":"Refugee Camp 28","__v":0}
+{"_id":{"$oid":"5735e427f5607d701a5d5e00"},"capacity":450,"type":"House","address":{"id_village":{"$oid":"5735c4c137879da81fb5419c"},"street":"Street 29"},"name":"Refugee Camp 29","__v":0}
+{"_id":{"$oid":"5735e436f5607d701a5d5e01"},"capacity":500,"type":"School","address":{"id_village":{"$oid":"5735c55937879da81fb541a5"},"street":"Street 30"},"name":"Refugee Camp 30","__v":0}
+{"_id":{"$oid":"5735e441f5607d701a5d5e02"},"capacity":550,"type":"Village Hall","address":{"id_village":{"$oid":"5735c5e537879da81fb541ae"},"street":"Street 31"},"name":"Refugee Camp 31","__v":0}
+{"_id":{"$oid":"5735e450f5607d701a5d5e03"},"capacity":600,"type":"Field","address":{"id_village":{"$oid":"5735cd2337879da81fb541b7"},"street":"Street 32"},"name":"Refugee Camp 32","__v":0}
+{"_id":{"$oid":"5735e45cf5607d701a5d5e04"},"capacity":650,"type":"School","address":{"id_village":{"$oid":"5735cd8537879da81fb541c0"},"street":"Street 33"},"name":"Refugee Camp 33","__v":0}

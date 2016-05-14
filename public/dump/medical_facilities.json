@@ -1,0 +1,33 @@
+{"_id":{"$oid":"5735cf2937879da81fb541c9"},"type":"Public Health Center","address":{"id_village":{"$oid":"5735beb937879da81fb54164"},"street":"Street 1"},"name":"Medical Facility 1","__v":0}
+{"_id":{"$oid":"5735cf3837879da81fb541ca"},"type":"Clinic","address":{"id_village":{"$oid":"5735bf9a37879da81fb5416e"},"street":"Street 2"},"name":"Medical Facility 2","__v":0}
+{"_id":{"$oid":"5735cf4737879da81fb541cb"},"type":"Hospital","address":{"id_village":{"$oid":"5735c01f37879da81fb54178"},"street":"Street 3"},"name":"Medical Facility 3","__v":0}
+{"_id":{"$oid":"5735cfd537879da81fb541cc"},"type":"Public Health Center","address":{"id_village":{"$oid":"5735c16d37879da81fb54181"},"street":"Street 4"},"name":"Medical Facility 4","__v":0}
+{"_id":{"$oid":"5735cfe437879da81fb541cd"},"type":"Clinic","address":{"id_village":{"$oid":"5735c1f437879da81fb5418a"},"street":"Street 5"},"name":"Medical Facility 5","__v":0}
+{"_id":{"$oid":"5735cff337879da81fb541ce"},"type":"Hospital","address":{"id_village":{"$oid":"5735c2d237879da81fb54193"},"street":"Street 6"},"name":"Medical Facility 6","__v":0}
+{"_id":{"$oid":"5735d09737879da81fb541cf"},"type":"Public Health Center","address":{"id_village":{"$oid":"5735c4c137879da81fb5419c"},"street":"Street 7"},"name":"Medical Facility 7","__v":0}
+{"_id":{"$oid":"5735d21e37879da81fb541d0"},"type":"Clinic","address":{"id_village":{"$oid":"5735c5e537879da81fb541ae"},"street":"Street 8"},"name":"Medical Facility 8","__v":0}
+{"_id":{"$oid":"5735d23d37879da81fb541d1"},"type":"Hospital","address":{"id_village":{"$oid":"5735cd2337879da81fb541b7"},"street":"Street 9"},"name":"Medical Facility 9","__v":0}
+{"_id":{"$oid":"5735d25337879da81fb541d2"},"type":"Public Health Center","address":{"id_village":{"$oid":"5735cd2337879da81fb541b7"},"street":"Street 10"},"name":"Medical Facility 10","__v":0}
+{"_id":{"$oid":"5735d25b37879da81fb541d3"},"type":"Clinic","address":{"id_village":{"$oid":"5735cd8537879da81fb541c0"},"street":"Street 11"},"name":"Medical Facility 11","__v":0}
+{"_id":{"$oid":"5735d3c037879da81fb541df"},"type":"Public Health Center","address":{"id_village":{"$oid":"5735beb937879da81fb54164"},"street":"Street 12"},"name":"Medical Facility 12","__v":0}
+{"_id":{"$oid":"5735d3cd37879da81fb541e0"},"type":"Clinic","address":{"id_village":{"$oid":"5735bf9a37879da81fb5416e"},"street":"Street 13"},"name":"Medical Facility 13","__v":0}
+{"_id":{"$oid":"5735d3d837879da81fb541e1"},"type":"Hospital","address":{"id_village":{"$oid":"5735c01f37879da81fb54178"},"street":"Street 14"},"name":"Medical Facility 14","__v":0}
+{"_id":{"$oid":"5735d3e137879da81fb541e2"},"type":"Public Health Center","address":{"id_village":{"$oid":"5735c16d37879da81fb54181"},"street":"Street 15"},"name":"Medical Facility 15","__v":0}
+{"_id":{"$oid":"5735d3ed37879da81fb541e3"},"type":"Clinic","address":{"id_village":{"$oid":"5735c1f437879da81fb5418a"},"street":"Street 16"},"name":"Medical Facility 16","__v":0}
+{"_id":{"$oid":"5735d3fa37879da81fb541e4"},"type":"Hospital","address":{"id_village":{"$oid":"5735c2d237879da81fb54193"},"street":"Street 17"},"name":"Medical Facility 17","__v":0}
+{"_id":{"$oid":"5735d40a37879da81fb541e5"},"type":"Public Health Center","address":{"id_village":{"$oid":"5735c4c137879da81fb5419c"},"street":"Street 18"},"name":"Medical Facility 18","__v":0}
+{"_id":{"$oid":"5735d42137879da81fb541e6"},"type":"Clinic","address":{"id_village":{"$oid":"5735c55937879da81fb541a5"},"street":"Street 19"},"name":"Medical Facility 19","__v":0}
+{"_id":{"$oid":"5735d42e37879da81fb541e7"},"type":"Hospital","address":{"id_village":{"$oid":"5735c5e537879da81fb541ae"},"street":"Street 20"},"name":"Medical Facility 20","__v":0}
+{"_id":{"$oid":"5735d44437879da81fb541e8"},"type":"Public Health Center","address":{"id_village":{"$oid":"5735cd2337879da81fb541b7"},"street":"Street 21"},"name":"Medical Facility 21","__v":0}
+{"_id":{"$oid":"5735d44f37879da81fb541e9"},"type":"Clinic","address":{"id_village":{"$oid":"5735cd8537879da81fb541c0"},"street":"Street 22"},"name":"Medical Facility 22","__v":0}
+{"_id":{"$oid":"5735d45937879da81fb541ea"},"type":"Public Health Center","address":{"id_village":{"$oid":"5735beb937879da81fb54164"},"street":"Street 23"},"name":"Medical Facility 23","__v":0}
+{"_id":{"$oid":"5735d46937879da81fb541eb"},"type":"Clinic","address":{"id_village":{"$oid":"5735bf9a37879da81fb5416e"},"street":"Street 24"},"name":"Medical Facility 24","__v":0}
+{"_id":{"$oid":"5735d47637879da81fb541ec"},"type":"Hospital","address":{"id_village":{"$oid":"5735c01f37879da81fb54178"},"street":"Street 25"},"name":"Medical Facility 25","__v":0}
+{"_id":{"$oid":"5735d48937879da81fb541ed"},"type":"Public Health Center","address":{"id_village":{"$oid":"5735c16d37879da81fb54181"},"street":"Street 26"},"name":"Medical Facility 26","__v":0}
+{"_id":{"$oid":"5735d49d37879da81fb541ee"},"type":"Clinic","address":{"id_village":{"$oid":"5735c1f437879da81fb5418a"},"street":"Street 27"},"name":"Medical Facility 27","__v":0}
+{"_id":{"$oid":"5735d4aa37879da81fb541ef"},"type":"Hospital","address":{"id_village":{"$oid":"5735c2d237879da81fb54193"},"street":"Street 28"},"name":"Medical Facility 28","__v":0}
+{"_id":{"$oid":"5735d4b937879da81fb541f0"},"type":"Public Health Center","address":{"id_village":{"$oid":"5735c4c137879da81fb5419c"},"street":"Street 29"},"name":"Medical Facility 29","__v":0}
+{"_id":{"$oid":"5735d4ce37879da81fb541f1"},"type":"Clinic","address":{"id_village":{"$oid":"5735c55937879da81fb541a5"},"street":"Street 30"},"name":"Medical Facility 30","__v":0}
+{"_id":{"$oid":"5735d4d737879da81fb541f2"},"type":"Hospital","address":{"id_village":{"$oid":"5735c5e537879da81fb541ae"},"street":"Street 31"},"name":"Medical Facility 31","__v":0}
+{"_id":{"$oid":"5735d4e637879da81fb541f3"},"type":"Public Health Center","address":{"id_village":{"$oid":"5735cd2337879da81fb541b7"},"street":"Street 32"},"name":"Medical Facility 32","__v":0}
+{"_id":{"$oid":"5735d4f037879da81fb541f4"},"type":"Clinic","address":{"id_village":{"$oid":"5735cd8537879da81fb541c0"},"street":"Street 33"},"name":"Medical Facility 33","__v":0}
