@@ -11,7 +11,7 @@ var refugee_camp_cont = require('../controller/refugee_camp_cont');
 
 router.get('/disaster_event/:id', function(req, res, next) {
 	disaster_event_cont.findById(req.params.id, function(result){	
-		res.render('display_json',{data: result, title: 'Disaster Event'});
+		res.render('display_disaster_event',{data: result, id_disasters:result.id_disasters, title: 'Disaster Event'});
 	});
 });
 router.get('/disaster/:id', function(req, res, next) {

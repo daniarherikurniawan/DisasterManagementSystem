@@ -246,7 +246,7 @@ $app.controller("query1Controller", function($scope, $http, $templateRequest, $s
 			    })
 			    .then(function(response) {
 			    	console.log("masuk")
-			    	alert(response.data)
+			    	// alert(response.data)
 			    	callback(response.data);
 			    }, 
 			    function(response) { // optional
