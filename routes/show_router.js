@@ -26,7 +26,12 @@ router.get('/village/:id', function(req, res, next) {
 });
 router.get('/victim/:id', function(req, res, next) {
 	victim_cont.findById(req.params.id, function(result){	
-		res.render('display/display_victim',{data: result, id_original_village: result.id_original_village,  title: 'Victim'});
+		id_camps = [];
+		for (var i = result.is_refugee.record_refugee_camps.length - 1; i >= 0; i--) {
+			console.log(result.is_refugee)
+			id_camps.push(result.is_refugee.record_refugee_camps[i].id_refugee_camp);
+		}
+		res.render('display/display_victim',{data: result,  id_camps: id_camps, id_original_village: result.id_original_village,  title: 'Victim'});
 	});
 });
 router.get('/medical_facility/:id', function(req, res, next) {

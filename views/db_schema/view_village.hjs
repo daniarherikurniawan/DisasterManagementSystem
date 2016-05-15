@@ -3,6 +3,46 @@
 	<head>
 		<title>DIMAS</title>
 		<link href="../../stylesheets/bootstrap.min.css" rel="stylesheet">
+
+		<!-- start draw leaflet -->
+		<script src="../../LeafletDraw/examples/libs/leaflet-src.js"></script>
+		<link rel="stylesheet" href="../../LeafletDraw/examples/libs/leaflet.css" />
+
+		<script src="../../LeafletDraw/src/Leaflet.draw.js"></script>
+		<link rel="stylesheet" href="../../LeafletDraw/dist/leaflet.draw.css" />
+
+		<script src="../../LeafletDraw/src/Toolbar.js"></script>
+		<script src="../../LeafletDraw/src/Tooltip.js"></script>
+
+		<script src="../../LeafletDraw/src/ext/GeometryUtil.js"></script>
+		<script src="../../LeafletDraw/src/ext/LatLngUtil.js"></script>
+		<script src="../../LeafletDraw/src/ext/LineUtil.Intersect.js"></script>
+		<script src="../../LeafletDraw/src/ext/Polygon.Intersect.js"></script>
+		<script src="../../LeafletDraw/src/ext/Polyline.Intersect.js"></script>
+		<script src="../../LeafletDraw/src/ext/TouchEvents.js"></script>
+
+		<script src="../../LeafletDraw/src/draw/DrawToolbar.js"></script>
+		<script src="../../LeafletDraw/src/draw/handler/Draw.Feature.js"></script>
+		<script src="../../LeafletDraw/src/draw/handler/Draw.SimpleShape.js"></script>
+		<script src="../../LeafletDraw/src/draw/handler/Draw.Polyline.js"></script>
+		<script src="../../LeafletDraw/src/draw/handler/Draw.Circle.js"></script>
+		<script src="../../LeafletDraw/src/draw/handler/Draw.Marker.js"></script>
+		<script src="../../LeafletDraw/src/draw/handler/Draw.Polygon.js"></script>
+		<script src="../../LeafletDraw/src/draw/handler/Draw.Rectangle.js"></script>
+
+
+		<script src="../../LeafletDraw/src/edit/EditToolbar.js"></script>
+		<script src="../../LeafletDraw/src/edit/handler/EditToolbar.Edit.js"></script>
+		<script src="../../LeafletDraw/src/edit/handler/EditToolbar.Delete.js"></script>
+
+		<script src="../../LeafletDraw/src/Control.Draw.js"></script>
+
+		<script src="../../LeafletDraw/src/edit/handler/Edit.Poly.js"></script>
+		<script src="../../LeafletDraw/src/edit/handler/Edit.SimpleShape.js"></script>
+		<script src="../../LeafletDraw/src/edit/handler/Edit.Circle.js"></script>
+		<script src="../../LeafletDraw/src/edit/handler/Edit.Rectangle.js"></script>
+		<script src="../../LeafletDraw/src/edit/handler/Edit.Marker.js"></script>
+		<!-- end draw leaflet -->
 	</head>
 	<body>
 		<div class="container" >
@@ -51,7 +91,8 @@
 						        <div class="col-sm-10">
 						        <textarea type="text" ng-model="geo_region" name="geo_region" placeholder="geo region of the village" class="form-control"  rows="5"></textarea>
 						        </div>
-					        </div>
+					        </div><br>
+					        <div id="map" style="width: auto; height: 600px; border: 1px solid #ccc"></div><br/>
 				        </div>
 
 			        	<div class="row">
@@ -85,6 +126,7 @@
 
 					  	<input class="btn btn-success" type="submit" id="submit" value="Submit" />
 					</form>
+
 				</div><!-- cpontroller -->
 			</div><!-- MyApp -->
 		</div>
@@ -130,6 +172,11 @@ $app.controller("villageController", function($scope, $http, $templateRequest, $
 	    		'condition' : $scope.selected_type_weather.name
 		    });
 	    };
+
+	    $scope.saveAsGeoRegion = function(){
+	    	$scope.geo_region = JSON.stringify($scope.geojson);
+		        // alert();
+	    }
 	    
 	    $scope.insertVillage = function(){
 	    	if($scope.record_weather.length == 0){
@@ -157,7 +204,70 @@ $app.controller("villageController", function($scope, $http, $templateRequest, $
 			    });
 	    	}
 		}
+		// ============== START GET REGION FROM MAPS ==========================
+		$scope.geojson = {};
 
+		var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+			osmAttrib = '&copy; <a href="http://openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+			osm = L.tileLayer(osmUrl, {maxZoom: 18, attribution: osmAttrib});
+			map = new L.Map('map', {layers: [osm], center: new L.LatLng(-0.7, 117), zoom: 5}),
+			drawnItems = L.featureGroup().addTo(map);
+
+			map.addControl(new L.Control.Draw({
+				edit: {
+					featureGroup: drawnItems,
+					poly : {
+						allowIntersection : false
+					}
+				},
+				draw: {
+					polygon : {
+						allowIntersection: false
+					}
+				}
+			}));
+
+			map.on('draw:created', function(event) {
+				// var layer = event.layer;
+
+				// drawnItems.addLayer(layer);
+				// console.log("created "+layer);
+				var type = event.layerType,
+        		layer = event.layer;
+
+    			if (type === 'polygon') {
+        			// structure the geojson object
+        			// var geojson = {};
+        			$scope.geojson['type'] = 'Feature';
+        			$scope.geojson['geometry'] = {};
+        			$scope.geojson['geometry']['type'] = "Polygon";
+
+        			// export the coordinates from the layer
+        			coordinates = [];
+        			latlngs = layer.getLatLngs();
+        			for (var i = 0; i < latlngs.length; i++) {
+            		coordinates.push([latlngs[i].lng, latlngs[i].lat])
+        		}
+
+        		// push the coordinates to the json geometry
+        		$scope.geojson['geometry']['coordinates'] = [coordinates];
+
+		        // Finally, show the poly as a geojson object in the console
+		        // $scope.geo_region = "cndskjcn"
+		        $scope.saveAsGeoRegion();
+
+
+    		}
+
+    		drawnItems.addLayer(layer);
+		});
+
+		// Get a callback when the bounds change
+		map.on("change", function() {
+    		console.log("Bounds:", this.getBounds());
+		});
+
+		// ============== END GET REGION FROM MAPS ============================
 	});
 
 

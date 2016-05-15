@@ -120,4 +120,9 @@ router.post('/query_7/get_every_id', function(req, res, next) {
     res.send(result);
   });
 });
+router.post('/query_8/poin4', function(req, res, next) {
+  victim_cont.filter_by_status_and_age(req.body, function(result){
+    res.send(result);
+  });
+});
 module.exports = router;

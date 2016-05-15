@@ -4,6 +4,7 @@
 	<title>DIMAS</title>
 	<link href="../../stylesheets/bootstrap.min.css" rel="stylesheet">
 	<link rel="stylesheet" href="../../MapVisualization/leaflet.css" />
+
 </head>
 <body>
 	<div ng-app="myApp">
@@ -27,12 +28,17 @@
 	</div>
 </body>
 </html>
-<script src="../../../javascripts/jquery.min.js"></script>
+<script src="../../javascripts/jquery.min.js"></script>
 <script src="../../javascripts/angular.min.js"></script>
-<script src="../../../javascripts/angular_directive.js"></script>
-<script src="../../../javascripts/angular-ui-router.js"></script>
-<script src="../../../javascripts/ui-bootstrap-tpls.min.js"></script>
-<script src="../../../javascripts//angular-animate.js"></script>
+<script src="../../javascripts/angular_directive.js"></script>
+<script src="../../javascripts/angular-ui-router.js"></script>
+<script src="../../javascripts/ui-bootstrap-tpls.min.js"></script>
+<script src="../../javascripts//angular-animate.js"></script>
+<link href="../../stylesheets/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="../../MapVisualization/leaflet.css" />
+<script src="../../MapVisualization/leaflet.js"></script>
+<script type="text/javascript" src="../../MapVisualization/IDN_adm1.js"></script>
+<script type="text/javascript" src="../../MapVisualization/IDN_adm2.js"></script>
 
 <script>
 	$app.controller("villageController", function($scope, $http, $templateRequest, $sce, $compile, $window){
@@ -55,6 +61,8 @@
 
 		$scope.showTheMap = function(){
 		    var data_json = $scope.my_map;
+		    console.log(data_json);
+			
 			var arr = [];
 			for(var x in data_json){
 			  arr.push(data_json[x]);
@@ -162,40 +170,7 @@
 				fillColor: '#ff4004'
 			};
 
-			var asyncLoop = function(o){
-				var mypolygon;
-				var i=-1, x =0;
-				length = data_maps.length;
-		    	var loop = function(){
-		    		
-		    		if(i < length-1){
-	        			i++;
-	        		}else{
-	        			i = 0;
-	        		}
-
-		    		if(i==length){o.callback(); return;}
-	    			if(x != 0){
-	    				map.removeLayer(mypolygon);
-	    			}	
-	    			x=1;
-					info.update(new Date($scope.my_map[i].date_start));
-					mypolygon = L.geoJson(JSON.parse(data_maps[i]),{style : myStyle}).addTo(map);
-	    			o.functionToLoop(loop, i);
-				} 
-				loop();//init
-			}
-			asyncLoop({
-				functionToLoop : function(loop, i){
-	        		setTimeout(function(){
-	        			loop();
-	    			},1000);
-				},
-				callback : function(){
-	        		console.log('All done!');
-				}
-
-			});
+			L.geoJson(data_json,{style : myStyle}).addTo(map);
 		};/*Show the map*/
 
 	});

@@ -16,7 +16,7 @@
 	- that come from a certain village or subdistrict or district or province. 
 			</div>
 			<div ng-app="myApp">
-				<div ng-controller="villageController">
+				<div ng-controller="query5Controller">
 					<div class="row " >
 				       <div class="form-group col-md-4">
 				        <label class="col-sm-6">{{type_of_query[0].name}}</label>
@@ -194,7 +194,7 @@
 <script src="../../javascripts/ui-bootstrap-tpls.min.js"></script>
 <script src="../../javascripts//angular-animate.js"></script>
 <script>
-$app.controller("villageController", function($scope, $http, $templateRequest, $sce, $compile, $window){
+$app.controller("query5Controller", function($scope, $http, $templateRequest, $sce, $compile, $window){
 		$scope.possibleDisasterEvent = [];
 		$scope.data_disaster_event =[];
 		$scope.id_disasters = [];
@@ -294,12 +294,14 @@ $app.controller("villageController", function($scope, $http, $templateRequest, $
 
 	    $scope.deleteDisasterEvent = function(id) {
 	    	$scope.data_disaster_event.splice(id, 1);
-	    	$scope.id_disasters = [];
-	    	$scope.id_total_disasters = [];
-	    	$scope.result = [];
+	    	$scope.updateIdDisasterAndIdVictim();
 	    };
 	    
 	    $scope.updateIdDisaster = function() {
+	    	$scope.id_total_disasters = [];
+	    	for (var i = $scope.data_disaster_event.length - 1; i >= 0; i--) {
+	    		$scope.id_total_disasters = $scope.id_total_disasters.concat($scope.data_disaster_event[i].id_disasters);
+	    	}
 	    	$scope.filterByTypeDisaster($scope.certain_type.id);
 	    	// $scope.filterByDate();
 	    };

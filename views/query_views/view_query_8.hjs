@@ -28,18 +28,255 @@
 	Note: Show as many as possible attributes for each information.
 			</div>
 			<div ng-app="myApp">
-				<div ng-controller="villageController">
-					<form class="form-horizontal" ng-submit="insertVillage()">
-					    <div class="row">
-					       <div class="form-group">
-					        <label class="col-sm-2">Name</label>
-					        <div class="col-sm-10"><input type="text" ng-model="name" 
-					        name="name" placeholder="name of the victim" class="form-control" required /></div>
-					        </div>
-					   	</div>
+				<div ng-controller="query8Controller">
+					<div class="row " >
+				       <div class="form-group col-md-3">
+				        <label class="col-sm-6">{{type_of_query[0].name}}</label>
+				        <div class="col-sm-6">
+				        	<input ng-change=""  type="checkbox" ng-model="poin_1">
+				        </div>
+				        </div>
+				       <div class="form-group col-md-3">
+				        <label class="col-sm-6">{{type_of_query[1].name}}</label>
+				        <div class="col-sm-6">
+				        	<input ng-change="" type="checkbox" ng-model="poin_2">
+				        </div>
+				        </div>
+				       <div class="form-group col-md-3">
+				        <label class="col-sm-6">{{type_of_query[2].name}}</label>
+				        <div class="col-sm-6">
+				        	<input ng-change="" type="checkbox" ng-model="poin_3">
+				        </div>
+				        </div>
+				       <div class="form-group col-md-3">
+				        <label class="col-sm-6">{{type_of_query[3].name}}</label>
+				        <div class="col-sm-6">
+				        	<input ng-change="" type="checkbox" ng-model="poin_4">
+				        </div>
+				        </div>
+					</div>
+					<br>
 
-					  	<input class="btn btn-success" type="submit" id="submit" value="Submit" />
-					</form>
+					   	<div ng-show="poin_1">
+						    <div class="row">
+						       <div class="form-group">
+						        <label class="col-sm-2">Name of Disaster Event</label>
+							        <div class="col-sm-10">
+							        	<span ng-repeat="disaster_event in data_disaster_events" style="float:left ">
+								            <input type="button" value="{{disaster_event.name}}" class="btn-info" ng-click="redirect_disaster_event(disaster_event._id)"/>
+					       					<input type="button" value="X" class="btn-danger" style="margin:0 20px 20px -5px" ng-click="deleteDisasterEvent($index)"/>
+								        </span>
+								        <div ng-show="data_disaster_events.length == 0">
+								        	<input type="text"  ng-change="findDisasterEventOnDB()"  ng-model="searchStringDisasterEvent" placeholder="name of the disaster event" class="form-control"   />
+								        	<br>  
+								        	<span ng-repeat="village in data_village" style="float:left ">
+									            <input type="button" value="{{village.name}}" class="btn-info" />
+						       					<input type="button" value="X" class="btn-danger" style="margin:0 20px 20px -5px" ng-click="deleteVillage($index)"/>
+									        </span>
+											<div ng-show="searchStringDisasterEvent.length != 0" >     
+									            <div class="data-ctrl">
+									                <span ng-repeat="disasterEvent in possibleDisasterEvent | searchForName:searchStringDisasterEvent">
+									                    <p><input type="button" value="+" class="btn-success"  ng-click="addSingleDisasterEvent($index)"/> {{disasterEvent.name}}
+									                </span>
+									            </div>
+								            </div>
+							            </div>
+
+							        </div>
+						        </div>
+						   	</div>
+						   	<div class="form-horizontal"  >
+							    <div class="row">
+							       <div class="form-group">
+							        <label class="col-sm-2">Certain Type of Disaster</label>
+							        <div class="col-sm-3">
+								         <select class="form-control btn btn-success dropdown-toggle" 
+							        	 	ng-init="certain_type = type_disaster[0]"
+							        	 	ng-options="t.name for t in type_disaster" 
+											ng-model="certain_type"
+											ng-change="updateIdDisasterAndIdVictim()"></select>
+							       	</div>
+							        </div>
+							   	</div>
+							</div>
+						</div>
+
+					   	<div ng-show="poin_2">
+						<form class="form-horizontal" ng-submit="executePoin2()">
+						    <div class="row">
+						       <div class="form-group">
+						        <label class="col-sm-2">At Certain Date</label>
+						        <div class="col-sm-3"><input type="date" ng-model="certain_date"  class="form-control"  ng-change="" /></div>
+						        </div>
+						   	</div>
+						    <div class="row">
+						       <div class="form-group">
+						        <label class="col-sm-2">At Certain Month</label>
+						        <div class="col-sm-3">
+						        <input type="month" ng-model="certain_month"  class="form-control"  ng-change="" /></div>
+						        </div>
+						   	</div>
+						    <div class="row">
+						       <div class="form-group">
+						        <label class="col-sm-2">At Certain Year</label>
+						        <div class="col-sm-3"><input type="number" placeholder="year between 2000 and 2020" ng-model="certain_year" min="2000" max="2020" class="form-control"  ng-change="" /></div>
+						        </div>
+						   	</div>
+					  		<input ng-hide="poin_3 || poin_4 " class="btn btn-success" type="submit" id="submit" value="Submit" />
+						</form>
+						</div>
+
+					   	<div ng-show="poin_3">
+						   	<form class="form-horizontal" ng-submit="executePoin3()">
+								 <div class="row">
+							        <div class="form-group">
+								        <label class="col-sm-2">Village</label>
+								        	<div class="col-sm-10">
+									        	<span ng-repeat="village in data_village" style="float:left ">
+										            <input type="button" value="{{village.name}}" class="btn-info" ng-click="processForm($index)"/>
+							       					<input type="button" value="X" class="btn-danger" style="margin:0 20px 20px -5px" ng-click="deleteVillage($index)"/>
+										        </span>
+										        <div ng-hide="isOriginalVillageFilled">
+										        	<input type="text" ng-change="findVillageOnDB()" ng-model="searchStringVillage" name="search_query" placeholder="type the name of village to search" class="form-control"  />
+													<br>  
+													<div ng-show="searchStringVillage.length != 0" >     
+											            <div class="data-ctrl">
+											                <span ng-repeat="village in possibleVillages | searchForName:searchStringVillage">
+											                    <p><input type="button" value="+" class="btn-success"  ng-click="addVillage($index)"/> {{village.name}}
+											                </span>
+											            </div>
+										            </div>
+										        </div>
+									        </div>
+
+								        </div>
+							   	</div>
+							    <div class="row">
+							       <div class="form-group">
+							        <label class="col-sm-2">From Certain Subdistrict</label>
+							        <div class="col-sm-3"><input type="text" ng-model="certain_subdistrict"  class="form-control"   /></div>
+							        </div>
+							   	</div>
+							    <div class="row">
+							       <div class="form-group">
+							        <label class="col-sm-2">From Certain District</label>
+							        <div class="col-sm-3"><input type="text" ng-model="certain_district"  class="form-control"   /></div>
+							        </div>
+							   	</div>
+							    <div class="row">
+							       <div class="form-group">
+							        <label class="col-sm-2">From Certain Province</label>
+							        <div class="col-sm-3"><input type="text" ng-model="certain_province"  class="form-control"   /></div>
+							        </div>
+							   	</div>
+						  		<input ng-hide="poin_4 " class="btn btn-success" type="submit" id="submit" value="Submit" />
+							</form>
+						</div>
+
+						<div ng-show="poin_4" class="row ">
+						   	<form class="form-horizontal" ng-submit="executePoin4()">
+							<div class="row" style="margin: 5px">
+						       <div class="form-group" >
+							        <label class="col-sm-3">Status</label>
+							        <div class="col-sm-3">
+							        	 <select class="form-control btn btn-success dropdown-toggle" 
+							        	 	ng-init="selected_status_injury = type_status_injury[0]"
+							        	 	ng-options="t.name for t in type_status_injury" 
+											ng-model="selected_status_injury"></select>
+							        </div>
+							   	</div>
+						   	</div>
+						   	<div class="row" style="margin: 5px">
+							   	<div class="form-group">
+							        <label class="col-sm-3">Age Group</label>
+							        <div class="col-sm-3">
+							        	 <select class="form-control btn btn-success dropdown-toggle" 
+							        	 	ng-init="selected_age_group = type_of_age_group[0]"
+							        	 	ng-options="t.name for t in type_of_age_group" 
+											ng-model="selected_age_group"></select>
+							        </div>
+							   	</div>
+						   	</div>
+						   	 <div class="row" style="margin: 5px">
+						       <div class="form-group">
+							        <label class="col-sm-3">Gender</label>
+							        <div class="col-sm-3">
+
+							        	 <select class="form-control btn btn-success dropdown-toggle" 
+							        	 	ng-init="selected_status_gender = type_gender[0]"
+							        	 	ng-options="t.name for t in type_gender" 
+											ng-model="selected_status_gender"></select>
+
+							        </div>
+							   	</div>
+							</div>
+						   	<div class="row"  style="margin: 5px">
+						       <div class="form-group">
+						        <label class="col-sm-3">Medical Facility Name</label>
+						        <div class="col-sm-3"><input type="text" ng-model="nama_medical_facility" 
+						        name="nama_medical_facility" placeholder="name of the medical facility" class="form-control"  /></div>
+						        </div>
+						   	</div>
+							<div class="row" style="margin: 5px">
+						       <div class="form-group">
+							        <label class="col-sm-3">Medical Facility Type</label>
+							        <div class="col-sm-3">
+
+							        	 <select class="form-control btn btn-success dropdown-toggle" 
+							        	 	ng-init="selected_type_medical_facility = type_medical_facility[0]"
+							        	 	ng-options="t.name for t in type_medical_facility" 
+											ng-model="selected_type_medical_facility"></select>
+
+									</div>
+						        </div>
+						   	</div>
+						   	<div class="row"  style="margin: 5px">
+						       <div class="form-group">
+						        <label class="col-sm-3">Refugee Camp Name</label>
+						        <div class="col-sm-3"><input type="text" ng-model="nama_refugee_camp" 
+						        name="nama_refugee_camp" placeholder="name of the refugee camp" class="form-control"  /></div>
+						        </div>
+						   	</div>
+						   	<div class="row" style="margin: 5px">
+						       <div class="form-group">
+							        <label class="col-sm-3">Refugee Camp Type</label>
+							        <div class="col-sm-3">
+							        	 <select class="form-control btn btn-success dropdown-toggle" 
+							        	 	ng-init="selected_type_camp = type_camp[0]"
+							        	 	ng-options="t.name for t in type_camp" 
+											ng-model="selected_type_camp"></select>
+									</div>
+						        </div>
+						   	</div>
+						   	<input  class="btn btn-success" type="submit" id="submit" value="Submit" />
+						</div>
+
+				   	<div ng-hide="poin_3 || poin_4" class="form-horizontal"  >
+					<br><hr><br>
+						<div class="row">
+					       <div class="form-group">
+								<label class="col-sm-2">Recorded Disaster</label>
+						        <div class="col-sm-10">
+						        	<span ng-repeat="disaster in id_disasters" style="float:left; margin: 10px ">
+							            <input type="button" value="{{disaster._id}}" class="btn-info" ng-click="redirect_disaster(disaster._id)"/>
+							        </span>
+						        </div>
+						    </div>
+				        </div>
+				    </div>
+					<br><hr><br>
+				   	<div class="form-horizontal"  >
+						<div class="row">
+					       <div class="form-group">
+								<label class="col-sm-2">Recorded Victims</label>
+						        <div class="col-sm-10">
+						        	<span ng-repeat="victim in result track by $index" style="float:left; margin: 10px ">
+							            <input type="button" value="{{victim}}" class="btn-info" ng-click="redirect_victim(victim)"/>
+							        </span>
+						        </div>
+						    </div>
+				        </div>
+				    </div>
 				</div><!-- cpontroller -->
 			</div><!-- MyApp -->
 
@@ -54,38 +291,515 @@
 <script src="../../javascripts/ui-bootstrap-tpls.min.js"></script>
 <script src="../../javascripts//angular-animate.js"></script>
 <script>
-$app.controller("villageController", function($scope, $http, $templateRequest, $sce, $compile, $window){
-		
-	  
-	    
-	    $scope.insertVillage = function(){
-	    	if($scope.record_weather.length == 0){
-	    		alert("Please input data recorded weather!")
-	    	}else{
-	    		$http({
-			        url: '/db/village/insert',
+$app.controller("query8Controller", function($scope, $http, $templateRequest, $sce, $compile, $window){
+		$scope.possibleDisasterEvent = [];
+		$scope.data_disaster_events =[];
+		$scope.id_disasters = [];
+		$scope.id_total_disasters = [];
+		$scope.id_victims = [];
+		$scope.type_camp = [{
+		        id: 0,
+		        name: "All Type"        
+		    },{
+		        id: 1,
+		        name: "School"        
+		    }, {
+		        id: 2,
+		        name: "Village Hall"        
+		    }, {
+		        id: 3,
+		        name: "Praying Place"        
+		    }, {
+		        id: 4,
+		        name: "House"        
+		    }, {
+		        id: 5,
+		        name: "Field"        
+		    }];
+		$scope.type_medical_facility = [{
+		        id: 0,
+		        name: "All Type"        
+		    },{
+		        id: 1,
+		        name: "Public Health Center"        
+		    }, {
+		        id: 2,
+		        name: "Clinic"        
+		    }, {
+		        id: 3,
+		        name: "Hospital"        
+		    }];
+
+		$scope.type_disaster = [{
+		        id: 0,
+		        name: "All"        
+		    },{
+		        id: 1,
+		        name: "Flood"        
+		    }, {
+		        id: 2,
+		        name: "Landslide"        
+		    }, {
+		        id: 3,
+		        name: "Earthquake"        
+		    }, {
+		        id: 4,
+		        name: "Tornado"        
+		    }, {
+		        id: 5,
+		        name: "Volcanic Eruption"        
+		    }, {
+		        id: 6,
+		        name: "Tsunami"        
+		    }];
+		$scope.type_gender = [{
+		        id: 0,
+		        name: "All Gender"        
+		    },{
+		        id: 1,
+		        name: "Man"        
+		    }, {
+		        id: 2,
+		        name: "Woman"        
+		    }];
+		    
+		$scope.type_status_injury = [{
+		        id: 0,
+		        name: "Every status"        
+		    },{
+		        id: 1,
+		        name: "Affected"        
+		    }, {
+		        id: 2,
+		        name: "Minor injury"        
+		    }, {
+		        id: 3,
+		        name: "Major injury"        
+		    }, {
+		        id: 4,
+		        name: "Missing"        
+		    }, {
+		        id: 5,
+		        name: "Deceased"        
+		    }];
+		$scope.type_of_age_group = [{
+		        id: 0,
+		        name: "All age"        
+		    },{
+		        id: 1,
+		        name: "Baby: less than 1 year old"        
+		    }, {
+		        id: 2,
+		        name: "Toddler: 1-5 years old"        
+		    }, {
+		        id: 3,
+		        name: "Child: 5-12 years old"        
+		    }, {
+		        id: 4,
+		        name: "Teenager: 13-17 years old"        
+		    }, {
+		        id: 5,
+		        name: "Adult: 18-59 years old"        
+		    }, {
+		        id: 6,
+		        name: "Elderly: 60 years old or more"        
+		    }];
+		$scope.type_of_query = [{
+		        id: 1,
+		        name: "Poin 1"        
+		    }, {
+		        id: 2,
+		        name: "Poin 2"       
+		    }, {
+		        id: 3,
+		        name: "Poin 3"        
+		    }, {
+		        id: 4,
+		        name: "Poin 4"        
+		    }];
+	  	$scope.findDisasterEventOnDB = function(){
+			if($scope.searchStringDisasterEvent != undefined &&
+				$scope.searchStringDisasterEvent.length>= 3 ){
+				$http({
+			        url: '/db/disaster_event/find_id_and_type_and_victim',
 			        method: "POST",
 			        data: {
-		                name: $scope.name,
-		                location: {
-		                	'sub_district' : $scope.sub_district,
-		                	'district' : $scope.district,
-		                	'province' : $scope.province
-		                },
-		                geo_region: $scope.geo_region,
-		                record_weather: $scope.record_weather
+		                search_term: $scope.searchStringDisasterEvent
 		            }
 			    })
 			    .then(function(response) {
-			        alert("Data village has been saved successfully!");
+			    	$scope.possibleDisasterEvent = response.data;
 			    }, 
-			    function(response) { // optional
-			        alert("failed: "+response.data);
+			    function(response) { 
+			        alert("failed: findDisasterEventOnDB"+response.data);
 			    });
-	    	}
+			}
 		}
 
+	    $scope.addSingleDisasterEvent = function(id) {
+			$scope.id_total_disasters = $scope.possibleDisasterEvent[id].id_disasters ;
+			$scope.id_disasters = $scope.id_total_disasters;
+		    $scope.data_disaster_events.push($scope.possibleDisasterEvent[id]);
+		    $scope.updateIdDisaster();
+		    $scope.updateIdVictims();
+	    };
+
+	    $scope.updateIdDisasterAndIdVictim = function() {
+		    $scope.updateIdDisaster();
+		    $scope.updateIdVictims();
+	    };
+
+	    $scope.deleteDisasterEvent = function(id) {
+	    	$scope.data_disaster_events.splice(id, 1);
+	    	$scope.updateIdDisasterAndIdVictim();
+	    };
+	    
+	    $scope.updateIdDisaster = function() {
+	    	$scope.id_total_disasters = [];
+	    	for (var i = $scope.data_disaster_events.length - 1; i >= 0; i--) {
+	    		$scope.id_total_disasters = $scope.id_total_disasters.concat($scope.data_disaster_events[i].id_disasters);
+	    	}
+	    	$scope.filterByTypeDisaster($scope.certain_type.id);
+	    	// $scope.filterByDate();
+	    };
+		$scope.updateIdVictims = function() {
+	    	/*collect victim id*/
+	    	possible_duplicate = [];
+	    	$scope.result = [];
+	    	for (var i = $scope.id_disasters.length - 1; i >= 0; i--) {
+	    		// console.log($scope.id_disasters[i].id_victims);
+	    		possible_duplicate = possible_duplicate.concat($scope.id_disasters[i].id_victims);
+	    	}
+			$.each(possible_duplicate, function(i, el){
+			    if($.inArray(el, $scope.result) === -1) $scope.result.push(el);
+			});
+	    };
+
+		$scope.filterByTypeDisaster = function(id) {
+	    	switch($scope.certain_type.id){
+	    		case 0 :
+	    			$scope.id_disasters = $scope.id_total_disasters;
+	    			break;
+	    		default:
+	    			$scope.id_disasters = [];
+	    			for (var i = $scope.id_total_disasters.length - 1; i >= 0; i--) {
+	    				if($scope.id_total_disasters[i].type == $scope.type_disaster[id].name)
+		    				$scope.id_disasters.push($scope.id_total_disasters[i]);
+	    			};
+	    	}
+	    };
+
+	   
+	    $scope.redirect_disaster_event = function(id){
+            $window.open("/show/disaster_event/"+id, '_blank');
+        };
+	    $scope.redirect_disaster = function(id){
+            $window.open("/show/disaster/"+id, '_blank');
+        };
+	    $scope.redirect_victim = function(id){
+            $window.open("/show/victim/"+id, '_blank');
+        };
+	    $scope.redirect_village = function(id){
+            $window.open("/show/village/"+id, '_blank');
+        };
+	    $scope.redirect_medical_facility = function(id){
+            $window.open("/show/medical_facility/"+id, '_blank');
+        };
+	    $scope.redirect_refugee_camp = function(id){
+            $window.open("/show/refugee_camp/"+id, '_blank');
+        };
+
+	  	$scope.executePoin1 = function(callback){
+	  		if($scope.poin_1){
+	  			$scope.updateIdDisaster();
+				$scope.updateIdVictims();
+				callback($scope.result);
+			 }else{
+			    callback();
+			 }
+	  	}
+	    
+	    $scope.FilterByDateMonthYear = function(callback){
+	    	$scope.updateIdDisaster();
+	    	if($scope.certain_date != null){
+  				/*already had id_disaster and id_disaster_events*/
+		  		$http({
+			        url: '/query/query_5/filter_by_date',
+			        method: "POST",
+			        data: {
+		                array_id: $scope.id_disasters,
+		                date: $scope.certain_date
+		            }
+			    })
+			    .then(function(response) {
+		    		$scope.id_disasters = response.data;
+					$scope.updateIdVictims();
+					callback();
+			    }, 
+			    function(response) { // optional
+			        callback("failed: "+response.data);
+			    });
+			}else if($scope.certain_month != null){
+  				/*already had id_disaster and id_disaster_events*/
+		  		$http({
+			        url: '/query/query_5/filter_by_month',
+			        method: "POST",
+			        data: {
+		                array_id: $scope.id_disasters,
+		                date: $scope.certain_month
+		            }
+			    })
+			    .then(function(response) {
+		    		$scope.id_disasters = response.data;
+					$scope.updateIdVictims();
+					callback();
+			    }, 
+			    function(response) { // optional
+			        callback("failed: "+response.data);
+			    });
+			}else if($scope.certain_year != null){
+  				/*already had id_disaster and id_disaster_events*/
+		    	// alert($scope.id_disasters)
+		  		$http({
+			        url: '/query/query_5/filter_by_year',
+			        method: "POST",
+			        data: {
+		                array_id: $scope.id_disasters,
+		                date: $scope.certain_year
+		            }
+			    })
+			    .then(function(response) {
+		    		$scope.id_disasters = response.data;
+					$scope.updateIdVictims();
+					callback();
+			    }, 
+			    function(response) { // optional
+			        callback("failed: "+response.data);
+			    });
+			} else{
+
+	    		callback();
+			}
+	    }
+
+	    $scope.initiateIdDisaster = function(callback){
+	    	$http({
+		        url: '/query/query_5/get_disaster_event_query5',
+		        method: "POST",
+		    })
+		    .then(function(response) {
+		    	// alert(response.data)
+			    $scope.data_disaster_events = response.data;
+			    $scope.id_total_disasters = []
+			    for (var i = response.data.length - 1; i >= 0; i--) {
+			    	$scope.id_total_disasters = $scope.id_total_disasters.concat(response.data[i].id_disasters);
+			    }
+				$scope.id_disasters = $scope.id_total_disasters;
+			    $scope.updateIdDisaster();
+			    $scope.updateIdVictims();
+		    	callback();
+		    }, 
+		    function(response) { // optional
+		    	console.log("masuk2")
+		        callback("failed: "+response.data);
+		    });
+	    }
+
+	  	$scope.executePoin2 = function(){
+	  		if($scope.poin_2){
+	  			if($scope.poin_1){
+	  				$scope.FilterByDateMonthYear( function(response){
+	  				});
+				}else{
+					$scope.initiateIdDisaster(function(){
+
+					/*should look at id_disaster_events on victim*/
+						$scope.FilterByDateMonthYear( function(response){
+		  				});
+						// alert("lalal")
+					})
+				}
+			}
+	  	}
+	    
+
+	  	$scope.executePoin3 = function(){
+	  		if ($scope.poin_1){
+	  			$scope.FilterByDateMonthYear( function(){
+					if($scope.data_village.length == 0){
+						$scope.certain_village = null;
+						$scope.partial_2_poin3(function(){});
+					}else{
+						$scope.certain_village = $scope.data_village[0]._id;
+						$scope.partial_1_poin3(function(){
+							$scope.partial_2_poin3(function(){});
+						});
+					}
+				});
+			 }else {
+			 	/*initialize the data about victim and disaster to be filtered further*/
+	  			$scope.initiateIdDisaster(function(){
+					$scope.FilterByDateMonthYear( function(){
+						if($scope.data_village.length == 0){
+							$scope.certain_village = null;
+							$scope.partial_2_poin3(function(){});
+						}else{
+							$scope.certain_village = $scope.data_village[0]._id;
+							$scope.partial_1_poin3(function(){
+								$scope.partial_2_poin3(function(){});
+							});
+						}
+					});
+				});
+			 }
+	  	};
+
+	  	$scope.FilterByStatusAndAgeAndGender = function(callback){
+	  		/*the result should be initialized upon entering this stage*/
+	  		id_disaster_events = [];
+        	for (var i = $scope.data_disaster_events.length - 1; i >= 0; i--) {
+        		id_disaster_events.push($scope.data_disaster_events[i]._id);
+        	}
+        	status_injury = [];
+        	if($scope.selected_status_injury.id == 0){
+        		status_injury = ['Affected', 'Minor injury', 'Major injury', 'Missing', 'Deceased'];
+        	}else{
+        		status_injury.push($scope.selected_status_injury.name);
+        	}
+
+        	gender = [];
+        	if($scope.selected_status_gender.id == 0){
+        		gender = ['Man', 'Woman'];
+        	}else{
+        		gender.push($scope.selected_status_gender.name);
+        	}
+        	
+        	type_refugee_camp = [];
+        	if($scope.selected_type_camp.id == 0){
+        		type_refugee_camp = ['School','Village Hall','Praying Place', 'House','Field'];
+        	}else{
+        		type_refugee_camp.push($scope.selected_type_camp.name);
+        	}
+
+        	type_medical_facility = [];
+        	if($scope.selected_type_medical_facility.id == 0){
+        		type_medical_facility = ["Public Health Center","Clinic","Hospital"];
+        	}else{
+        		type_medical_facility.push($scope.selected_type_medical_facility.name);
+        	}
+
+	  		$http({
+	        url: '/query/query_8/poin4',
+	        method: "POST",
+	        data: {
+	        	id_disaster_events: id_disaster_events,
+	        	gender: gender,
+	        	type_refugee_camp: type_refugee_camp,
+	        	type_medical_facility: type_medical_facility,
+	        	nama_refugee_camp: $scope.nama_refugee_camp,
+	        	nama_medical_facility: $scope.nama_medical_facility,
+	        	id_victims: $scope.result,
+	        	selected_status_injury: status_injury,
+	        	id_selected_age_group: $scope.selected_age_group.id
+            }})
+            .then(function(response) {
+            	$scope.result = [];
+            	for (var i = response.data.length - 1; i >= 0; i--) {
+            		$scope.result.push(response.data[i]._id);
+            	}
+            	
+            	/*the id disasters and id disaster events should sync (have) the id of current victims*/
+		    	callback();
+		    });
+	  	}
+	  	// $scope.poin_4 = true;
+
+	  	$scope.executePoin4 = function(){
+	  		if(!$scope.poin_1 && !$scope.poin_2 && !$scope.poin_3){
+	  			/*initialize the data about victim and disaster to be filtered further*/
+	  			$scope.initiateIdDisaster(function(){
+					$scope.FilterByStatusAndAgeAndGender( function(){
+						// alert("holi")
+					});
+				});
+	  		}else{
+	  			$scope.FilterByStatusAndAgeAndGender( function(){
+						// alert("holi")
+					});
+	  		}
+	  	}
+	    
+	  	$scope.partial_1_poin3 = function(callback){
+	  		$http({
+	        url: '/query/query_5/poin3',
+	        method: "POST",
+	        data: {
+	        	id_victims: $scope.result,
+                id_original_village: $scope.certain_village 
+            }})
+            .then(function(response) {
+		    	if(response.data != null){
+			    	$scope.result = [];
+			    	for (var i = response.data.length - 1; i >= 0; i--) {
+			    		$scope.result.push(response.data[i]._id);
+			    	}
+			    	callback();
+		    	}
+		    });
+	  	};
+
+	  	$scope.partial_2_poin3 = function(callback){
+	  		$http({
+	        url: '/query/query_5/poin3',
+	        method: "POST",
+	        data: {
+	        	id_victims: $scope.result,
+                certain_subdistrict: $scope.certain_subdistrict,
+                certain_district: $scope.certain_district,
+                certain_province: $scope.certain_province
+            }})
+            .then(function(response) {
+		    	if(response.data != null){
+			    	$scope.result = [];
+			    	for (var i = response.data.length - 1; i >= 0; i--) {
+			    		$scope.result.push(response.data[i]._id);
+			    	}
+		    	}
+		    	callback();
+		    });
+	  	};
+
+	    $scope.redirect_disaster_event = function(id){
+            $window.open("/show/disaster_event/"+id, '_blank');
+        };
+
+		$scope.data_village = [];
+		 $scope.addVillage = function(id) {
+		    $scope.data_village.push($scope.possibleVillages[id]);
+			$scope.isOriginalVillageFilled = true;
+	    };
+
+	    $scope.deleteVillage = function(id) {
+			$scope.isOriginalVillageFilled = false;
+	    	$scope.data_village.splice(id, 1);
+	    };
+		 $scope.findVillageOnDB = function(){
+			if($scope.searchStringVillage != undefined &&
+				$scope.searchStringVillage.length >= 3 ){
+				$http({
+			        url: '/db/village/find',
+			        method: "POST",
+			        data: {
+		                search_term: $scope.searchStringVillage
+		            }
+			    })
+			    .then(function(response) {
+			    	$scope.possibleVillages = response.data;
+			    }, 
+			    function(response) { 
+			        alert("failed: findVillageOnDB"+response.data);
+			    });
+			}
+		};	 
 	});
-
-
 </script>

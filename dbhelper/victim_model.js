@@ -9,7 +9,7 @@ var VictimSchema = new mongoose.Schema({
   id_original_village: { type: mongoose.Schema.Types.ObjectId, ref: 'Village' },
   gender	: { type: String, default: "L"},
   birthday	: { type: Date, default: Date.now},
-  status	: { type: String, default: "affected"},
+  status	: { type: String, default: "Affected"},
   is_pregnant : { type: Boolean, default: false},
   is_deceased : { 
   	status		: { type: Boolean, default: false},
