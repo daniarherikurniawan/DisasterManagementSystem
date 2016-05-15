@@ -13,8 +13,8 @@
 	A list of the refuge camps in a certain village or subdistrict or district or province.
 			</div>
 			<div ng-app="myApp">
-				<div ng-controller="villageController">
-					<form class="form-horizontal" ng-submit="insertVillage()">
+				<div ng-controller="query6Controller">
+					<form class="form-horizontal" ng-submit="executeQuery()">
 					    <div class="row">
 					       <div class="form-group">
 					        <label class="col-sm-2">Name</label>
@@ -39,35 +39,25 @@
 <script src="../../javascripts/ui-bootstrap-tpls.min.js"></script>
 <script src="../../javascripts//angular-animate.js"></script>
 <script>
-$app.controller("villageController", function($scope, $http, $templateRequest, $sce, $compile, $window){
+$app.controller("query6Controller", function($scope, $http, $templateRequest, $sce, $compile, $window){
 		
 	  
 	    
-	    $scope.insertVillage = function(){
-	    	if($scope.record_weather.length == 0){
-	    		alert("Please input data recorded weather!")
-	    	}else{
-	    		$http({
-			        url: '/db/village/insert',
-			        method: "POST",
-			        data: {
-		                name: $scope.name,
-		                location: {
-		                	'sub_district' : $scope.sub_district,
-		                	'district' : $scope.district,
-		                	'province' : $scope.province
-		                },
-		                geo_region: $scope.geo_region,
-		                record_weather: $scope.record_weather
-		            }
-			    })
-			    .then(function(response) {
-			        alert("Data village has been saved successfully!");
-			    }, 
-			    function(response) { // optional
-			        alert("failed: "+response.data);
-			    });
-	    	}
+	    $scope.executeQuery = function(){
+    		$http({
+		        url: '/db/disaster/geo_region',
+		        method: "POST",
+		        data: {
+	                id: '57370a9159308b7813152be0'
+	            }
+		    })
+		    .then(function(response) {
+		        alert(response.data);
+		    }, 
+		    function(response) { // optional
+		        alert("failed: "+response.data);
+		    });
+	    	
 		}
 
 	});

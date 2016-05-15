@@ -17,6 +17,7 @@ module.exports = {
 		Disaster.object
 			.findById(id)
 			.exec(function(err, disaster){
+				// console.log(disaster)
 				callback(disaster);
 				return;
 		})
@@ -138,7 +139,6 @@ module.exports = {
 				return;
 		})
 	},
-
 	insert: function(data){
 		var disasterObj = new Disaster.model(data);
 	    disasterObj.save(function(err){
