@@ -41,23 +41,36 @@
 					    <div class="row">
 					       <div class="form-group">
 					        <label class="col-sm-2">From Certain Subdistrict</label>
-					        <div class="col-sm-3"><input type="text" ng-model="certain_subdistrict"  class="form-control"   /></div>
+					        <div class="col-sm-3"><input type="text" ng-model="certain_subdistrict" placeholder="input certain subdistrict" class="form-control"   /></div>
 					        </div>
 					   	</div>
 					    <div class="row">
 					       <div class="form-group">
 					        <label class="col-sm-2">From Certain District</label>
-					        <div class="col-sm-3"><input type="text" ng-model="certain_district"  class="form-control"   /></div>
+					        <div class="col-sm-3"><input type="text" ng-model="certain_district"  class="form-control"  placeholder="input certain district" /></div>
 					        </div>
 					   	</div>
 					    <div class="row">
 					       <div class="form-group">
 					        <label class="col-sm-2">From Certain Province</label>
-					        <div class="col-sm-3"><input type="text" ng-model="certain_province"  class="form-control"   /></div>
+					        <div class="col-sm-3"><input type="text" ng-model="certain_province"  class="form-control"  placeholder="input certain province" /></div>
 					        </div>
 					   	</div>
 				  		<input  class="btn btn-success" type="submit" id="submit" value="Submit" />
 					</form>
+					<br><hr><br>
+				   	<div class="form-horizontal"  >
+						<div class="row">
+					       <div class="form-group">
+								<label class="col-sm-2">Refugee Camp</label>
+						        <div class="col-sm-10">
+						        	<span ng-repeat="refugee_camp in result track by $index" style="float:left; margin: 10px ">
+							            <input type="button" value="{{refugee_camp.name}}" class="btn-info" ng-click="redirect_refugee_camp(refugee_camp._id)"/>
+							        </span>
+						        </div>
+						    </div>
+				        </div>
+				    </div>
 				</div><!-- cpontroller -->
 			</div><!-- MyApp -->
 
@@ -74,25 +87,10 @@
 <script>
 $app.controller("query6Controller", function($scope, $http, $templateRequest, $sce, $compile, $window){
 		$scope.data_village = [];
-	  
-	    
-	    $scope.executeQuery = function(){
-    		$http({
-		        url: '/db/disaster/geo_region',
-		        method: "POST",
-		        data: {
-	                id: '57370a9159308b7813152be0'
-	            }
-		    })
-		    .then(function(response) {
-		        alert(response.data);
-		    }, 
-		    function(response) { // optional
-		        alert("failed: "+response.data);
-		    });
-	    	
-		}
-
+	  	$scope.result = [];
+	  	$scope.certain_subdistrict = '';
+		$scope.certain_district = '';
+		$scope.certain_province = '';
 		$scope.data_village = [];
 		 $scope.addVillage = function(id) {
 		    $scope.data_village.push($scope.possibleVillages[id]);
@@ -122,17 +120,44 @@ $app.controller("query6Controller", function($scope, $http, $templateRequest, $s
 			}
 		};	 
 
+		 $scope.initiateIdRefugeeCamp = function(callback){
+	    	$http({
+		        url: '/query/query_6/get_every_id',
+		        method: "POST",
+		    })
+		    .then(function(response) {
+		    	$scope.updateIdAndResult(response.data);
+		    	callback();
+		    }, 
+		    function(response) { // optional
+		        callback("failed: "+response.data);
+		    });
+	    }
+
+	    $scope.updateIdAndResult = function(data){
+	    	$scope.id_total_refugee_camp = []
+	    	$scope.result = [];
+		    for (var i = data.length - 1; i >= 0; i--) {
+		    	$scope.id_total_refugee_camp = $scope.id_total_refugee_camp.concat(data[i]._id);
+				$scope.result.push(data[i]);
+		    }
+	    }
 
 		$scope.executeParameter = function(){
-			if($scope.data_village.length == 0){
-				$scope.certain_village = null;
-				$scope.partial_2(function(){});
-			}else{
-				$scope.certain_village = $scope.data_village[0]._id;
-				$scope.partial_1(function(){
-					$scope.partial_2(function(){});
-				});
-			}
+			/*initialize with refugee_camp id*/
+			$scope.initiateIdRefugeeCamp(function(){
+				if($scope.data_village.length == 0){
+					$scope.certain_village = null;
+					$scope.partial_2(function(){
+					});
+				}else{
+					$scope.certain_village = $scope.data_village[0]._id;
+					$scope.partial_1(function(){
+						$scope.partial_2(function(){
+						});
+					});
+				}
+			})
 	  	};
 
 	  	$scope.partial_1 = function(callback){
@@ -140,14 +165,12 @@ $app.controller("query6Controller", function($scope, $http, $templateRequest, $s
 	        url: '/query/query_6',
 	        method: "POST",
 	        data: {
+	        	id_refugee_camps: $scope.id_total_refugee_camp,
                 id_original_village: $scope.certain_village 
             }})
             .then(function(response) {
-		    	if(response.data != null){
-			    	$scope.result = [];
-			    	for (var i = response.data.length - 1; i >= 0; i--) {
-			    		$scope.result.push(response.data[i]._id);
-			    	}
+		    	if(response.data.length > 0){
+			    	$scope.updateIdAndResult(response.data);
 			    	callback();
 		    	}
 		    });
@@ -155,21 +178,19 @@ $app.controller("query6Controller", function($scope, $http, $templateRequest, $s
 
 	  	$scope.partial_2 = function(callback){
 	  		$http({
-	        url: '/query/query_5',
+	        url: '/query/query_6',
 	        method: "POST",
 	        data: {
+	        	id_refugee_camps: $scope.id_total_refugee_camp,
                 certain_subdistrict: $scope.certain_subdistrict,
                 certain_district: $scope.certain_district,
                 certain_province: $scope.certain_province
             }})
             .then(function(response) {
-		    	if(response.data != null){
-			    	$scope.result = [];
-			    	for (var i = response.data.length - 1; i >= 0; i--) {
-			    		$scope.result.push(response.data[i]._id);
-			    	}
-		    	}
-		    	callback();
+            	if(response.data != "parameter_invalid"){
+			    	$scope.updateIdAndResult(response.data);
+				}
+				callback();
 		    });
 	  	};
 

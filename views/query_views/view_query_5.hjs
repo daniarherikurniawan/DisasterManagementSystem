@@ -549,28 +549,6 @@ $app.controller("villageController", function($scope, $http, $templateRequest, $
             $window.open("/show/disaster_event/"+id, '_blank');
         };
 
-   //      $scope.removeRecordedData = function(){
-			// // $scope.id_disasters = [];
-   //      }
-
-		$scope.executeQuery = function(){
-				/*Execute poin 1 directly using other function*/
-				$scope.executePoin1(function(){
-				/*Execute poin 2*/		
-					$scope.executePoin2( function(){
-					// console.log("A"+JSON.stringify(response))
-				// 		// console.log("B"+JSON.stringify(response))
-				// 		/*Execute poin 3*/
-				// 		$scope.executePoin3( response, function(response){
-							$scope.result = [];
-							for (var i = response.length - 1; i >= 0; i--) {
-					    		$scope.result.push(response[i]);
-					    	}
-				// 		});
-					});
-				});
-			
-		}
 		$scope.data_village = [];
 		 $scope.addVillage = function(id) {
 		    $scope.data_village.push($scope.possibleVillages[id]);

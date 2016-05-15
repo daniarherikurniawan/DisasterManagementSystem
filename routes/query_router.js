@@ -104,6 +104,20 @@ router.post('/query_6', function(req, res, next) {
     res.send(result);
   });
 });
+router.post('/query_6/get_every_id', function(req, res, next) {
+  refugee_camp_cont.get_every_id( function(result){
+    res.send(result);
+  });
+});
 
-
+router.post('/query_7', function(req, res, next) {
+  medical_facility_cont.filter_by_location(req.body, function(result){
+    res.send(result);
+  });
+});
+router.post('/query_7/get_every_id', function(req, res, next) {
+  medical_facility_cont.get_every_id( function(result){
+    res.send(result);
+  });
+});
 module.exports = router;
