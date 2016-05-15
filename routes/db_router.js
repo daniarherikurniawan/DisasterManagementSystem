@@ -192,8 +192,8 @@ router.post('/disaster/get_array_id', function(req, res, next) {
     res.send(response);
   });
 });
-router.post('/disaster/geo_region', function(req, res, next) {
-  disaster_cont.findById(req.body.id, function(response){
+router.post('/disaster/geo_region/:id', function(req, res, next) {
+  disaster_cont.findById(req.params.id, function(response){
     res.send(response.record_region);
   });
 });

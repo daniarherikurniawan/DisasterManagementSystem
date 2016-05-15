@@ -14,16 +14,49 @@
 			</div>
 			<div ng-app="myApp">
 				<div ng-controller="query6Controller">
-					<form class="form-horizontal" ng-submit="executeQuery()">
+					<form class="form-horizontal" ng-submit="executeParameter()">
+						 <div class="row">
+					        <div class="form-group">
+						        <label class="col-sm-2">Village</label>
+						        	<div class="col-sm-10">
+							        	<span ng-repeat="village in data_village" style="float:left ">
+								            <input type="button" value="{{village.name}}" class="btn-info" ng-click="processForm($index)"/>
+					       					<input type="button" value="X" class="btn-danger" style="margin:0 20px 20px -5px" ng-click="deleteVillage($index)"/>
+								        </span>
+								        <div ng-hide="isOriginalVillageFilled">
+								        	<input type="text" ng-change="findVillageOnDB()" ng-model="searchStringVillage" name="search_query" placeholder="type the name of village to search" class="form-control"  />
+											<br>  
+											<div ng-show="searchStringVillage.length != 0" >     
+									            <div class="data-ctrl">
+									                <span ng-repeat="village in possibleVillages | searchForName:searchStringVillage">
+									                    <p><input type="button" value="+" class="btn-success"  ng-click="addVillage($index)"/> {{village.name}}
+									                </span>
+									            </div>
+								            </div>
+								        </div>
+							        </div>
+
+						        </div>
+					   	</div>
 					    <div class="row">
 					       <div class="form-group">
-					        <label class="col-sm-2">Name</label>
-					        <div class="col-sm-10"><input type="text" ng-model="name" 
-					        name="name" placeholder="name of the victim" class="form-control" required /></div>
+					        <label class="col-sm-2">From Certain Subdistrict</label>
+					        <div class="col-sm-3"><input type="text" ng-model="certain_subdistrict"  class="form-control"   /></div>
 					        </div>
 					   	</div>
-
-					  	<input class="btn btn-success" type="submit" id="submit" value="Submit" />
+					    <div class="row">
+					       <div class="form-group">
+					        <label class="col-sm-2">From Certain District</label>
+					        <div class="col-sm-3"><input type="text" ng-model="certain_district"  class="form-control"   /></div>
+					        </div>
+					   	</div>
+					    <div class="row">
+					       <div class="form-group">
+					        <label class="col-sm-2">From Certain Province</label>
+					        <div class="col-sm-3"><input type="text" ng-model="certain_province"  class="form-control"   /></div>
+					        </div>
+					   	</div>
+				  		<input  class="btn btn-success" type="submit" id="submit" value="Submit" />
 					</form>
 				</div><!-- cpontroller -->
 			</div><!-- MyApp -->
@@ -40,7 +73,7 @@
 <script src="../../javascripts//angular-animate.js"></script>
 <script>
 $app.controller("query6Controller", function($scope, $http, $templateRequest, $sce, $compile, $window){
-		
+		$scope.data_village = [];
 	  
 	    
 	    $scope.executeQuery = function(){
@@ -60,6 +93,104 @@ $app.controller("query6Controller", function($scope, $http, $templateRequest, $s
 	    	
 		}
 
+		$scope.data_village = [];
+		 $scope.addVillage = function(id) {
+		    $scope.data_village.push($scope.possibleVillages[id]);
+			$scope.isOriginalVillageFilled = true;
+	    };
+
+	    $scope.deleteVillage = function(id) {
+			$scope.isOriginalVillageFilled = false;
+	    	$scope.data_village.splice(id, 1);
+	    };
+		 $scope.findVillageOnDB = function(){
+			if($scope.searchStringVillage != undefined &&
+				$scope.searchStringVillage.length >= 3 ){
+				$http({
+			        url: '/db/village/find',
+			        method: "POST",
+			        data: {
+		                search_term: $scope.searchStringVillage
+		            }
+			    })
+			    .then(function(response) {
+			    	$scope.possibleVillages = response.data;
+			    }, 
+			    function(response) { 
+			        alert("failed: findVillageOnDB"+response.data);
+			    });
+			}
+		};	 
+
+
+		$scope.executeParameter = function(){
+			if($scope.data_village.length == 0){
+				$scope.certain_village = null;
+				$scope.partial_2(function(){});
+			}else{
+				$scope.certain_village = $scope.data_village[0]._id;
+				$scope.partial_1(function(){
+					$scope.partial_2(function(){});
+				});
+			}
+	  	};
+
+	  	$scope.partial_1 = function(callback){
+	  		$http({
+	        url: '/query/query_6',
+	        method: "POST",
+	        data: {
+                id_original_village: $scope.certain_village 
+            }})
+            .then(function(response) {
+		    	if(response.data != null){
+			    	$scope.result = [];
+			    	for (var i = response.data.length - 1; i >= 0; i--) {
+			    		$scope.result.push(response.data[i]._id);
+			    	}
+			    	callback();
+		    	}
+		    });
+	  	};
+
+	  	$scope.partial_2 = function(callback){
+	  		$http({
+	        url: '/query/query_5',
+	        method: "POST",
+	        data: {
+                certain_subdistrict: $scope.certain_subdistrict,
+                certain_district: $scope.certain_district,
+                certain_province: $scope.certain_province
+            }})
+            .then(function(response) {
+		    	if(response.data != null){
+			    	$scope.result = [];
+			    	for (var i = response.data.length - 1; i >= 0; i--) {
+			    		$scope.result.push(response.data[i]._id);
+			    	}
+		    	}
+		    	callback();
+		    });
+	  	};
+
+		$scope.redirect_disaster_event = function(id){
+            $window.open("/show/disaster_event/"+id, '_blank');
+        };
+	    $scope.redirect_disaster = function(id){
+            $window.open("/show/disaster/"+id, '_blank');
+        };
+	    $scope.redirect_victim = function(id){
+            $window.open("/show/victim/"+id, '_blank');
+        };
+	    $scope.redirect_village = function(id){
+            $window.open("/show/village/"+id, '_blank');
+        };
+	    $scope.redirect_medical_facility = function(id){
+            $window.open("/show/medical_facility/"+id, '_blank');
+        };
+	    $scope.redirect_refugee_camp = function(id){
+            $window.open("/show/refugee_camp/"+id, '_blank');
+        };
 	});
 
 

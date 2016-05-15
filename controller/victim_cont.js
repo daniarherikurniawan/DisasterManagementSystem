@@ -61,7 +61,7 @@ module.exports = {
 	},
 
 	query_5_poin3: function(data, callback){
-		console.log(data);
+		// console.log(data);
 		if(data.id_original_village!=null){
 			Victim.object
 			.find({$and: [

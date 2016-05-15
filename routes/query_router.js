@@ -99,6 +99,11 @@ router.post('/query_5/get_disaster_event_query5', function(req, res, next) {
   });
 });
 
+router.post('/query_6', function(req, res, next) {
+  refugee_camp_cont.filter_by_location(req.body, function(result){
+    res.send(result);
+  });
+});
 
 
 module.exports = router;
