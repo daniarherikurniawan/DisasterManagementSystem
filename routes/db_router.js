@@ -197,4 +197,9 @@ router.post('/disaster/geo_region/:id', function(req, res, next) {
     res.send(response.record_region);
   });
 });
+router.post('/village/geo_region/:id', function(req, res, next) {
+  village_cont.findById(req.params.id, function(response){
+    res.send(response.geo_region);
+  });
+});
 module.exports = router;

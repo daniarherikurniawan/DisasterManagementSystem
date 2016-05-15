@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>DIMAS</title>
+	<link href="../../stylesheets/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="../../MapVisualization/leaflet.css" />
+</head>
+<body>
+	<div ng-app="myApp">
+		<div ng-controller="villageController">
+			<form class="form-horizontal" ng-submit="getMap()">
+				<div class="container">
+					<div class="row">
+						<h1><%title%></h1>
+					</div>
+					<div class="row">
+						<pre id="json">
+			 				<h3 id="id1"><%data%></h3>
+						</pre>
+					</div>
+					
+					  	<input class="btn btn-success" type="submit" id="submit" value="Show the map!" />
+					<div id="map"></div>
+				</div>
+			</form>
+		</div>
+	</div>
+</body>
+</html>
+<script src="../../../javascripts/jquery.min.js"></script>
+<script src="../../javascripts/angular.min.js"></script>
+<script src="../../../javascripts/angular_directive.js"></script>
+<script src="../../../javascripts/angular-ui-router.js"></script>
+<script src="../../../javascripts/ui-bootstrap-tpls.min.js"></script>
+<script src="../../../javascripts//angular-animate.js"></script>
+
+<script>
+	$app.controller("villageController", function($scope, $http, $templateRequest, $sce, $compile, $window){
+		
+	  	$scope.result = "<%id_original_village%>";
+
+	  	$scope.getMap = function(){
+    		$http({
+		        url: '/db/village/geo_region/<%_id%>',
+		        method: "POST"
+		    })
+		    .then(function(response) {
+		    	$scope.my_map = response.data;
+		    	$scope.showTheMap();
+		    }, 
+		    function(response) { // optional
+		        alert("failed: "+response.data);
+		    });
+		}
+
+		$scope.showTheMap = function(){
+		    var data_json = $scope.my_map;
+			var arr = [];
+			for(var x in data_json){
+			  arr.push(data_json[x]);
+			}
+				
+				var data_maps=[];
+			for(var i = 0; i < data_json.length; i++){
+				data_maps.push(data_json[i].geo_region);
+			}
+			// Start maps ==========================
+			
+			var southWest = L.latLng(-10, 90.8),
+			northEast = L.latLng(8.4, 141.19),
+			bounds = L.latLngBounds(southWest, northEast);
+
+			var map = L.map('map', {
+				maxBounds: bounds,
+				maxZoom: 17,
+				minZoom: 5
+			}).setView([-0.7, 117], 5);
+			map.createPane('labels');
+			map.getPane('labels').style.zIndex = 650;
+			map.getPane('labels').style.pointerEvents = 'none';
+
+			var positron = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png', {attribution: '©OpenStreetMap, ©CartoDB'}).addTo(map);
+
+			var positronLabels = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}.png', {
+	    			attribution: '©OpenStreetMap, ©CartoDB',
+			        pane: 'labels'
+				}).addTo(map);
+
+			// control that shows state info on hover
+			var info = L.control();
+
+			info.onAdd = function (map) {
+				this._div = L.DomUtil.create('div', 'info');
+				this.update();
+				return this._div;
+			};
+
+			info.update = function (date) {
+				this._div.innerHTML = '<h4>Recorded Date</h4>' +'<b>' + date + '</b>';
+			};
+			info.addTo(map);
+
+			function style(feature) {
+				return {
+					weight: 2,
+					opacity: 1,
+					color: 'white',
+					dashArray: '3',
+					fillOpacity: 0.7
+				};
+			}
+
+			function highlightFeature(e) {
+				var layer = e.target;
+				layer.setStyle({
+					weight: 2,
+					color: '#ccffff',
+					dashArray: '',
+					fillOpacity: 0.7
+				});
+				if (!L.Browser.ie && !L.Browser.opera) {
+					layer.bringToFront();
+				}
+			}
+
+			var geojsonProvinsi, geojsonKabupaten;
+
+			function resetHighlight(e) {
+				geojsonKabupaten.resetStyle(e.target);
+				geojsonProvinsi.resetStyle(e.target);
+			}
+
+			function zoomToFeature(e) {
+				map.fitBounds(e.target.getBounds());
+			}
+
+			function onEachFeature(feature, layer) {
+				layer.on({
+					mouseover: highlightFeature,
+					mouseout: resetHighlight,
+					click: zoomToFeature
+				});
+			}
+
+
+			geojsonProvinsi = L.geoJson(statesData, {
+				style: style,
+				onEachFeature: onEachFeature
+			}).addTo(map);
+
+
+			geojsonKabupaten = L.geoJson(dataKabupaten, {
+				style: style,
+				onEachFeature: onEachFeature
+			});
+			var myStyle = {
+	    		weight: 2,
+				opacity: 1,
+				color: '#ff4004',
+				dashArray: '3',
+				fillOpacity: 1,
+				fillColor: '#ff4004'
+			};
+
+			var asyncLoop = function(o){
+				var mypolygon;
+				var i=-1, x =0;
+				length = data_maps.length;
+		    	var loop = function(){
+		    		
+		    		if(i < length-1){
+	        			i++;
+	        		}else{
+	        			i = 0;
+	        		}
+
+		    		if(i==length){o.callback(); return;}
+	    			if(x != 0){
+	    				map.removeLayer(mypolygon);
+	    			}	
+	    			x=1;
+					info.update(new Date($scope.my_map[i].date_start));
+					mypolygon = L.geoJson(JSON.parse(data_maps[i]),{style : myStyle}).addTo(map);
+	    			o.functionToLoop(loop, i);
+				} 
+				loop();//init
+			}
+			asyncLoop({
+				functionToLoop : function(loop, i){
+	        		setTimeout(function(){
+	        			loop();
+	    			},1000);
+				},
+				callback : function(){
+	        		console.log('All done!');
+				}
+
+			});
+		};/*Show the map*/
+
+	});
+
+</script>

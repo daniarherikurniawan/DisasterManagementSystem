@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>DIMAS</title>
+	<link href="../../stylesheets/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="../../MapVisualization/leaflet.css" />
+</head>
+<body>
+	<div ng-app="myApp">
+		<div ng-controller="villageController">
+			<form class="form-horizontal" ng-submit="insertVillage()">
+				<div class="container">
+					<div class="row">
+						<h1><%title%></h1>
+					</div>
+					<div class="row">
+						<pre id="json">
+			 				<h3 id="id1"><%data%></h3>
+						</pre>
+					</div>
+					<div class="form-group">
+						<label class="col-sm-2">Original Village</label>
+				        <div class="col-sm-10">
+					            <input type="button" value="{{result}}" class="btn-info" ng-click="redirect_village(result)"/>
+				        </div>
+				    </div>
+				</div>
+			</form>
+		</div>
+	</div>
+</body>
+</html>
+<script src="../../../javascripts/jquery.min.js"></script>
+<script src="../../javascripts/angular.min.js"></script>
+<script src="../../../javascripts/angular_directive.js"></script>
+<script src="../../../javascripts/angular-ui-router.js"></script>
+<script src="../../../javascripts/ui-bootstrap-tpls.min.js"></script>
+<script src="../../../javascripts//angular-animate.js"></script>
+
+<script>
+	$app.controller("villageController", function($scope, $http, $templateRequest, $sce, $compile, $window){
+		
+	  	$scope.result = "<%id_original_village%>";
+	    $scope.redirect_village = function(id){
+            $window.open("/show/village/"+id, '_blank');
+        };
+
+	});/*Angular controller*/
+</script>

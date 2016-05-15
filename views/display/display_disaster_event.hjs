@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>DIMAS</title>
+	<link href="../../stylesheets/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+		<div class="container">
+			<div class="row">
+				<h1><%title%></h1>
+			</div>
+			<div class="row">
+<pre id="json">
+ <h3><%data%></h3>
+</pre>
+			</div>
+			<div ng-app="myApp">
+				<div ng-controller="villageController">
+				   	<div class="form-group">
+						<label class="col-sm-2">Disasters</label>
+				        <div class="col-sm-10">
+				        	<span ng-repeat="refugee_camp in result" style="float:left; margin: 10px ">
+					            <input type="button" value="{{refugee_camp}}" class="btn-info" ng-click="redirect_disaster(refugee_camp)"/>
+					        </span>
+				        </div>
+				    </div>
+				</div><!-- cpontroller -->
+			</div><!-- MyApp -->
+
+
+		</div>
+	</body>
+</html>
+<script src="../../javascripts/jquery.min.js"></script>
+<script src="../../javascripts/angular.min.js"></script>
+<script src="../../javascripts/angular_directive.js"></script>
+<script src="../../javascripts/angular-ui-router.js"></script>
+<script src="../../javascripts/ui-bootstrap-tpls.min.js"></script>
+<script src="../../javascripts//angular-animate.js"></script>
+<script>
+$app.controller("villageController", function($scope, $http, $templateRequest, $sce, $compile, $window){
+	  	$scope.result = "<%id_disasters%>".split(",");
+	  	
+	    $scope.redirect_disaster = function(id){
+            $window.open("/show/disaster/"+id, '_blank');
+        };
+	});
+
+
+</script>

@@ -11,22 +11,22 @@ var refugee_camp_cont = require('../controller/refugee_camp_cont');
 
 router.get('/disaster_event/:id', function(req, res, next) {
 	disaster_event_cont.findById(req.params.id, function(result){	
-		res.render('display_disaster_event',{data: result, id_disasters:result.id_disasters, title: 'Disaster Event'});
+		res.render('display/display_disaster_event',{data: result, id_disasters:result.id_disasters, title: 'Disaster Event'});
 	});
 });
 router.get('/disaster/:id', function(req, res, next) {
 	disaster_cont.findById(req.params.id, function(result){	
-		res.render('display_disaster',{data: result, title: 'Disaster'});
+		res.render('display/display_disaster',{data: result, _id: result._id, id_victims: result.id_victims, title: 'Disaster'});
 	});
 });
 router.get('/village/:id', function(req, res, next) {
 	village_cont.findById(req.params.id, function(result){	
-		res.render('display_json',{data: result, title: 'Village'});
+		res.render('display/display_village',{data: result, _id: result._id, title: 'Village'});
 	});
 });
 router.get('/victim/:id', function(req, res, next) {
 	victim_cont.findById(req.params.id, function(result){	
-		res.render('display_json',{data: result, title: 'Victim'});
+		res.render('display/display_victim',{data: result, id_original_village: result.id_original_village,  title: 'Victim'});
 	});
 });
 router.get('/medical_facility/:id', function(req, res, next) {

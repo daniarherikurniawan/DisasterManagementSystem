@@ -8,7 +8,7 @@
 <body>
 	<div ng-app="myApp">
 		<div ng-controller="villageController">
-			<form class="form-horizontal" ng-submit="insertVillage()">
+			<form class="form-horizontal" ng-submit="getMap()">
 				<div class="container">
 					<div class="row">
 						<h1><%title%></h1>
@@ -18,7 +18,14 @@
 			 				<h3 id="id1"><%data%></h3>
 						</pre>
 					</div>
-
+					<div class="form-group">
+						<label class="col-sm-2">Victims</label>
+				        <div class="col-sm-10">
+				        	<span ng-repeat="refugee_camp in result track by $index" style="float:left; margin: 10px ">
+					            <input type="button" value="{{refugee_camp}}" class="btn-info" ng-click="redirect_victim(refugee_camp)"/>
+					        </span>
+				        </div>
+				    </div>
 					  	<input class="btn btn-success" type="submit" id="submit" value="Animate the disaster!" />
 					<div id="map"></div>
 				</div>
@@ -33,24 +40,25 @@
 <script src="../../javascripts/angular-ui-router.js"></script>
 <script src="../../javascripts/ui-bootstrap-tpls.min.js"></script>
 <script src="../../javascripts//angular-animate.js"></script>
-
 <link href="../../stylesheets/bootstrap.min.css" rel="stylesheet">
-
 <link rel="stylesheet" href="../../MapVisualization/leaflet.css" />
 <script src="../../MapVisualization/leaflet.js"></script>
-
 <script type="text/javascript" src="../../MapVisualization/IDN_adm1.js"></script>
 <script type="text/javascript" src="../../MapVisualization/IDN_adm2.js"></script>
 
-
-	<script>
-
-		$app.controller("villageController", function($scope, $http, $templateRequest, $sce, $compile, $window){
+<script>
+	$app.controller("villageController", function($scope, $http, $templateRequest, $sce, $compile, $window){
 		$scope.my_map = [];
-	  
-	    $scope.insertVillage = function(){
+	  	$scope.result = "<%id_victims%>".split(",");
+	  	
+
+	    $scope.redirect_victim = function(id){
+            $window.open("/show/victim/"+id, '_blank');
+        };
+
+	    $scope.getMap = function(){
     		$http({
-		        url: '/db/disaster/geo_region/57370a9159308b7813152be0',
+		        url: '/db/disaster/geo_region/<%_id%>',
 		        method: "POST"
 		    })
 		    .then(function(response) {
