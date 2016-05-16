@@ -20,6 +20,16 @@ module.exports = {
 				return;
 		})
 	},
+	
+	get_villages_geom: function(callback){
+		Village.object
+			.find()
+			.select({name : 1 , geo_region : 1})
+			.exec(function(err, village){
+				callback(village);
+				return;
+		})
+	},
 
 	insert: function(data){
 		var villageObj = new Village.model(data);

@@ -202,4 +202,16 @@ router.post('/village/geo_region/:id', function(req, res, next) {
     res.send(response.geo_region);
   });
 });
+router.post('/village/get_villages_geom', function(req, res, next) {
+  village_cont.get_villages_geom(function(response){
+    res.send(response);
+  });
+});
+router.post('/disaster/get_disasters_geom', function(req, res, next) {
+  disaster_cont.get_disasters_geom(req.body, function(response){
+    res.send(response);
+  });
+});
+
+
 module.exports = router;

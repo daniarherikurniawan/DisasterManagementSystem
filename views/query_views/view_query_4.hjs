@@ -76,6 +76,21 @@
 							    </div>
 					        </div>
 					    </div>
+					    <div class="form-horizontal"  >
+							<div class="row">
+						       <div class="form-group">
+									<label class="col-sm-2">Affected Villages</label>
+							        <div class="col-sm-10">
+							        	<span ng-repeat="village in id_affected_villages" style="float:left; margin: 10px ">
+								            <input type="button" value="{{village}}" class="btn-info" ng-click="redirect_village(village)"/>
+								        </span>
+							        </div>
+							    </div>
+					        <input type="button" value="Get Villages" class="btn-success" ng-click="getVillageIntersect()"/>
+					        </div>
+					    </div>
+				        <br>
+				        <br>
 				        <br>
 					  	<!-- <input class="btn btn-success" type="submit" id="submit" value="Submit" /> -->
 					  	<div class="row">
@@ -83,8 +98,30 @@
 						        <label class="col-sm-2">Query</label>
 						        <div class="col-sm-10">
 						        <textarea type="text" ng-model="input_query" name="input_query" placeholder="input query" class="form-control"  rows="5"></textarea>
-						        <br>
+						        
 					        <input type="button" value="Run Query" class="btn-success" ng-click="runQuery()"/>
+						        </div>
+					        </div>
+					        <br/>
+				        </div>
+				        <div class="row">
+							<div class="form-group">
+						        <label class="col-sm-2">Geom 1</label>
+						        <div class="col-sm-10">
+						        <textarea type="text" ng-model="geom1" name="geom1" placeholder="input query" class="form-control"  rows="5"></textarea>
+						        <br>
+						        </div>
+					        </div>
+					        <br/>
+				        </div>
+				        <div class="row">
+							<div class="form-group">
+						        <label class="col-sm-2">Geom 2</label>
+						        <div class="col-sm-10">
+						        <textarea type="text" ng-model="geom2" name="geom2" placeholder="input query" class="form-control"  rows="5"></textarea>
+						        <br>
+					        <input type="button" value="Run Query" class="btn-success" ng-click="runIntersect()"/>
+					        <br><br>
 						        </div>
 					        </div>
 					        <br/>
@@ -118,7 +155,7 @@ $app.controller("villageController", function($scope, $http, $templateRequest, $
 		$scope.data_disaster_event =[];
 		$scope.id_disasters = [];
 		$scope.id_total_disasters = [];
-
+		$scope.id_affected_villages = [];
 		$scope.type_disaster = [{
 		        id: 0,
 		        name: "All"        
@@ -141,10 +178,79 @@ $app.controller("villageController", function($scope, $http, $templateRequest, $
 		        id: 6,
 		        name: "Tsunami"        
 		    }];
+
+		$scope.runIntersect = function(){
+			/*mode advanced*/
+			$scope.input_query = 
+			"SELECT ST_Intersects("+
+				"ST_GeomFromGeoJSON('"+
+					$scope.geom1 +
+				"'),"+
+				"ST_GeomFromGeoJSON('"+
+					$scope.geom2 +
+				"')"+
+			");";
+
+		}
+
+		$scope.runIntersectGeom1Geom2 = function(geom1, geom2){
+			/*mode advanced*/
+			$scope.input_query = 
+			"SELECT ST_Intersects("+
+				"ST_GeomFromGeoJSON('"+
+					geom1 +
+				"'),"+
+				"ST_GeomFromGeoJSON('"+
+					geom2 +
+				"')"+
+			");";
+			alert($scope.input_query)
+			$http({
+			        url: '/query/run',
+			        method: "POST",
+			        data: {
+		                input_query: $scope.input_query
+		            }
+			    })
+			    .then(function(response) {
+			    	$scope.query_result = JSON.stringify(response.data.rows);
+			    }, 
+			    function(response) { 
+			        alert("failed: run query"+response.data);
+			    });
+		}
+
+		$scope.getVillageIntersect = function(){
+			// if($scope.id_disasters.length != 0 ){
+			    	// response_village = response_village.data;
+			    	$http({
+				        url: '/db/disaster/get_disasters_geom',
+				        method: "POST",
+				        data:{
+				        	id_disasters: $scope.id_disasters
+				        }
+				    })
+				    .then(function(response) {
+				    	console.log(JSON.stringify(response.data))
+						$scope.id_affected_villages = []
+				    	$.each(response.data, function(i, el){
+						    if($.inArray(el, $scope.id_affected_villages) === -1) $scope.id_affected_villages.push(el);
+						});
+				    	  ;
+				    })
+			   
+			// }else{
+			// 	alert("Please input data about the disaster events");
+			// }
+		}
+
 		$scope.runQuery = function(){
 			if($scope.input_query != undefined ){
+				/*mode standard*/
 				someText = $scope.input_query;
 				someText = someText.replace(/(\r\n|\n|\r)/gm," ");
+
+				
 				$http({
 			        url: '/query/run',
 			        method: "POST",

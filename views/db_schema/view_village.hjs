@@ -175,7 +175,7 @@ $app.controller("villageController", function($scope, $http, $templateRequest, $
 
 	    $scope.saveAsGeoRegion = function(){
 	    	$scope.geo_region = JSON.stringify($scope.geojson);
-		        // alert();
+		        alert($scope.geo_region);
 	    }
 	    
 	    $scope.insertVillage = function(){
