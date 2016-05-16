@@ -7,6 +7,7 @@ var victim_cont = require('../controller/victim_cont');
 var village_cont = require('../controller/village_cont');
 var medical_facility_cont = require('../controller/medical_facility_cont');
 var refugee_camp_cont = require('../controller/refugee_camp_cont');
+var postgre_cont = require('../controller/postgre_cont');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -39,6 +40,12 @@ router.get('/query_8', function(req, res, next) {
   res.render('query_views/view_query_8', {title:"Query 8"});
 });
 
+/* Run Query Postgresql */
+router.post('/run', function(req, res, next) {
+  postgre_cont.run_query(req.body, function(result){
+    res.send(result);
+  });
+});
 
 /* Answer Query input */
 router.post('/query_1/poin1', function(req, res, next) {

@@ -7,9 +7,12 @@ var bodyParser = require('body-parser');
 var session = require('express-session')
 var fs = require('fs');
 
-var mongoose = require('mongoose');
-var url = 'mongodb://localhost:27017/disasterdb';
-mongoose.connect(url);
+/*databases connection*/
+var mongo = require('./dbconfig/mongo_config');
+mongo.connect();
+var psql = require('./dbconfig/psql_config');
+psql.connect();
+
 var app = express();
 
 // view engine setup

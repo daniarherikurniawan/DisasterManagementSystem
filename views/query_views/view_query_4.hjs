@@ -78,6 +78,26 @@
 					    </div>
 				        <br>
 					  	<!-- <input class="btn btn-success" type="submit" id="submit" value="Submit" /> -->
+					  	<div class="row">
+							<div class="form-group">
+						        <label class="col-sm-2">Query</label>
+						        <div class="col-sm-10">
+						        <textarea type="text" ng-model="input_query" name="input_query" placeholder="input query" class="form-control"  rows="5"></textarea>
+						        <br>
+					        <input type="button" value="Run Query" class="btn-success" ng-click="runQuery()"/>
+						        </div>
+					        </div>
+					        <br/>
+				        </div>
+				        <div class="row">
+							<div class="form-group">
+						        <label class="col-sm-2">Query's Result</label>
+						        <div class="col-sm-10">
+						        <textarea type="text" ng-model="query_result" name="query_result" placeholder="query result is here" class="form-control"  rows="5"></textarea>
+						        </div>
+					        </div>
+					        <br/>
+				        </div>
 					</form>
 				</div><!-- cpontroller -->
 			</div><!-- MyApp -->
@@ -121,6 +141,27 @@ $app.controller("villageController", function($scope, $http, $templateRequest, $
 		        id: 6,
 		        name: "Tsunami"        
 		    }];
+		$scope.runQuery = function(){
+			if($scope.input_query != undefined ){
+				someText = $scope.input_query;
+				someText = someText.replace(/(\r\n|\n|\r)/gm," ");
+				$http({
+			        url: '/query/run',
+			        method: "POST",
+			        data: {
+		                input_query: someText
+		            }
+			    })
+			    .then(function(response) {
+			    	$scope.query_result = JSON.stringify(response.data.rows);
+			    }, 
+			    function(response) { 
+			        alert("failed: run query"+response.data);
+			    });
+			}else{
+				alert("insert some text for the query!")
+			}
+		}
 
 	  	$scope.findDisasterEventOnDB = function(){
 			if($scope.searchStringDisasterEvent != undefined &&

@@ -1,0 +1,29 @@
+﻿-- Table: public.bandung_infra
+
+-- DROP TABLE public.bandung_infra;
+
+CREATE TABLE public.bandung_infra
+(
+  gid integer NOT NULL DEFAULT nextval('bandung_infra_gid_seq'::regclass),
+  layer character varying(32),
+  keterangan character varying(31),
+  kordinat_x numeric,
+  kordinat_y numeric,
+  geom geometry(MultiPoint),
+  CONSTRAINT bandung_infra_pkey PRIMARY KEY (gid)
+)
+WITH (
+  OIDS=FALSE
+);
+ALTER TABLE public.bandung_infra
+  OWNER TO daniar;
+
+-- Index: public.bandung_infra_geom_gist
+
+-- DROP INDEX public.bandung_infra_geom_gist;
+
+CREATE INDEX bandung_infra_geom_gist
+  ON public.bandung_infra
+  USING gist
+  (geom);
+
